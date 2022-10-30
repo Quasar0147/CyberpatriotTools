@@ -427,6 +427,8 @@ unlock_time = 0
 systemctl disable kdump.service
 apt-get install mfetp
 useradd -D -f 35 
+echo "SHELL=/bin/sh
+INACTIVE=30" > /etc/default/useradd
 passwd -l root
 apt-get remove telnetd -y
 apt-get remove telnet -y
