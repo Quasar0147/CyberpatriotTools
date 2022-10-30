@@ -8,7 +8,24 @@ cp ./utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
 bash ubuntu.sh
 cd ..
+echo "
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.64/scap-security-guide-0.1.64-oval-5.10.zip
+unzip scap-security-guide-0.1.64-oval-5.10.zip
+apt-get install libopenscap8 -y
+apt-get install wget -y
+oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_level2_workstation --results ssg-cis-oscap.xml scap-security-guide-0.1.64-oval-5.10/ssg-ubuntu"$version"04-ds.xml
+" >> cis.sh
+if [ $version = "20" ]
+then
+echo "
+oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_stig --results ssg-stig-oscap.xml scap-security-guide-0.1.64-oval-5.10/ssg-ubuntu2004-ds.xml
+" >> cis.sh
+fi
+chmod +x cis.sh
+./cis.sh>/dev/null & 
 
+find ./utils -type f -exec chown root:root {} \;
+find ./utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
 apt-get install ufw -y >> /dev/null
 ufw enable
@@ -51,8 +68,43 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//
 mv ./utils/pam/* /etc/pam.d/
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
+chown root:root /etc/pam.d/*
 sudo dpkg-reconfigure lightdm
-mv /utils/lightdm.conf /etc/lightdm/lightdm.conf
+mv ./utils/lightdm.conf /etc/lightdm/lightdm.conf
+mv ./utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+mv ./utils/gdm3.conf /etc/gdm3/custom.conf
+echo "user-db:user
+system-db:gdm
+file-db:/usr/share/gdm/greeter-dconf-defaults
+" >> /etc/dconf/profile/gdm
+chmod 644 /etc/dconf/profile/gdm
+chown root:root /etc/dconf/profile/gdm
+rm /etc/dconf/db/gdm.d/*
+echo "[org/gnome/login-screen]
+disable-user-list=true
+disable-restart-buttons=true
+enable-password-authentication=true
+enable-smartcard-authentication=false
+enable-fingerprint-authentication=false
+allowed-failures=3
+[org/gnome/desktop/screensaver]
+lock-enabled=true
+[org/gnome/desktop/lockdown]
+disable-command-line=true
+disable-log-out=true
+disable-printing=true
+disable-lock-screen=true
+disable-print-setup=true
+disable-user-switching=true
+disable-application-handlers=true
+disable-save-to-disk=true
+user-administration-disabled=true
+" >> /etc/dconf/db/gdm.d/00-login-screen
+chmod 644 /etc/dconf/db/gdm.d/00-login-screen
+chown root:root /etc/dconf/db/gdm.d/00-login-screen
+dconf update
+systemctl restart gdm
+
 while :;
     do
     read -p "Autologin User (some username/none): " a
@@ -66,7 +118,7 @@ while :;
     else 
         sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
         sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
-        group=$(getent group $(id -u ubuntu) | cut -d: -f1)
+        group=$(getent group $(id -u $a) | cut -d: -f1)
         sed -i "s/*actualhell/$group/g" /etc/pam.d/lightdm
         break
     fi
@@ -92,7 +144,6 @@ enforcing=1
 enforce_for_root=1" >> /etc/security/pwquality.conf
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do chage -M 30 -m 7 -W 15 $u; done
-sed -i s'/password        required        pam_unix.so .*/password        required        pam_unix.so sha512  shadow rounds=65536/' /etc/pam.d/passwd
 sed -i 's/umask .*//' /etc/profile
 echo "umask 027" >> /etc/profile
 sed -i 's/umask .*//' /etc/login.defs
@@ -153,9 +204,7 @@ cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
 sysctl --system >/dev/null
 
-data=`echo "$password
-$password
-" | grub-mkpasswd-pbkdf2 | awk '{ print $11 }'`
+data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | awk '{print $NF}')
 echo "cat <<EOF
 set superusers='root'
 password pbkdf2 root '"$data"'
@@ -364,7 +413,7 @@ chmod 644 /etc/bash.bashrc
 echo "console" > /etc/securetty
 apt-get install opensc-pkcs11 -y >> /dev/null
 apt-get install libpam-pkcs11 -y >> /dev/null
-gsettings set org.gnome.desktop.screensaver lock-enabled true
+
 echo "
 audit
 silent
@@ -456,15 +505,6 @@ wget https://database.clamav.net/daily.cvd -O /var/lib/clamav/daily.cvd
 freshclam
 systemctl start clamav-freshclam
 clamscan --infected --recursive --remove / &>/dev/null
-
-
-read -p "Is this system a server [y/n]: " a
-if [ a = "y" ]
-then 
-b="server"
-else
-b="workstation"
-fi
 version=$(cat /etc/os-release | head -n 6 | tail -n 1 | cut -c13-14)
 if [ $version = "20" ]
 then
@@ -472,19 +512,3 @@ version="20"
 else
 version="22"
 fi
-echo "
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.64/scap-security-guide-0.1.64-oval-5.10.zip
-unzip scap-security-guide-0.1.64-oval-5.10.zip
-apt-get install libopenscap8 -y
-apt-get install wget -y
-oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_level2_$b --results ssg-cis-oscap.xml scap-security-guide-0.1.64-oval-5.10/ssg-ubuntu"$version"04-ds.xml
-oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_standard --results ssg-standard-sys-profile-oscap.xml scap-security-guide-0.1.64-oval-5.10/ssg-ubuntu"$version"04-ds.xml
-" >> cis.sh
-if [ $version = "20" ]
-then
-echo "
-oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_stig --results ssg-stig-oscap.xml scap-security-guide-0.1.64-oval-5.10/ssg-ubuntu2004-ds.xml
-" >> cis.sh
-fi
-chmod +x cis.sh
-./cis.sh>/dev/null & 

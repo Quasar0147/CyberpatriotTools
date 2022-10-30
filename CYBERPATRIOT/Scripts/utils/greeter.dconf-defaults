@@ -1,0 +1,13 @@
+[org/gnome/desktop/interface]
+[org/gnome/desktop/background]
+[org/gnome/desktop/background]
+[org/gnome/login-screen]
+# - Disable user list
+disable-user-list=true
+# - Disable restart buttons
+disable-restart-buttons=true
+[org/gnome/settings-daemon/plugins/power]
+# sleep-inactive-ac-timeout=1200
+# sleep-inactive-ac-type='suspend'
+# sleep-inactive-battery-timeout=1200
+# sleep-inactive-battery-type='suspend'
