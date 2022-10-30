@@ -1,20 +1,26 @@
 ##### STOP IT GET SOME HELP #####
 # This script is for Ubuntu 20.04 LTS
-
+version=$(cat /etc/os-release | head -n 6 | tail -n 1 | cut -c13-14)
+if [ $version = "20" ]
+then
+version="20"
+else
+version="22"
+fi
 #Hardening from other people done first so i can override some of their dumb settings :>
 apt-get -y install git net-tools procps >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
-cp ./utils/ubuntu.cfg hardening/ubuntu.cfg
+cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
 bash ubuntu.sh
 cd ..
 echo "
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.64/scap-security-guide-0.1.64-oval-5.10.zip
-unzip scap-security-guide-0.1.64-oval-5.10.zip
-apt-get install libopenscap8 -y
-apt-get install wget -y
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.64/scap-security-guide-0.1.64-oval-5.10.zip >> /dev/null
+unzip scap-security-guide-0.1.64-oval-5.10.zip >> /dev/null
+apt-get install libopenscap8 -y >> /dev/null
+apt-get install wget -y >> /dev/null
 path=`realpath $(find .. -name \"ssg-ubuntu\"$version\"04-ds.xml\" | head -n 1)`
-oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_level2_workstation --results ssg-cis-oscap.xml \$path
+oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_level2_workstation --results ssg-cis-oscap.xml \$path >> /dev/null
 " >> cis.sh
 if [ $version = "20" ]
 then
@@ -23,11 +29,11 @@ oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_stig
 " >> cis.sh
 fi
 chmod +x cis.sh
-./cis.sh>/dev/null & 
+#./cis.sh>/dev/null & 
 
-find ./utils -type f -exec chown root:root {} \;
-find ./utils -type f -exec chmod 644 {} \;
-password="Baher13@costco"
+find `pwd`/utils -type f -exec chown root:root {} \;
+find `pwd`/utils -type f -exec chmod 644 {} \;
+password="Baher13@c0stc0"
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do chage -M 30 -m 7 -W 15 $u; done
 apt-get install ufw -y >> /dev/null
@@ -53,8 +59,8 @@ systemctl start auditd
 apt-get install apparmor-utils -y >> /dev/null
 systemctl enable auditd
 systemctl start auditd
-if [[ -f /etc/ssh/sshd_config ]]; then
-    mv ./utils/sshd_config /etc/ssh/sshd_config
+if [ -f /etc/ssh/sshd_config ]; then
+    mv `pwd`/utils/sshd_config /etc/ssh/sshd_config
     echo "DENY_THRESHOLD_INVALID = 5
     DENY_THRESHOLD_VALID = 10
     DENY_THRESHOLD_ROOT = 1
@@ -65,20 +71,21 @@ if [[ -f /etc/ssh/sshd_config ]]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-#mv ./utils/pam/* /etc/pam.d/
+#mv `pwd`/utils/pam/* /etc/pam.d/
 #chown root:root /etc/pam.d/*
 #chmod 644 /etc/pam.d/*
 #chown root:root /etc/pam.d/*
-mv ./utils/lightdm.conf /etc/lightdm/lightdm.conf
-mv ./utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
-mv ./utils/gdm3.conf /etc/gdm3/custom.conf
+mv `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
+mv `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+mv `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults
 " >> /etc/dconf/profile/gdm
 chmod 644 /etc/dconf/profile/gdm
 chown root:root /etc/dconf/profile/gdm
-rm /etc/dconf/db/gdm.d/*
+rm /etc/dconf/db/gdm.d/* 2>/dev/null
+mkdir /etc/dconf/db/gdm.d/ 2>/dev/null
 echo "[org/gnome/login-screen]
 disable-user-list=true
 disable-restart-buttons=true
@@ -106,12 +113,12 @@ dconf update
 while :;
     do
     read -p "Autologin User (some username/none): " a
-    if [[ $a == "root" ]]; then
+    if [ $a == "root" ]]; then
         echo "root is not allowed for autologin"
-    elif [[ `cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1` != *$a* ]]
+    elif [ `cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1` != *$a* ]]
     then
         echo "User does not exist"
-    elif [[ $a == "none" ]]; then
+    elif [ $a == "none" ]]; then
         break
     else 
         sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
@@ -150,7 +157,7 @@ cp /etc/bash.bashrc /root/.bashrc
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
 echo "TMOUT=600" > /etc/profile.d/99-terminal_tmout.sh
-mv ./utils/login.defs /etc/login.defs
+mv `pwd`/utils/login.defs /etc/login.defs
 export TMOUT=600
 sudo apt-get install vlock
 sudo apt-get install gzip
@@ -169,7 +176,7 @@ systemctl start apparmor.service
 sed -i 's/apparmor=.*/apparmor=0/' /etc/default/grub
 aa-enforce /etc/apparmor.d/*
 
-mv ./utils/sysctl.conf /etc/sysctl.conf
+mv `pwd`/utils/sysctl.conf /etc/sysctl.conf
 read -p "IPV6? (y/n): " ipv6
 if [ "$ipv6"="y" ]; then
 echo "
@@ -209,101 +216,101 @@ sudo chmod 744 /etc/grub.d/00_header
 sudo update-grub
 
 sudo chmod 744 /etc/default/grub
-sudo chown root:root /boot/grub/grub.cfg 2&>1 > /dev/null
-sudo chmod 744 /boot/grub/grub.cfg 2&>1 > /dev/null
-chown root:root /etc/crontab 2&>1 > /dev/null
-chmod og-rwx /etc/crontab 2&>1 > /dev/null
-chown root:root /etc/cron.hourly 2&>1 > /dev/null
-chmod og-rwx /etc/cron.hourly 2&>1 > /dev/null
-chown root:root /etc/cron.daily 2&>1 > /dev/null 
-chmod og-rwx /etc/cron.daily 2&>1 > /dev/null
-chown root:root /etc/cron.weekly 2&>1 > /dev/null
-chmod og-rwx /etc/cron.weekly 2&>1 > /dev/null
-chown root:root /etc/cron.monthly 2&>1 > /dev/null
-chmod og-rwx /etc/cron.monthly 2&>1 > /dev/null
-chown root:root /etc/cron.d 2&>1 > /dev/null
-chmod og-rwx /etc/cron.d 2&>1 > /dev/null
-rm /etc/cron.deny 2&>1 > /dev/null
-rm /etc/at.deny 2&>1 > /dev/null
+sudo chown root:root /boot/grub/grub.cfg 2>/dev/null
+sudo chmod 744 /boot/grub/grub.cfg 2>/dev/null
+chown root:root /etc/crontab 2>/dev/null
+chmod og-rwx /etc/crontab 2>/dev/null
+chown root:root /etc/cron.hourly 2>/dev/null
+chmod og-rwx /etc/cron.hourly 2>/dev/null
+chown root:root /etc/cron.daily 2>/dev/null 
+chmod og-rwx /etc/cron.daily 2>/dev/null
+chown root:root /etc/cron.weekly 2>/dev/null
+chmod og-rwx /etc/cron.weekly 2>/dev/null
+chown root:root /etc/cron.monthly 2>/dev/null
+chmod og-rwx /etc/cron.monthly 2>/dev/null
+chown root:root /etc/cron.d 2>/dev/null
+chmod og-rwx /etc/cron.d 2>/dev/null
+rm /etc/cron.deny 2>/dev/null
+rm /etc/at.deny 2>/dev/null
 chown -R root:root /etc/*cron*
 chmod -R 600 /etc/*cron*
 chown -R root:root /var/spool/cron
 chmod -R 600 /var/spool/cron
-touch /etc/cron.allow 2&>1 > /dev/null
-touch /etc/at.allow 2&>1 > /dev/null
-chmod og-rwx /etc/cron.allow 2&>1 > /dev/null
-chmod og-rwx /etc/at.allow 2&>1 > /dev/null
-chown root:root /etc/cron.allow 2&>1 > /dev/null
-chown root:root /etc/at.allow 2&>1 > /dev/null
-chown root:root /etc/passwd 2&>1 > /dev/null
-chmod 0744 /etc/passwd 2&>1 > /dev/null
-chown root:shadow /etc/shadow 2&>1 > /dev/null
-chmod o-rwx,g-wx /etc/shadow 2&>1 > /dev/null
-chown root:root /etc/group 2&>1 > /dev/null
-chmod 0700 /etc/group 2&>1 > /dev/null
-chmod 0644 /etc/group 2&>1 > /dev/null
-chown root:root /etc/group- 2&>1 > /dev/null
-chmod u-x,go-wx /etc/group- 2&>1 > /dev/null
-chown root:shadow /etc/gshadow 2&>1 > /dev/null
-chmod o-rwx,g-rw /etc/gshadow 2&>1 > /dev/null
-chown root:root /etc/passwd- 2&>1 > /dev/null
-chmod u-x,go-wx /etc/passwd- 2&>1 > /dev/null
-chown root:root /etc/shadow- 2&>1 > /dev/null
-chown root:shadow /etc/shadow- 2&>1 > /dev/null
-chmod o-rwx,g-rw /etc/shadow- 2&>1 > /dev/null
-chown root:root /etc/gshadow- 2&>1 > /dev/null
-chown root:shadow /etc/gshadow- 2&>1 > /dev/null
-chmod o-rwx,g-rw /etc/gshadow- 2&>1 > /dev/null
-chown root:root /etc/motd 2&>1 > /dev/null
-chmod 0744 /etc/motd 2&>1 > /dev/null
-chown root:root /etc/issue 2&>1 > /dev/null
-chmod 0744 /etc/issue 2&>1 > /dev/null
-chown root:root /etc/issue.net 2&>1 > /dev/null
-chmod 0744 /etc/issue.net 2&>1 > /dev/null
-chown root:root /etc/hosts.allow 2&>1 > /dev/null
-chmod 0744 /etc/hosts.allow 2&>1 > /dev/null
-chown root:root /etc/hosts.deny 2&>1 > /dev/null
-chmod 0744 /etc/hosts.deny 2&>1 > /dev/null
-chown root:root /etc/hosts 2&>1 > /dev/null
-chmod 0744 /etc/hosts 2&>1 > /dev/null
-chown root:root /etc/hostname 2&>1 > /dev/null
-chmod 0744 /etc/hostname 2&>1 > /dev/null
-chown root:root /etc/network/interfaces 2&>1 > /dev/null
-chmod 0744 /etc/network/interfaces 2&>1 > /dev/null
-chown root:root /etc/network/interfaces.d 2&>1 > /dev/null
-chmod 0744 /etc/network/interfaces.d 2&>1 > /dev/null
-chown root:root /etc/networks 2&>1 > /dev/null
-chmod 0744 /etc/networks 2&>1 > /dev/null
-chown root:root /etc/services 2&>1 > /dev/null
-chmod 0744 /etc/services 2&>1 > /dev/null
-chown root:root /etc/protocols 2&>1 > /dev/null
-chmod 0744 /etc/protocols 2&>1 > /dev/null
-chown root:root /etc/resolv.conf 2&>1 > /dev/null
-chmod 0744 /etc/resolv.conf 2&>1 > /dev/null
-chown root:root /etc/nsswitch.conf 2&>1 > /dev/null
-chmod 0744 /etc/nsswitch.conf 2&>1 > /dev/null
-chown root:root /etc/ssh/sshd_config 2&>1 > /dev/null
-chmod 0744 /etc/ssh/sshd_config 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_config 2&>1 > /dev/null
-chmod 0744 /etc/ssh/ssh_config 2&>1 > /dev/null
-chown root:root /etc/ssh/moduli 2&>1 > /dev/null
-chmod 0744 /etc/ssh/moduli 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_rsa_key 2&>1 > /dev/null
-chmod 400 /etc/ssh/ssh_host_rsa_key 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_dsa_key 2&>1 > /dev/null
-chmod 400 /etc/ssh/ssh_host_dsa_key 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_ecdsa_key 2&>1 > /dev/null
-chmod 400 /etc/ssh/ssh_host_ecdsa_key 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_ed25519_key 2&>1 > /dev/null
-chmod 400 /etc/ssh/ssh_host_ed25519_key 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_rsa_key.pub 2&>1 > /dev/null
-chmod 744 /etc/ssh/ssh_host_rsa_key.pub 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_dsa_key.pub 2&>1 > /dev/null
-chmod 744 /etc/ssh/ssh_host_dsa_key.pub 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_ecdsa_key.pub 2&>1 > /dev/null
-chmod 744 /etc/ssh/ssh_host_ecdsa_key.pub 2&>1 > /dev/null
-chown root:root /etc/ssh/ssh_host_ed25519_key.pub 2&>1 > /dev/null
-chmod 744 /etc/ssh/ssh_host_ed25519_key.pub 2&>1 > /dev/null
+touch /etc/cron.allow 2>/dev/null
+touch /etc/at.allow 2>/dev/null
+chmod og-rwx /etc/cron.allow 2>/dev/null
+chmod og-rwx /etc/at.allow 2>/dev/null
+chown root:root /etc/cron.allow 2>/dev/null
+chown root:root /etc/at.allow 2>/dev/null
+chown root:root /etc/passwd 2>/dev/null
+chmod 0744 /etc/passwd 2>/dev/null
+chown root:shadow /etc/shadow 2>/dev/null
+chmod o-rwx,g-wx /etc/shadow 2>/dev/null
+chown root:root /etc/group 2>/dev/null
+chmod 0700 /etc/group 2>/dev/null
+chmod 0644 /etc/group 2>/dev/null
+chown root:root /etc/group- 2>/dev/null
+chmod u-x,go-wx /etc/group- 2>/dev/null
+chown root:shadow /etc/gshadow 2>/dev/null
+chmod o-rwx,g-rw /etc/gshadow 2>/dev/null
+chown root:root /etc/passwd- 2>/dev/null
+chmod u-x,go-wx /etc/passwd- 2>/dev/null
+chown root:root /etc/shadow- 2>/dev/null
+chown root:shadow /etc/shadow- 2>/dev/null
+chmod o-rwx,g-rw /etc/shadow- 2>/dev/null
+chown root:root /etc/gshadow- 2>/dev/null
+chown root:shadow /etc/gshadow- 2>/dev/null
+chmod o-rwx,g-rw /etc/gshadow- 2>/dev/null
+chown root:root /etc/motd 2>/dev/null
+chmod 0744 /etc/motd 2>/dev/null
+chown root:root /etc/issue 2>/dev/null
+chmod 0744 /etc/issue 2>/dev/null
+chown root:root /etc/issue.net 2>/dev/null
+chmod 0744 /etc/issue.net 2>/dev/null
+chown root:root /etc/hosts.allow 2>/dev/null
+chmod 0744 /etc/hosts.allow 2>/dev/null
+chown root:root /etc/hosts.deny 2>/dev/null
+chmod 0744 /etc/hosts.deny 2>/dev/null
+chown root:root /etc/hosts 2>/dev/null
+chmod 0744 /etc/hosts 2>/dev/null
+chown root:root /etc/hostname 2>/dev/null
+chmod 0744 /etc/hostname 2>/dev/null
+chown root:root /etc/network/interfaces 2>/dev/null
+chmod 0744 /etc/network/interfaces 2>/dev/null
+chown root:root /etc/network/interfaces.d 2>/dev/null
+chmod 0744 /etc/network/interfaces.d 2>/dev/null
+chown root:root /etc/networks 2>/dev/null
+chmod 0744 /etc/networks 2>/dev/null
+chown root:root /etc/services 2>/dev/null
+chmod 0744 /etc/services 2>/dev/null
+chown root:root /etc/protocols 2>/dev/null
+chmod 0744 /etc/protocols 2>/dev/null
+chown root:root /etc/resolv.conf 2>/dev/null
+chmod 0744 /etc/resolv.conf 2>/dev/null
+chown root:root /etc/nsswitch.conf 2>/dev/null
+chmod 0744 /etc/nsswitch.conf 2>/dev/null
+chown root:root /etc/ssh/sshd_config 2>/dev/null
+chmod 0744 /etc/ssh/sshd_config 2>/dev/null
+chown root:root /etc/ssh/ssh_config 2>/dev/null
+chmod 0744 /etc/ssh/ssh_config 2>/dev/null
+chown root:root /etc/ssh/moduli 2>/dev/null
+chmod 0744 /etc/ssh/moduli 2>/dev/null
+chown root:root /etc/ssh/ssh_host_rsa_key 2>/dev/null
+chmod 400 /etc/ssh/ssh_host_rsa_key 2>/dev/null
+chown root:root /etc/ssh/ssh_host_dsa_key 2>/dev/null
+chmod 400 /etc/ssh/ssh_host_dsa_key 2>/dev/null
+chown root:root /etc/ssh/ssh_host_ecdsa_key 2>/dev/null
+chmod 400 /etc/ssh/ssh_host_ecdsa_key 2>/dev/null
+chown root:root /etc/ssh/ssh_host_ed25519_key 2>/dev/null
+chmod 400 /etc/ssh/ssh_host_ed25519_key 2>/dev/null
+chown root:root /etc/ssh/ssh_host_rsa_key.pub 2>/dev/null
+chmod 744 /etc/ssh/ssh_host_rsa_key.pub 2>/dev/null
+chown root:root /etc/ssh/ssh_host_dsa_key.pub 2>/dev/null
+chmod 744 /etc/ssh/ssh_host_dsa_key.pub 2>/dev/null
+chown root:root /etc/ssh/ssh_host_ecdsa_key.pub 2>/dev/null
+chmod 744 /etc/ssh/ssh_host_ecdsa_key.pub 2>/dev/null
+chown root:root /etc/ssh/ssh_host_ed25519_key.pub 2>/dev/null
+chmod 744 /etc/ssh/ssh_host_ed25519_key.pub 2>/dev/null
 chown root:root /lib 
 chown root:root /usr/lib 
 chown root:root /lib64
@@ -327,18 +334,18 @@ find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -
 apt-get install rsyslog
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do passwd -l $u; done
 auditctl -e 1
-mv ./utils/audit.rules /etc/audit/rules.d/audit.rules
+mv `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
 augenrules --load
 echo "* hard core" > /etc/security/limits.conf
 echo "* hard maxlogins 10" >> /etc/security/limits.conf
 sudo chmod 744 /etc/security/limits.conf
-sudo chmod 600 /etc/ssh/*key 2&>1 > /dev/null
-sudo chmod 640 /etc/ssh/*key.pub 2&>1 > /dev/null
-sudo chmod 640 /etc/ssh/*key-cert.pub 2&>1 > /dev/null
+sudo chmod 600 /etc/ssh/*key 2>/dev/null
+sudo chmod 640 /etc/ssh/*key.pub 2>/dev/null
+sudo chmod 640 /etc/ssh/*key-cert.pub 2>/dev/null
 chmod 0640 /var/log/syslog
 chown syslog /var/log/syslog
 for x in "dccp sctp tipc rds"; do sudo modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/ubuntu.conf; done
-sudo chmod 744 /etc/modprobe.d/ubuntu.conf 2&>1 > /dev/null
+sudo chmod 744 /etc/modprobe.d/ubuntu.conf 2>/dev/null
 echo "max_log_file=16384
 space_left_action=email
 action_mail_acct=root
@@ -369,17 +376,17 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 echo > /etc/rc.local
 echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 $USER\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts
-find /bin/ -name "*.sh" -type f -delete
-find /usr/bin/ -name "*.sh" -type f -delete
-find /usr/local/bin/ -name "*.sh" -type f -delete
-find /sbin/ -name "*.sh" -type f -delete
-find /usr/sbin/ -name "*.sh" -type f -delete
-find /usr/local/sbin/ -name "*.sh" -type f -delete
+find /bin/ -name "*.sh" -type f -delete &
+find /usr/bin/ -name "*.sh" -type f -delete &
+find /usr/local/bin/ -name "*.sh" -type f -delete &
+find /sbin/ -name "*.sh" -type f -delete &
+find /usr/sbin/ -name "*.sh" -type f -delete &
+find /usr/local/sbin/ -name "*.sh" -type f -delete &
 for y in "/home"; do for x in "mp4 mov mp3 mp2 png jpg mpg mpeg jpeg"; do find $y -name "*.$x" -type f -delete; done; done
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
 apt-get install unattended-upgrades -y >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
-mv ./utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
+mv `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 
 
 apt-get install -y fail2ban >> /dev/null
@@ -387,7 +394,7 @@ systemctl enable fail2ban
 systemctl start fail2ban
 
 sudo apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
-FILE=./utils/user.js
+FILE=`pwd`/utils/user.js
 if [ -f "$FILE" ]; then
     echo "user.js found"
 else
@@ -398,8 +405,8 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(c
 sed s'/user_pref(/pref(/g' utils/user.js > /etc/firefox/syspref.js
 
 echo "TMOUT=900" >> /etc/bashrc
-cp ./utils/bash.bashrc /etc/bash.bashrc
-cp ./utils/profile /etc/profile
+cp `pwd`/utils/bash.bashrc /etc/bash.bashrc
+cp `pwd`/utils/profile /etc/profile
 chmod 644 /etc/profile
 cp /etc/profile /home/*/.profile
 cp /etc/profile /root/.profile
@@ -421,14 +428,15 @@ systemctl disable kdump.service
 apt-get install mfetp
 useradd -D -f 35 
 passwd -l root
-apt-get remove telnetd
-apt-get remove telnet
+apt-get remove telnetd -y
+apt-get remove telnet -y
 systemctl disable ctrl-alt-del.target
 systemctl mask ctrl-alt-del.target
 rm /etc/init/control-alt-delete.override
 rm /etc/init/control-alt-delete.conf
 touch /etc/init/control-alt-delete.override
 touch /etc/init/control-alt-delete.conf
+mkdir /etc/dconf/db/local.d/
 sed -i 's/logout=.*//g' /etc/dconf/db/local.d/*
 echo "
 [org/gnome/settings-daemon/plugins/media-keys]
@@ -443,7 +451,6 @@ done
 for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd)
 do
 usermod -U $x
-done
 done
 for x in $(cut -d: -f1,3 /etc/passwd | egrep ':[0]{1}$' | cut -d: -f1 | sed s'/root//g')
 do
@@ -501,12 +508,5 @@ wget https://database.clamav.net/daily.cvd -O /var/lib/clamav/daily.cvd
 freshclam
 systemctl start clamav-freshclam
 clamscan --infected --recursive --remove / &>/dev/null
-version=$(cat /etc/os-release | head -n 6 | tail -n 1 | cut -c13-14)
-if [ $version = "20" ]
-then
-version="20"
-else
-version="22"
-fi
 dpkg-reconfigure lightdm
 systemctl restart gdm
