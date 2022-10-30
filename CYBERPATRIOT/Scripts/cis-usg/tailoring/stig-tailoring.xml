@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf-11-tailoring:Tailoring xmlns:cdf-11-tailoring="http://open-scap.org/page/Xccdf-1.1-tailoring" xmlns:xccdf="http://checklists.nist.gov/xccdf/1.1" id="xccdf_scap-workbench_tailoring_default">
+  <cdf-11-tailoring:benchmark href="/usr/share/ubuntu-scap-security-guides/1/benchmarks/Canonical_Ubuntu_20.04_Benchmarks-xccdf.xml"/>
+  <cdf-11-tailoring:version time="2022-06-28T17:03:21">1</cdf-11-tailoring:version>
+  <xccdf:Profile id="stig_customized" extends="stig">
+    <xccdf:title xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="en-US" override="true">DISA-STIG Benchmark [CUSTOMIZED]</xccdf:title>
+    <xccdf:description xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="en-US" override="true">This baseline aligns to the DISA-STIG v.1, rel.1, released 04-06-2021.</xccdf:description>
+<!-- UBTU-20-010000 The Ubuntu operating system must provision temporary user accounts with an expiration time of 72 hours or less. -->
+<xccdf:select idref="account_temp_expire_date" selected="true"/>
+
+
+<!-- UBTU-20-010002 The Ubuntu operating system must enable the graphical user logon banner to display the Standard Mandatory DoD Notice and Consent Banner before granting local access to the system via a graphical user logon. -->
+<xccdf:select idref="dconf_gnome_banner_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010003 The Ubuntu operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local access to the system via a graphical user logon. -->
+<xccdf:set-value idref="login_banner_text">^(You[\s\n]+are[\s\n]+accessing[\s\n]+a[\s\n]+U\.S\.[\s\n]+Government[\s\n]+\(USG\)[\s\n]+Information[\s\n]+System[\s\n]+\(IS\)[\s\n]+that[\s\n]+is[\s\n]+provided[\s\n]+for[\s\n]+USG\-authorized[\s\n]+use[\s\n]+only\.[\s\n]+By[\s\n]+using[\s\n]+this[\s\n]+IS[\s\n]+\(which[\s\n]+includes[\s\n]+any[\s\n]+device[\s\n]+attached[\s\n]+to[\s\n]+this[\s\n]+IS\)\,[\s\n]+you[\s\n]+consent[\s\n]+to[\s\n]+the[\s\n]+following[\s\n]+conditions\:(?:[\n]+|(?:\\n)+)\-The[\s\n]+USG[\s\n]+routinely[\s\n]+intercepts[\s\n]+and[\s\n]+monitors[\s\n]+communications[\s\n]+on[\s\n]+this[\s\n]+IS[\s\n]+for[\s\n]+purposes[\s\n]+including\,[\s\n]+but[\s\n]+not[\s\n]+limited[\s\n]+to\,[\s\n]+penetration[\s\n]+testing\,[\s\n]+COMSEC[\s\n]+monitoring\,[\s\n]+network[\s\n]+operations[\s\n]+and[\s\n]+defense\,[\s\n]+personnel[\s\n]+misconduct[\s\n]+\(PM\)\,[\s\n]+law[\s\n]+enforcement[\s\n]+\(LE\)\,[\s\n]+and[\s\n]+counterintelligence[\s\n]+\(CI\)[\s\n]+investigations\.(?:[\n]+|(?:\\n)+)\-At[\s\n]+any[\s\n]+time\,[\s\n]+the[\s\n]+USG[\s\n]+may[\s\n]+inspect[\s\n]+and[\s\n]+seize[\s\n]+data[\s\n]+stored[\s\n]+on[\s\n]+this[\s\n]+IS\.(?:[\n]+|(?:\\n)+)\-Communications[\s\n]+using\,[\s\n]+or[\s\n]+data[\s\n]+stored[\s\n]+on\,[\s\n]+this[\s\n]+IS[\s\n]+are[\s\n]+not[\s\n]+private\,[\s\n]+are[\s\n]+subject[\s\n]+to[\s\n]+routine[\s\n]+monitoring\,[\s\n]+interception\,[\s\n]+and[\s\n]+search\,[\s\n]+and[\s\n]+may[\s\n]+be[\s\n]+disclosed[\s\n]+or[\s\n]+used[\s\n]+for[\s\n]+any[\s\n]+USG\-authorized[\s\n]+purpose\.(?:[\n]+|(?:\\n)+)\-This[\s\n]+IS[\s\n]+includes[\s\n]+security[\s\n]+measures[\s\n]+\(e\.g\.\,[\s\n]+authentication[\s\n]+and[\s\n]+access[\s\n]+controls\)[\s\n]+to[\s\n]+protect[\s\n]+USG[\s\n]+interests\-\-not[\s\n]+for[\s\n]+your[\s\n]+personal[\s\n]+benefit[\s\n]+or[\s\n]+privacy\.(?:[\n]+|(?:\\n)+)\-Notwithstanding[\s\n]+the[\s\n]+above\,[\s\n]+using[\s\n]+this[\s\n]+IS[\s\n]+does[\s\n]+not[\s\n]+constitute[\s\n]+consent[\s\n]+to[\s\n]+PM\,[\s\n]+LE[\s\n]+or[\s\n]+CI[\s\n]+investigative[\s\n]+searching[\s\n]+or[\s\n]+monitoring[\s\n]+of[\s\n]+the[\s\n]+content[\s\n]+of[\s\n]+privileged[\s\n]+communications\,[\s\n]+or[\s\n]+work[\s\n]+product\,[\s\n]+related[\s\n]+to[\s\n]+personal[\s\n]+representation[\s\n]+or[\s\n]+services[\s\n]+by[\s\n]+attorneys\,[\s\n]+psychotherapists\,[\s\n]+or[\s\n]+clergy\,[\s\n]+and[\s\n]+their[\s\n]+assistants\.[\s\n]+Such[\s\n]+communications[\s\n]+and[\s\n]+work[\s\n]+product[\s\n]+are[\s\n]+private[\s\n]+and[\s\n]+confidential\.[\s\n]+See[\s\n]+User[\s\n]+Agreement[\s\n]+for[\s\n]+details\.|I've[\s\n]+read[\s\n]+\&[\s\n]+consent[\s\n]+to[\s\n]+terms[\s\n]+in[\s\n]+IS[\s\n]+user[\s\n]+agreem't\.)$</xccdf:set-value>
+<xccdf:select idref="dconf_gnome_login_banner_text" selected="true"/>
+
+
+<!-- UBTU-20-010004 The Ubuntu operating system must retain a user's session lock until that user reestablishes access using established identification and authentication procedures. -->
+<xccdf:select idref="dconf_gnome_screensaver_lock_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010005 The Ubuntu operating system must allow users to directly initiate a session lock for all connection types. -->
+<xccdf:select idref="vlock_installed" selected="true"/>
+
+
+<!-- UBTU-20-010006 The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication. -->
+<xccdf:select idref="verify_use_mappers" selected="true"/>
+
+
+<!-- UBTU-20-010007 The Ubuntu operating system must enforce 24 hours/1 day as the minimum password lifetime. Passwords for new users must have a 24 hours/1 day minimum password lifetime restriction. -->
+<xccdf:set-value idref="var_accounts_minimum_age_login_defs">1</xccdf:set-value>
+<xccdf:select idref="accounts_minimum_age_login_defs" selected="true"/>
+
+
+<!-- UBTU-20-010008 The Ubuntu operating system must enforce a 60-day maximum password lifetime restriction. Passwords for new users must have a 60-day maximum password lifetime restriction. -->
+<xccdf:set-value idref="var_accounts_maximum_age_login_defs">60</xccdf:set-value>
+<xccdf:select idref="accounts_maximum_age_login_defs" selected="true"/>
+
+
+<!-- UBTU-20-010009 Ubuntu operating systems when booted must require authentication upon booting into single-user and maintenance modes. -->
+<xccdf:select idref="grub2_uefi_password" selected="true"/>
+<xccdf:select idref="grub2_password" selected="false"/>
+
+
+<!-- UBTU-20-010010 The Ubuntu operating system must uniquely identify interactive users. -->
+<xccdf:select idref="no_duplicate_uids" selected="true"/>
+
+
+<!-- UBTU-20-010012 The Ubuntu operating system must ensure only users who need access to security functions are part of sudo group. -->
+<xccdf:select idref="ensure_sudo_group_restricted" selected="true"/>
+
+
+<!-- UBTU-20-010013 The Ubuntu operating system must automatically terminate a user session after inactivity timeouts have expired. -->
+<xccdf:set-value idref="var_accounts_tmout">600</xccdf:set-value>
+<xccdf:select idref="accounts_tmout" selected="true"/>
+
+
+<!-- UBTU-20-010014 The Ubuntu operating system must require users to reauthenticate for privilege escalation or when changing roles. -->
+<xccdf:select idref="sudo_require_authentication" selected="true"/>
+
+
+<!-- UBTU-20-010016 The Ubuntu operating system default filesystem permissions must be defined in such a way that all authenticated users can read and modify only their own files. -->
+<xccdf:set-value idref="var_accounts_user_umask">077</xccdf:set-value>
+<xccdf:select idref="accounts_umask_etc_login_defs" selected="true"/>
+
+
+<!-- UBTU-20-010033 The Ubuntu operating system must implement smart card logins for multifactor authentication for local and network access to privileged and non-privileged accounts. -->
+<xccdf:select idref="sshd_enable_pubkey_auth" selected="true"/>
+<xccdf:select idref="smartcard_pam_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010035 The Ubuntu operating system must use strong authenticators in establishing nonlocal maintenance and diagnostic sessions. -->
+<xccdf:select idref="sshd_enable_pam" selected="true"/>
+
+
+<!-- UBTU-20-010036 The Ubuntu operating system must immediately terminate all network connections associated with SSH traffic after a period of inactivity. -->
+<xccdf:set-value idref="var_sshd_set_keepalive">1</xccdf:set-value>
+<xccdf:select idref="sshd_set_keepalive" selected="true"/>
+
+
+<!-- UBTU-20-010037 The Ubuntu operating system must immediately terminate all network connections associated with SSH traffic at the end of the session or after 10 minutes of inactivity. -->
+<xccdf:set-value idref="sshd_idle_timeout_value">600</xccdf:set-value>
+<xccdf:select idref="sshd_set_idle_timeout" selected="true"/>
+
+
+<!-- UBTU-20-010038 The Ubuntu operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting any local or remote connection to the system. -->
+<xccdf:select idref="banner_etc_issue_net" selected="true"/>
+<xccdf:select idref="sshd_enable_warning_banner_net" selected="true"/>
+
+
+<!-- UBTU-20-010042 The Ubuntu operating system must use SSH to protect the confidentiality and integrity of transmitted information. -->
+<xccdf:select idref="package_openssh-server_installed" selected="true"/>
+<xccdf:select idref="service_sshd_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010043 The Ubuntu operating system must configure the SSH daemon to use Message Authentication Codes (MACs) employing FIPS 140-2 approved cryptographic hashes to prevent the unauthorized disclosure of information and/or detect changes to information during transmission. -->
+<xccdf:select idref="sshd_use_approved_macs_ordered_stig" selected="true"/>
+
+
+<!-- UBTU-20-010044 The Ubuntu operating system must configure the SSH daemon to use FIPS 140-2 approved ciphers to prevent the unauthorized disclosure of information and/or detect changes to information during transmission. -->
+<xccdf:select idref="sshd_use_approved_ciphers_ordered_stig" selected="true"/>
+
+
+<!-- UBTU-20-010047 The Ubuntu operating system must not allow unattended or automatic login via SSH. -->
+<xccdf:select idref="sshd_disable_empty_passwords" selected="true"/>
+<xccdf:select idref="sshd_do_not_permit_user_env" selected="true"/>
+
+
+<!-- UBTU-20-010048 The Ubuntu operating system must be configured so that remote X connections are disabled, unless to fulfill documented and validated mission requirements. -->
+<xccdf:select idref="sshd_disable_x11_forwarding" selected="true"/>
+
+
+<!-- UBTU-20-010049 The Ubuntu operating system SSH daemon must prevent remote hosts from connecting to the proxy display. -->
+<xccdf:select idref="sshd_x11_use_localhost" selected="true"/>
+
+
+<!-- UBTU-20-010050 The Ubuntu operating system must enforce password complexity by requiring that at least one upper-case character be used. -->
+<xccdf:set-value idref="var_password_pam_ucredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_ucredit" selected="true"/>
+
+
+<!-- UBTU-20-010051 The Ubuntu operating system must enforce password complexity by requiring that at least one lower-case character be used. -->
+<xccdf:set-value idref="var_password_pam_lcredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_lcredit" selected="true"/>
+
+
+<!-- UBTU-20-010052 The Ubuntu operating system must enforce password complexity by requiring that at least one numeric character be used. -->
+<xccdf:set-value idref="var_password_pam_dcredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_dcredit" selected="true"/>
+
+
+<!-- UBTU-20-010053 The Ubuntu operating system must require the change of at least 8 characters when passwords are changed. -->
+<xccdf:set-value idref="var_password_pam_difok">8</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_difok" selected="true"/>
+
+
+<!-- UBTU-20-010054 The Ubuntu operating system must enforce a minimum 15-character password length. -->
+<xccdf:set-value idref="var_password_pam_minlen">15</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_minlen" selected="true"/>
+
+
+<!-- UBTU-20-010055 The Ubuntu operating system must enforce password complexity by requiring that at least one special character be used. -->
+<xccdf:set-value idref="var_password_pam_ocredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_ocredit" selected="true"/>
+
+
+<!-- UBTU-20-010056 The Ubuntu operating system must prevent the use of dictionary words for passwords. -->
+<xccdf:set-value idref="var_password_pam_dictcheck">1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_dictcheck" selected="true"/>
+
+
+<!-- UBTU-20-010057 The Ubuntu operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used. -->
+<xccdf:set-value idref="var_password_pam_retry">3</xccdf:set-value>
+<xccdf:select idref="package_pam_pwquality_installed" selected="true"/>
+<xccdf:select idref="accounts_password_pam_enforcing" selected="true"/>
+<xccdf:select idref="accounts_password_pam_retry" selected="true"/>
+
+
+<!-- UBTU-20-010060 The Ubuntu operating system, for PKI-based authentication, must validate certificates by constructing a certification path (which includes status information) to an accepted trust anchor. -->
+<xccdf:select idref="smartcard_configure_ca" selected="true"/>
+
+
+<!-- UBTU-20-010063 The Ubuntu operating system must implement multifactor authentication for remote access to privileged accounts in such a way that one of the factors is provided by a device separate from the system gaining access. -->
+<xccdf:select idref="install_smartcard_packages" selected="true"/>
+
+
+<!-- UBTU-20-010064 The Ubuntu operating system must accept Personal Identity Verification (PIV) credentials. -->
+<xccdf:select idref="package_opensc_installed" selected="true"/>
+
+
+<!-- UBTU-20-010065 The Ubuntu operating system must electronically verify Personal Identity Verification (PIV) credentials. -->
+<xccdf:select idref="smartcard_configure_cert_checking" selected="true"/>
+
+
+<!-- UBTU-20-010066 The Ubuntu operating system for PKI-based authentication, must implement a local cache of revocation data in case of the inability to access revocation information via the network. -->
+<xccdf:select idref="smartcard_configure_crl" selected="true"/>
+
+
+<!-- UBTU-20-010070 The Ubuntu operating system must prohibit password reuse for a minimum of five generations. -->
+<xccdf:set-value idref="var_password_pam_unix_remember">5</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_unix_remember" selected="true"/>
+
+
+<!-- UBTU-20-010072 The Ubuntu operating system must automatically lock an account until the locked account is released by an administrator when three unsuccessful logon attempts have been made. -->
+<xccdf:select idref="accounts_passwords_pam_tally2" selected="true"/>
+
+
+<!-- UBTU-20-010074 The Ubuntu operating system must be configured so that the script which runs each 30 days or less to check file integrity is the default one. -->
+<xccdf:select idref="aide_periodic_cron_checking" selected="true"/>
+
+
+<!-- UBTU-20-010075 The Ubuntu operating system must enforce a delay of at least 4 seconds between logon prompts following a failed logon attempt. -->
+<xccdf:set-value idref="var_password_pam_delay">4000000</xccdf:set-value>
+<xccdf:select idref="accounts_passwords_pam_faildelay_delay" selected="true"/>
+
+
+<!-- UBTU-20-010100 The Ubuntu operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/passwd. -->
+<xccdf:select idref="audit_rules_usergroup_modification_passwd" selected="true"/>
+
+
+<!-- UBTU-20-010101 The Ubuntu operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/group. -->
+<xccdf:select idref="audit_rules_usergroup_modification_group" selected="true"/>
+
+
+<!-- UBTU-20-010102 The Ubuntu operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/shadow. -->
+<xccdf:select idref="audit_rules_usergroup_modification_shadow" selected="true"/>
+
+
+<!-- UBTU-20-010103 The Ubuntu operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/gshadow. -->
+<xccdf:select idref="audit_rules_usergroup_modification_gshadow" selected="true"/>
+
+
+<!-- UBTU-20-010104 The Ubuntu operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/opasswd. -->
+<xccdf:select idref="audit_rules_usergroup_modification_opasswd" selected="true"/>
+
+
+<!-- UBTU-20-010117 The Ubuntu operating system must alert the ISSO and SA (at a minimum) in the event of an audit processing failure. -->
+<xccdf:set-value idref="var_auditd_action_mail_acct">root</xccdf:set-value>
+<xccdf:select idref="auditd_data_retention_action_mail_acct" selected="true"/>
+
+
+<!-- UBTU-20-010118 The Ubuntu operating system must shut down by default upon audit failure (unless availability is an overriding concern). -->
+<xccdf:set-value idref="var_auditd_disk_full_action">halt</xccdf:set-value>
+<xccdf:select idref="auditd_data_disk_full_action" selected="true"/>
+
+
+<!-- UBTU-20-010122 The Ubuntu operating system must be configured so that audit log files are not read or write-accessible by unauthorized users. -->
+<xccdf:select idref="file_permissions_var_log_audit" selected="true"/>
+
+
+<!-- UBTU-20-010123 The Ubuntu operating system must be configured to permit only authorized users ownership of the audit log files. -->
+<xccdf:select idref="file_ownership_var_log_audit_stig" selected="true"/>
+
+
+<!-- UBTU-20-010124 The Ubuntu operating system must permit only authorized groups ownership of the audit log files. -->
+<xccdf:select idref="file_group_ownership_var_log_audit" selected="true"/>
+
+
+<!-- UBTU-20-010128 The Ubuntu operating system must be configured so that the audit log directory is not write-accessible by unauthorized users. -->
+<xccdf:select idref="directory_permissions_var_log_audit" selected="true"/>
+
+
+<!-- UBTU-20-010133 The Ubuntu operating system must be configured so that audit configuration files are not write-accessible by unauthorized users. -->
+<xccdf:select idref="file_permissions_etc_audit_rulesd" selected="true"/>
+<xccdf:select idref="file_permissions_etc_audit_auditd" selected="true"/>
+
+
+<!-- UBTU-20-010134 The Ubuntu operating system must permit only authorized accounts to own the audit configuration files. -->
+<xccdf:select idref="file_ownership_audit_configuration" selected="true"/>
+
+
+<!-- UBTU-20-010135 The Ubuntu operating system must permit only authorized groups to own the audit configuration files. -->
+<xccdf:select idref="file_groupownership_audit_configuration" selected="true"/>
+
+
+<!-- UBTU-20-010136 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the su command. -->
+<xccdf:select idref="audit_rules_privileged_commands_su" selected="true"/>
+
+
+<!-- UBTU-20-010137 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chfn command. -->
+<xccdf:select idref="audit_rules_privileged_commands_chfn" selected="true"/>
+
+
+<!-- UBTU-20-010138 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the mount command. -->
+<xccdf:select idref="audit_rules_privileged_commands_mount" selected="true"/>
+
+
+<!-- UBTU-20-010139 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the umount command. -->
+<xccdf:select idref="audit_rules_privileged_commands_umount" selected="true"/>
+
+
+<!-- UBTU-20-010140 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the ssh-agent command. -->
+<xccdf:select idref="audit_rules_privileged_commands_ssh_agent" selected="true"/>
+
+
+<!-- UBTU-20-010141 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the ssh-keysign command. -->
+<xccdf:select idref="audit_rules_privileged_commands_ssh_keysign" selected="true"/>
+
+
+<!-- UBTU-20-010142 The Ubuntu operating system must generate audit records for any use of the setxattr system call. -->
+<xccdf:select idref="audit_rules_dac_modification_setxattr" selected="true"/>
+
+
+<!-- UBTU-20-010143 The Ubuntu operating system must generate audit records for any use of the lsetxattr system call. -->
+<xccdf:select idref="audit_rules_dac_modification_lsetxattr" selected="true"/>
+
+
+<!-- UBTU-20-010144 The Ubuntu operating system must generate audit records for any use of the fsetxattr system call. -->
+<xccdf:select idref="audit_rules_dac_modification_fsetxattr" selected="true"/>
+
+
+<!-- UBTU-20-010145 The Ubuntu operating system must generate audit records for any use of the removexattr system call. -->
+<xccdf:select idref="audit_rules_dac_modification_removexattr" selected="true"/>
+
+
+<!-- UBTU-20-010146 The Ubuntu operating system must generate audit records for any use of the lremovexattr system call. -->
+<xccdf:select idref="audit_rules_dac_modification_lremovexattr" selected="true"/>
+
+
+<!-- UBTU-20-010147 The Ubuntu operating system must generate audit records for any use of the fremovexattr system call. -->
+<xccdf:select idref="audit_rules_dac_modification_fremovexattr" selected="true"/>
+
+
+<!-- UBTU-20-010148 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chown system call. -->
+<xccdf:select idref="audit_rules_dac_modification_chown" selected="true"/>
+
+
+<!-- UBTU-20-010149 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchown system call. -->
+<xccdf:select idref="audit_rules_dac_modification_fchown" selected="true"/>
+
+
+<!-- UBTU-20-010150 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchownat system call. -->
+<xccdf:select idref="audit_rules_dac_modification_fchownat" selected="true"/>
+
+
+<!-- UBTU-20-010151 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the lchown system call. -->
+<xccdf:select idref="audit_rules_dac_modification_lchown" selected="true"/>
+
+
+<!-- UBTU-20-010152 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chmod system call. -->
+<xccdf:select idref="audit_rules_dac_modification_chmod" selected="true"/>
+
+
+<!-- UBTU-20-010153 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchmod system call. -->
+<xccdf:select idref="audit_rules_dac_modification_fchmod" selected="true"/>
+
+
+<!-- UBTU-20-010154 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchmodat system call. -->
+<xccdf:select idref="audit_rules_dac_modification_fchmodat" selected="true"/>
+
+
+<!-- UBTU-20-010155 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the open system call. -->
+<xccdf:select idref="audit_rules_unsuccessful_file_modification_open" selected="true"/>
+
+
+<!-- UBTU-20-010156 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the truncate system call. -->
+<xccdf:select idref="audit_rules_unsuccessful_file_modification_truncate" selected="true"/>
+
+
+<!-- UBTU-20-010157 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the ftruncate system call. -->
+<xccdf:select idref="audit_rules_unsuccessful_file_modification_ftruncate" selected="true"/>
+
+
+<!-- UBTU-20-010158 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the creat system call. -->
+<xccdf:select idref="audit_rules_unsuccessful_file_modification_creat" selected="true"/>
+
+
+<!-- UBTU-20-010159 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the openat system call. -->
+<xccdf:select idref="audit_rules_unsuccessful_file_modification_openat" selected="true"/>
+
+
+<!-- UBTU-20-010160 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the open_by_handle_at system call. -->
+<xccdf:select idref="audit_rules_unsuccessful_file_modification_open_by_handle_at" selected="true"/>
+
+
+<!-- UBTU-20-010161 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudo command. -->
+<xccdf:select idref="audit_rules_privileged_commands_sudo" selected="true"/>
+
+
+<!-- UBTU-20-010162 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudoedit command. -->
+<xccdf:select idref="audit_rules_privileged_commands_sudoedit" selected="true"/>
+
+
+<!-- UBTU-20-010163 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chsh command. -->
+<xccdf:select idref="audit_rules_privileged_commands_chsh" selected="true"/>
+
+
+<!-- UBTU-20-010164 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the newgrp command. -->
+<xccdf:select idref="audit_rules_privileged_commands_newgrp" selected="true"/>
+
+
+<!-- UBTU-20-010165 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chcon command. -->
+<xccdf:select idref="audit_rules_execution_chcon" selected="true"/>
+
+
+<!-- UBTU-20-010166 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the apparmor_parser command. -->
+<xccdf:select idref="audit_rules_privileged_commands_apparmor_parser" selected="true"/>
+
+
+<!-- UBTU-20-010167 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the setfacl command. -->
+<xccdf:select idref="audit_rules_execution_setfacl" selected="true"/>
+
+
+<!-- UBTU-20-010168 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chacl command. -->
+<xccdf:select idref="audit_rules_execution_chacl" selected="true"/>
+
+
+<!-- UBTU-20-010169 The Ubuntu operating system must generate audit records for the use and modification of the tallylog file. -->
+<xccdf:select idref="audit_rules_login_events_tallylog" selected="true"/>
+
+
+<!-- UBTU-20-010170 The Ubuntu operating system must generate audit records for the use and modification of faillog file. -->
+<xccdf:select idref="audit_rules_login_events_faillog" selected="true"/>
+
+
+<!-- UBTU-20-010171 The Ubuntu operating system must generate audit records for the use and modification of the lastlog file. -->
+<xccdf:select idref="audit_rules_login_events_lastlog" selected="true"/>
+
+
+<!-- UBTU-20-010172 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the passwd command. -->
+<xccdf:select idref="audit_rules_privileged_commands_passwd" selected="true"/>
+
+
+<!-- UBTU-20-010173 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the unix_update command. -->
+<xccdf:select idref="audit_rules_privileged_commands_unix_update" selected="true"/>
+
+
+<!-- UBTU-20-010174 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the gpasswd command. -->
+<xccdf:select idref="audit_rules_privileged_commands_gpasswd" selected="true"/>
+
+
+<!-- UBTU-20-010175 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chage command. -->
+<xccdf:select idref="audit_rules_privileged_commands_chage" selected="true"/>
+
+
+<!-- UBTU-20-010176 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the usermod command. -->
+<xccdf:select idref="audit_rules_privileged_commands_usermod" selected="true"/>
+
+
+<!-- UBTU-20-010177 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the crontab command. -->
+<xccdf:select idref="audit_rules_privileged_commands_crontab" selected="true"/>
+
+
+<!-- UBTU-20-010178 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the pam_timestamp_check command. -->
+<xccdf:select idref="audit_rules_privileged_commands_pam_timestamp_check" selected="true"/>
+
+
+<!-- UBTU-20-010179 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the init_module syscall. -->
+<xccdf:select idref="audit_rules_kernel_module_loading_init" selected="true"/>
+
+
+<!-- UBTU-20-010180 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the finit_module syscall. -->
+<xccdf:select idref="audit_rules_kernel_module_loading_finit" selected="true"/>
+
+
+<!-- UBTU-20-010182 The Ubuntu operating system must produce audit records and reports containing information to establish when, where, what type, the source, and the outcome for all DoD-defined auditable events and actions in near real time. -->
+<xccdf:select idref="package_audit_installed" selected="true"/>
+<xccdf:select idref="service_auditd_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010198 The Ubuntu operating system must initiate session audits at system start-up. -->
+<xccdf:select idref="grub2_audit_argument" selected="true"/>
+
+
+<!-- UBTU-20-010199 The Ubuntu operating system must configure audit tools with a mode of 0755 or less permissive. -->
+<xccdf:select idref="file_permissions_audit_binaries" selected="true"/>
+
+
+<!-- UBTU-20-010200 The Ubuntu operating system must configure audit tools to be owned by root. -->
+<xccdf:select idref="file_ownership_audit_binaries" selected="true"/>
+
+
+<!-- UBTU-20-010201 The Ubuntu operating system must configure the audit tools to be group-owned by root. -->
+<xccdf:select idref="file_groupownership_audit_binaries" selected="true"/>
+
+
+<!-- UBTU-20-010205 The Ubuntu operating system must use cryptographic mechanisms to protect the integrity of audit tools. -->
+<xccdf:select idref="aide_check_audit_tools" selected="true"/>
+
+
+<!-- UBTU-20-010211 The Ubuntu operating system must prevent all software from executing at higher privilege levels than users executing the software and the audit system must be configured to audit the execution of privileged functions. -->
+<xccdf:select idref="audit_rules_suid_privilege_function" selected="true"/>
+
+
+<!-- UBTU-20-010215 The Ubuntu operating system must allocate audit record storage capacity to store at least one weeks' worth of audit records, when audit records are not immediately sent to a central audit record storage facility. -->
+<xccdf:select idref="auditd_audispd_configure_sufficiently_large_partition" selected="true"/>
+
+
+<!-- UBTU-20-010216 The Ubuntu operating system audit event multiplexor must be configured to off-load audit logs onto a different system or storage media from the system being audited. -->
+<xccdf:select idref="package_audit-audispd-plugins_installed" selected="true"/>
+<xccdf:select idref="auditd_audispd_configure_remote_server" selected="true"/>
+
+
+<!-- UBTU-20-010217 The Ubuntu operating system must immediately notify the SA and ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity. -->
+<xccdf:set-value idref="var_auditd_space_left">25%</xccdf:set-value>
+<xccdf:set-value idref="var_auditd_space_left_action">email</xccdf:set-value>
+<xccdf:select idref="auditd_data_retention_space_left_action" selected="true"/>
+<xccdf:select idref="auditd_data_retention_space_left" selected="true"/>
+
+
+<!-- UBTU-20-010230 The Ubuntu operating system must record time stamps for audit records that can be mapped to Coordinated Universal Time (UTC) or Greenwich Mean Time (GMT). -->
+<xccdf:select idref="ensure_rtc_utc_configuration" selected="true"/>
+
+
+<!-- UBTU-20-010244 The Ubuntu operating system must generate audit records for privileged activities, nonlocal maintenance, diagnostic sessions and other system-level access. -->
+<xccdf:select idref="audit_sudo_log_events" selected="true"/>
+
+
+<!-- UBTU-20-010267 The Ubuntu operating system must generate audit records for any successful/unsuccessful use of unlink system call. -->
+<xccdf:select idref="audit_rules_file_deletion_events_unlink" selected="true"/>
+
+
+<!-- UBTU-20-010268 The Ubuntu operating system must generate audit records for any successful/unsuccessful use of unlinkat system call. -->
+<xccdf:select idref="audit_rules_file_deletion_events_unlinkat" selected="true"/>
+
+
+<!-- UBTU-20-010269 The Ubuntu operating system must generate audit records for any successful/unsuccessful use of rename system call. -->
+<xccdf:select idref="audit_rules_file_deletion_events_rename" selected="true"/>
+
+
+<!-- UBTU-20-010270 The Ubuntu operating system must generate audit records for any successful/unsuccessful use of renameat system call. -->
+<xccdf:select idref="audit_rules_file_deletion_events_renameat" selected="true"/>
+
+
+<!-- UBTU-20-010277 The Ubuntu operating system must generate audit records for the /var/log/wtmp file. -->
+<xccdf:select idref="audit_rules_session_events_wtmp" selected="true"/>
+
+
+<!-- UBTU-20-010278 The Ubuntu operating system must generate audit records for the /var/run/wtmp file. -->
+<xccdf:select idref="audit_rules_session_events_utmp" selected="true"/>
+
+
+<!-- UBTU-20-010279 The Ubuntu operating system must generate audit records for the /var/log/btmp file. -->
+<xccdf:select idref="audit_rules_session_events_btmp" selected="true"/>
+
+
+<!-- UBTU-20-010296 The Ubuntu operating system must generate audit records when successful/unsuccessful attempts to use modprobe command -->
+<xccdf:select idref="audit_rules_privileged_commands_modprobe" selected="true"/>
+
+
+<!-- UBTU-20-010297 The Ubuntu operating system must generate audit records when successful/unsuccessful attempts to use the kmod command. -->
+<xccdf:select idref="audit_rules_privileged_commands_kmod_0" selected="true"/>
+
+
+<!-- UBTU-20-010298 The Ubuntu operating system must generate audit records when successful/unsuccessful attempts to use the fdisk command. -->
+<xccdf:select idref="audit_rules_privileged_commands_fdisk" selected="true"/>
+
+
+<!-- UBTU-20-010300 The Ubuntu operating system must have a crontab script running weekly to offload audit events of standalone systems. -->
+<xccdf:select idref="auditd_offload_logs" selected="true"/>
+
+
+<!-- UBTU-20-010302 The Ubuntu operating system must generate records for successful/unsuccessful uses of delete_module syscall. -->
+<xccdf:select idref="audit_rules_kernel_module_loading_delete" selected="true"/>
+
+
+<!-- UBTU-20-010400 The Ubuntu operating system must limit the number of concurrent sessions to ten for all accounts and/or account types. -->
+<xccdf:set-value idref="var_accounts_max_concurrent_login_sessions">10</xccdf:set-value>
+<xccdf:select idref="accounts_max_concurrent_login_sessions" selected="true"/>
+
+
+<!-- UBTU-20-010403 The Ubuntu operating system must monitor remote access methods. -->
+<xccdf:select idref="rsyslog_remote_access_monitoring" selected="true"/>
+
+
+<!-- UBTU-20-010404 The Ubuntu operating system must encrypt all stored passwords with a FIPS 140-2 approved cryptographic hashing algorithm. -->
+<xccdf:select idref="set_password_hashing_algorithm_logindefs" selected="true"/>
+
+
+<!-- UBTU-20-010405 The Ubuntu operating system must not have the telnet package installed. -->
+<xccdf:select idref="package_telnetd_removed" selected="true"/>
+
+
+<!-- UBTU-20-010406 The Ubuntu operating system must not have the rsh-server package installed. -->
+<xccdf:select idref="package_rsh-server_removed" selected="true"/>
+
+
+<!-- UBTU-20-010407 The Ubuntu operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the PPSM CAL and vulnerability assessments. -->
+<xccdf:select idref="ufw_only_required_services" selected="true"/>
+
+
+<!-- UBTU-20-010408 The Ubuntu operating system must prevent direct login into the root account. -->
+<xccdf:select idref="prevent_direct_root_logins" selected="true"/>
+
+
+<!-- UBTU-20-010409 The Ubuntu operating system must disable account identifiers (individuals, groups, roles, and devices) after 35 days of inactivity. -->
+<xccdf:select idref="account_disable_post_pw_expiration" selected="true"/>
+
+
+<!-- UBTU-20-010411 The Ubuntu operating system must set a sticky bit  on all public directories to prevent unauthorized and unintended information transferred via shared system resources. -->
+<xccdf:select idref="dir_perms_world_writable_sticky_bits" selected="true"/>
+
+
+<!-- UBTU-20-010412 The Ubuntu operating system must be configured to use TCP syncookies. -->
+<xccdf:select idref="sysctl_net_ipv4_tcp_syncookies" selected="true"/>
+
+
+<!-- UBTU-20-010413 The Ubuntu operating system must disable kernel core dumps  so that it can fail to a secure state if system initialization fails, shutdown fails or aborts fail. -->
+<xccdf:select idref="service_kdump_disabled" selected="true"/>
+
+
+<!-- UBTU-20-010414 Ubuntu operating systems handling data requiring "data at rest" protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest. -->
+<xccdf:select idref="encrypt_partitions" selected="true"/>
+
+
+<!-- UBTU-20-010415 The Ubuntu operating system must deploy Endpoint Security for Linux Threat Prevention (ENSLTP). -->
+<xccdf:select idref="package_mfetp_installed" selected="true"/>
+
+
+<!-- UBTU-20-010416 The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries. -->
+<xccdf:select idref="permissions_local_var_log" selected="true"/>
+
+
+<!-- UBTU-20-010417 The Ubuntu operating system must configure the /var/log directory to be group-owned by syslog. -->
+<xccdf:select idref="file_groupowner_var_log" selected="true"/>
+
+
+<!-- UBTU-20-010418 The Ubuntu operating system must configure the /var/log directory to be owned by root. -->
+<xccdf:select idref="file_owner_var_log" selected="true"/>
+
+
+<!-- UBTU-20-010419 The Ubuntu operating system must configure the /var/log directory to have mode 0750 or less permissive. -->
+<xccdf:select idref="file_permissions_var_log" selected="true"/>
+
+
+<!-- UBTU-20-010420 The Ubuntu operating system must configure the /var/log/syslog file to be group-owned by adm. -->
+<xccdf:select idref="file_groupowner_var_log_syslog" selected="true"/>
+
+
+<!-- UBTU-20-010421 The Ubuntu operating system must configure /var/log/syslog file to be owned by syslog. -->
+<xccdf:select idref="file_owner_var_log_syslog" selected="true"/>
+
+
+<!-- UBTU-20-010422 The Ubuntu operating system must configure /var/log/syslog file with mode 0640 or less permissive. -->
+<xccdf:select idref="file_permissions_var_log_syslog" selected="true"/>
+
+
+<!-- UBTU-20-010423 The Ubuntu operating system must have directories that contain system commands set to a mode of 0755 or less permissive. -->
+<xccdf:select idref="dir_permissions_binary_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010424 The Ubuntu operating system must have directories that contain system commands owned by root. -->
+<xccdf:select idref="dir_ownership_binary_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010425 The Ubuntu operating system must have directories that contain system commands group-owned by root. -->
+<xccdf:select idref="dir_groupownership_binary_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010426 The Ubuntu operating system library files must have mode 0755 or less permissive. -->
+<xccdf:select idref="file_permissions_library_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010427 The Ubuntu operating system library directories must have mode 0755 or less permissive. -->
+<xccdf:select idref="dir_permissions_library_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010428 The Ubuntu operating system library files must be owned by root. -->
+<xccdf:select idref="file_ownership_library_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010429 The Ubuntu operating system library directories must be owned by root. -->
+<xccdf:select idref="dir_ownership_library_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010430 The Ubuntu operating system library files must be group-owned by root. -->
+<xccdf:select idref="root_permissions_syslibrary_files" selected="true"/>
+
+
+<!-- UBTU-20-010431 The Ubuntu operating system library directories must be group-owned by root. -->
+<xccdf:select idref="dir_groupownership_library_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010432 The Ubuntu operating system must be configured to preserve log records from failure events. -->
+<xccdf:select idref="service_rsyslog_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010433 The Ubuntu operating system must have an application firewall installed in order to control remote access methods. -->
+<xccdf:set-value idref="var_firewall_package">ufw</xccdf:set-value>
+<xccdf:select idref="package_ufw_installed" selected="true"/>
+
+
+<!-- UBTU-20-010434 The Ubuntu operating system must enable and run the uncomplicated firewall(ufw). -->
+<xccdf:select idref="service_ufw_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010435 The Ubuntu operating system must, for networked systems, compare internal information system clocks at least every 24 hours with a server which is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, or a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS). -->
+<xccdf:set-value idref="var_time_service_set_maxpoll">17</xccdf:set-value>
+<xccdf:select idref="package_chrony_installed" selected="true"/>
+<xccdf:select idref="chronyd_or_ntpd_set_maxpoll" selected="true"/>
+
+
+<!-- UBTU-20-010436 The Ubuntu operating system must synchronize internal information system clocks to the authoritative time source when the time difference is greater than one second. -->
+<xccdf:select idref="chronyd_sync_clock" selected="true"/>
+
+
+<!-- UBTU-20-010438 The Ubuntu operating system's Advance Package Tool (APT) must be configured to prevent the installation of patches, service packs, device drivers, or Ubuntu operating system components without verification they have been digitally signed using a certificate that is recognized and approved by the organization. -->
+<xccdf:select idref="apt_conf_disallow_unauthenticated" selected="true"/>
+
+
+<!-- UBTU-20-010439 The Ubuntu operating system must be configured to use AppArmor. -->
+<xccdf:select idref="package_apparmor_installed" selected="true"/>
+<xccdf:select idref="apparmor_configured" selected="true"/>
+
+
+<!-- UBTU-20-010440 The Ubuntu operating system must allow the use of a temporary password for system logons with an immediate change to a permanent password. -->
+<xccdf:select idref="policy_temp_passwords_immediate_change" selected="true"/>
+
+
+<!-- UBTU-20-010441 The Ubuntu operating system must be configured such that Pluggable Authentication Module (PAM) prohibits the use of cached authentications after one day. -->
+<xccdf:select idref="sssd_offline_cred_expiration" selected="true"/>
+
+
+<!-- UBTU-20-010442 The Ubuntu operating system must implement NIST FIPS-validated cryptography  to protect classified information and for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. -->
+<xccdf:select idref="is_fips_mode_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010443 The Ubuntu operating system must only allow the use of DoD PKI-established certificate authorities for verification of the establishment of protected sessions. -->
+<xccdf:select idref="only_allow_dod_certs" selected="true"/>
+
+
+<!-- UBTU-20-010446 The Ubuntu operating system must configure the uncomplicated firewall to rate-limit impacted network interfaces. -->
+<xccdf:select idref="ufw_rate_limit" selected="true"/>
+
+
+<!-- UBTU-20-010447 The Ubuntu operating system must implement non-executable data to protect its memory from unauthorized code execution. -->
+<xccdf:select idref="ensure_xd_nx_support_enabled" selected="true"/>
+
+
+<!-- UBTU-20-010448 The Ubuntu operating system must implement address space layout randomization to protect its memory from unauthorized code execution. -->
+<xccdf:select idref="sysctl_kernel_randomize_va_space" selected="true"/>
+
+
+<!-- UBTU-20-010449 The Ubuntu operating system must be configured so that Advance Package Tool (APT) removes all software components after updated versions have been installed. -->
+<xccdf:select idref="clean_components_post_updating" selected="true"/>
+
+
+<!-- UBTU-20-010450 The Ubuntu operating system must use a file integrity tool to verify correct operation of all security functions. -->
+<xccdf:select idref="package_aide_installed" selected="true"/>
+
+
+<!-- UBTU-20-010453 The Ubuntu operating system must display the date and time of the last successful account logon upon logon. -->
+<xccdf:select idref="display_login_attempts" selected="true"/>
+
+
+<!-- UBTU-20-010455 The Ubuntu operating system must disable all wireless network adapters. -->
+<xccdf:select idref="wireless_disable_interfaces" selected="true"/>
+
+
+<!-- UBTU-20-010456 The Ubuntu operating system must have system commands set to a mode of 0755 or less permissive. -->
+<xccdf:select idref="file_permissions_binary_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010457 The Ubuntu operating system must have system commands owned by root. -->
+<xccdf:select idref="file_ownership_binary_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010458 The Ubuntu operating system must have system commands group-owned by root. -->
+<xccdf:select idref="file_groupownership_system_commands_dirs" selected="true"/>
+
+
+<!-- UBTU-20-010459 The Ubuntu operating system must disable the x86 Ctrl-Alt-Delete key sequence if a graphical user interface is installed. -->
+<xccdf:select idref="dconf_gnome_disable_ctrlaltdel_reboot" selected="true"/>
+
+
+<!-- UBTU-20-010460 The Ubuntu operating system must disable the x86 Ctrl-Alt-Delete key sequence. -->
+<xccdf:select idref="disable_ctrlaltdel_reboot" selected="true"/>
+<xccdf:select idref="disable_ctrlaltdel_burstaction" selected="true"/>
+
+
+  </xccdf:Profile>
+</cdf-11-tailoring:Tailoring>

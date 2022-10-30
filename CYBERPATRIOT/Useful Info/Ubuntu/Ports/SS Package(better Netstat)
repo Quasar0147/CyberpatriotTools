@@ -1,0 +1,5 @@
+The SS package can be used in specific manners, and is in fact better that other such packages. A useful syntax could be:
+ss -o state established '( dport = :ssh or sport = :ssh )'
+This finds all connections from SSH
+SS is PRE-INSTALLED, and can be used easily
+Notes: Did not use in script cause got NEARLY everything I need from netstat

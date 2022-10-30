@@ -1,0 +1,15 @@
+TCPDUMP can be used to see what activity is occuring in a port
+Several Syntaxes:
+tcpdump -i eth0
+This lists ALL activity in your ENTIRE interface
+tcpdump port 3389
+Lists all activity on 3389
+
+When observing a few items in scrutiny, -X will provide hex so you can see the packets
+For example
+tcpdump port 3389 -X
+(Note:
+Could be
+tcpdump port -X 3389
+Havent tested)
+Above gives the PACKET info, so you can see what the heck is happening

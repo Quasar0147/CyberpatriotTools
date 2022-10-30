@@ -1,0 +1,13 @@
+---
+- name: disable ctrl-alt-del
+  become: 'yes'
+  systemd:
+    name: ctrl-alt-del.target
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+  tags:
+    - ctrl-alt-del
+    - systemd
+    - CCE-80785-9
+...

@@ -1,0 +1,16 @@
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::Verbose "3";
+APT::Periodic::RandomSleep "1800";
+APT::Periodic::Unattended-Upgrade::Automatic-Reboot "0";
+APT::Get::AllowUnauthenticated "false"; 
+Unattended-Upgrade::Remove-Unused-Dependencies "true"; 
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Allowed-Origins {    
+    "${distro_id} stable";
+    "${distro_id} ${distro_codename}-security";
+    "${distro_id} ${distro_codename}-updates";
+};
+Unattended-Upgrade::Automatic-Reboot "false";

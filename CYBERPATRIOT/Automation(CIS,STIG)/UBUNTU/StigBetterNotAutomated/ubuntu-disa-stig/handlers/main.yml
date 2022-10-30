@@ -1,0 +1,135 @@
+---
+# https://github.com/ansible/ansible/issues/22171
+- name: restart auditd
+  become: 'yes'
+  command: service auditd restart
+  args:
+    warn: false
+  tags:
+    - CCE-80872-5
+
+- name: generate auditd
+  become: 'yes'
+  command: augenrules
+
+- name: restart sysctl
+  become: 'yes'
+  service:
+    name: systemd-sysctl
+    state: restarted
+
+- name: reload systemd
+  become: 'yes'
+  systemd:
+    daemon_reload: 'yes'
+
+- name: rkhunter propupd
+  become: 'yes'
+  command: rkhunter --propupd
+
+- name: enable aidecheck
+  become: 'yes'
+  systemd:
+    name: aidecheck.timer
+    enabled: 'yes'
+    state: started
+
+- name: disable aidecheck
+  become: 'yes'
+  systemd:
+    name: aidecheck.timer
+    state: stopped
+    enabled: 'no'
+
+- name: mask aidecheck
+  become: 'yes'
+  systemd:
+    name: aidecheck.timer
+    masked: 'yes'
+    stated: stopped
+    enabled: 'no'
+
+- name: restart sshd
+  become: 'yes'
+  service:
+    name: sshd
+    state: restarted
+
+- name: restart postfix
+  become: 'yes'
+  service:
+    name: postfix
+    state: restarted
+
+- name: apt-get autoremove
+  become: 'yes'
+  apt:
+    autoremove: 'yes'
+
+- name: apt-get clean
+  become: 'yes'
+  apt:
+    autoclean: 'yes'
+
+- name: mask apport
+  become: 'yes'
+  systemd:
+    name: apport.service
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+
+- name: mask motdnews timer
+  become: 'yes'
+  systemd:
+    name: motd-news.timer
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+
+- name: mask motdnews service
+  become: 'yes'
+  systemd:
+    name: motd-news.service
+    masked: 'yes'
+    enabled: 'no'
+    state: stopped
+
+- name: dnf autoremove
+  dnf:
+    autoremove: 'yes'
+  when: ansible_os_family == "RedHat"
+  tags:
+    - dnf
+    - packages
+
+- name: enable haveged
+  become: 'yes'
+  systemd:
+    name: haveged
+    enabled: 'yes'
+    state: started
+
+- name: reboot node
+  become: 'yes'
+  reboot:
+    pre_reboot_delay: "{{ 3600 | random(start=1) }}"
+
+- name: update cracklib debian
+  become: 'yes'
+  command: update-cracklib
+  when: ansible_os_family == "Debian"
+
+- name: update cracklib redhat
+  become: 'yes'
+  command: create-cracklib-dict /usr/share/dict/*
+  when: ansible_os_family == "RedHat"
+
+- name: update grub
+  become: 'yes'
+  command: update-grub
+
+- name: update grub2
+  become: 'yes'
+  command: grub2-mkconfig
+...

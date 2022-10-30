@@ -1,0 +1,11 @@
+---
+
+- name: Ubuntu 2004 DISA STIG Playbook
+  hosts:
+  become: True
+  gather_facts: True
+  ignore_errors: True
+  roles:
+    - role: ubuntu-disa-stig
+
+...

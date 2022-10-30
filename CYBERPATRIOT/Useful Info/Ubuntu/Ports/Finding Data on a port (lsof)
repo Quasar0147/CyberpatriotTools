@@ -1,0 +1,4 @@
+Other than the ss package, lsof -i :port can help find useful info
+For example:
+lsof -i :8000
+This will find data on a port such as the application running on it.

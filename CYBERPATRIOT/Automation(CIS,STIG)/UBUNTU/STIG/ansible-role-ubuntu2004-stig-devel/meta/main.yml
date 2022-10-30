@@ -1,0 +1,21 @@
+galaxy_info:
+  role_name: beholdenkey.ubuntu2004-stig
+  namespace: 
+  author: beholdenkey
+  description: DISA STIG for Ubuntu 20.04
+
+  issue_tracker_url: https://github.com/ComplianceAsCode/content/issues
+
+  license: BSD-3-Clause
+
+  min_ansible_version: 2.5
+
+  platforms:
+  - name: EL
+    versions:
+    - 8
+
+  galaxy_tags: [system, hardening, openscap, ssg, scap, security, compliance, complianceascode, canonical, ubuntu, stig, disa]
+
+
+dependencies: []

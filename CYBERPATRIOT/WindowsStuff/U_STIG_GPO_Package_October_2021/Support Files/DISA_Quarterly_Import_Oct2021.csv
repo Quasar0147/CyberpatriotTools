@@ -1,0 +1,21 @@
+GPOName,Path
+DoD Microsoft Edge STIG Computer v1r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Microsoft Edge v1r3\GPOs
+DoD Internet Explorer 11 STIG Computer v2r1,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Internet Explorer 11 v2r1\GPOs
+DoD Internet Explorer 11 STIG User v2r1,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Internet Explorer 11 v2r1\GPOs
+DoD Windows 10 STIG Computer v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows 10 v2r3\GPOs
+DoD Windows 10 STIG User v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows 10 v2r3\GPOs
+DoD Windows Server 2012 R2 Member Server STIG Computer v3r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2012 R2 MS and DC v3r3\GPOs
+DoD Windows Server 2012 R2 Member Server STIG User v3r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2012 R2 MS and DC v3r3\GPOs
+DoD Windows Server 2012 R2 Domain Controller STIG Computer v3r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2012 R2 MS and DC v3r3\GPOs
+DoD Windows Server 2012 R2 Domain Controller STIG User v3r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2012 R2 MS and DC v3r3\GPOs
+DoD Windows Server 2016 Domain Controller STIG Computer v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2016 MS and DC v2r3\GPOs
+DoD Windows Server 2016 Domain Controller STIG User v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2016 MS and DC v2r3\GPOs
+DoD Windows Server 2016 Member Server STIG Computer v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2016 MS and DC v2r3\GPOs
+DoD Windows Server 2016 Member Server STIG User v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2016 MS and DC v2r3\GPOs
+DoD Windows Server 2019 Domain Controller STIG Computer v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2019 MS and DC v2r3\GPOs
+DoD Windows Server 2019 Domain Controller STIG User v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2019 MS and DC v2r3\GPOs
+DoD Windows Server 2019 Member Server STIG Computer v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2019 MS and DC v2r3\GPOs
+DoD Windows Server 2019 Member Server STIG User v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Server 2019 MS and DC v2r3\GPOs
+DoD OneDrive for Business 2016 STIG Computer v2r2,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Office System 2016 and Components\GPOs
+DoD OneDrive for Business 2016 STIG User v2r2,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Office System 2016 and Components\GPOs
+DoD Windows Defender Antivirus STIG Computer v2r3,C:\Temp\October 2021 DISA STIG GPO Package 1015\DoD Windows Defender Antivirus STIG v2r3\GPOs

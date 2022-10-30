@@ -1,0 +1,1308 @@
+October 2021 DISA STIG GPO Package 1015
+¦   Change Log.docx
+¦   October 2021 DISA STIG GPO Package 1015 Directory Map.txt
+¦   ReadMe.txt
+¦   
++---ADMX Templates
+¦   +---Adobe
+¦   ¦   ¦   AcrobatDCContinuous.admx
+¦   ¦   ¦   AcrobatProDCContinuous.admx
+¦   ¦   ¦   
+¦   ¦   +---en-us
+¦   ¦           AcrobatDCContinuous.adml
+¦   ¦           AcrobatProDCContinuous.adml
+¦   ¦           
+¦   +---Google
+¦   ¦   ¦   chrome.admx
+¦   ¦   ¦   google.admx
+¦   ¦   ¦   GoogleUpdate.admx
+¦   ¦   ¦   
+¦   ¦   +---en-US
+¦   ¦           chrome.adml
+¦   ¦           google.adml
+¦   ¦           GoogleUpdate.adml
+¦   ¦           
+¦   +---Microsoft
+¦   ¦   ¦   AdmPwd.admx
+¦   ¦   ¦   MSS-legacy.admx
+¦   ¦   ¦   SecGuide.admx
+¦   ¦   ¦   
+¦   ¦   +---en-US
+¦   ¦           AdmPwd.adml
+¦   ¦           MSS-legacy.adml
+¦   ¦           SecGuide.adml
+¦   ¦           
+¦   +---Microsoft Edge
+¦   ¦   ¦   msedge.admx
+¦   ¦   ¦   msedgeupdate.admx
+¦   ¦   ¦   msedgewebview2.admx
+¦   ¦   ¦   
+¦   ¦   +---en-US
+¦   ¦           msedge.adml
+¦   ¦           msedgeupdate.adml
+¦   ¦           msedgewebview2.adml
+¦   ¦           
+¦   +---Office 2013
+¦   ¦   ¦   access15.admx
+¦   ¦   ¦   excel15.admx
+¦   ¦   ¦   inf15.admx
+¦   ¦   ¦   lync15.admx
+¦   ¦   ¦   office15.admx
+¦   ¦   ¦   onent15.admx
+¦   ¦   ¦   outlk15.admx
+¦   ¦   ¦   ppt15.admx
+¦   ¦   ¦   proj15.admx
+¦   ¦   ¦   pub15.admx
+¦   ¦   ¦   spd15.admx
+¦   ¦   ¦   visio15.admx
+¦   ¦   ¦   word15.admx
+¦   ¦   ¦   
+¦   ¦   +---en-us
+¦   ¦           access15.adml
+¦   ¦           excel15.adml
+¦   ¦           inf15.adml
+¦   ¦           lync15.adml
+¦   ¦           office15.adml
+¦   ¦           onent15.adml
+¦   ¦           outlk15.adml
+¦   ¦           ppt15.adml
+¦   ¦           proj15.adml
+¦   ¦           pub15.adml
+¦   ¦           spd15.adml
+¦   ¦           visio15.adml
+¦   ¦           word15.adml
+¦   ¦           
+¦   +---Office 2016-2019-M365
+¦   ¦   ¦   access16.admx
+¦   ¦   ¦   excel16.admx
+¦   ¦   ¦   lync16.admx
+¦   ¦   ¦   office16.admx
+¦   ¦   ¦   onent16.admx
+¦   ¦   ¦   outlk16.admx
+¦   ¦   ¦   ppt16.admx
+¦   ¦   ¦   proj16.admx
+¦   ¦   ¦   pub16.admx
+¦   ¦   ¦   teams16.admx
+¦   ¦   ¦   visio16.admx
+¦   ¦   ¦   word16.admx
+¦   ¦   ¦   
+¦   ¦   +---en-us
+¦   ¦           access16.adml
+¦   ¦           excel16.adml
+¦   ¦           lync16.adml
+¦   ¦           office16.adml
+¦   ¦           onent16.adml
+¦   ¦           outlk16.adml
+¦   ¦           ppt16.adml
+¦   ¦           proj16.adml
+¦   ¦           pub16.adml
+¦   ¦           teams16.adml
+¦   ¦           visio16.adml
+¦   ¦           word16.adml
+¦   ¦           
+¦   +---OneDrive
+¦       ¦   OneDrive.admx
+¦       ¦   
+¦       +---en-us
+¦               OneDrive.adml
+¦               
++---DoD Adobe Acrobat Pro DC Continuous V2R1
+¦   +---GPOs
+¦   ¦   +---{58B892A3-ECB0-4DAD-91D4-B647524DFF30}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦       comment.cmtx
+¦   ¦   ¦           ¦       registry.pol
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---User
+¦   ¦   +---{67BE380B-ADBA-4E71-B702-821D607D4A9B}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       DoD Adobe Acrobat Pro DC Continuous STIG Computer v2r1.html
+¦   ¦       DoD Adobe Acrobat Pro DC Continuous STIG User v2r1.html
+¦   ¦       
+¦   +---WMI Filter
++---DoD Adobe Acrobat Reader DC Continuous V2R1
+¦   +---GPOs
+¦   ¦   +---{74861BF8-24D3-4F2A-A5FF-99A97905FACE}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦       comment.cmtx
+¦   ¦   ¦           ¦       registry.pol
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{C35375BC-06E6-4F8B-9E46-8318F3934421}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               ¦       comment.cmtx
+¦   ¦               ¦       registry.pol
+¦   ¦               ¦       
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       DoD Adobe Acrobat Reader DC Continuous STIG Computer V2R1.html
+¦   ¦       DoD Adobe Acrobat Reader DC Continuous STIG User V2R1.html
+¦   ¦       
+¦   +---WMI Filter
++---DoD Google Chrome V2R4
+¦   +---GPOs
+¦   ¦   +---{EEF6BEB9-04D8-4C6E-B24A-988831E70C92}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               ¦   ¦   comment.cmtx
+¦   ¦               ¦   ¦   registry.pol
+¦   ¦               ¦   ¦   
+¦   ¦               ¦   +---Microsoft
+¦   ¦               ¦   ¦   +---Windows NT
+¦   ¦               ¦   ¦       +---SecEdit
+¦   ¦               ¦   ¦               GptTmpl.inf
+¦   ¦               ¦   ¦               
+¦   ¦               ¦   +---Scripts
+¦   ¦               ¦       +---Shutdown
+¦   ¦               ¦       +---Startup
+¦   ¦               +---User
+¦   +---Reports
+¦   ¦       DoD Google Chrome STIG Computer v2r4.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Google Chrome.mof
+¦           
++---DoD Internet Explorer 11 V2R1
+¦   +---GPOs
+¦   ¦   +---{3B9A25C9-D05C-4BF2-B668-705FD9FB2B60}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{6C6339E6-84D4-4F30-B53C-80971DE439F1}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                   ¦   comment.cmtx
+¦   ¦                   ¦   registry.pol
+¦   ¦                   ¦   
+¦   ¦                   +---Preferences
+¦   ¦                       +---Registry
+¦   ¦                               Registry.xml
+¦   ¦                               
+¦   +---Reports
+¦   ¦       Delta_DoDInternet Explorer11STIGComputer v1r19toDoDInternetExplorer11STIGComputerv2r1.xlsx
+¦   ¦       DoD Internet Explorer 11 STIG Computer v2r1.html
+¦   ¦       DoD Internet Explorer 11 STIG User v2r1.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Internet Explorer 11.mof
+¦           
++---DoD Microsoft Edge V1R3
+¦   +---GPOs
+¦   ¦   +---{DC03A1CE-491C-463B-868E-D5DB8DFE8693}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               ¦       comment.cmtx
+¦   ¦               ¦       registry.pol
+¦   ¦               ¦       
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       Delta_DoDMicrosoftEdgeSTIGComputerv1r2toDoDMicrosoftEdgeSTIGv1r3.xlsx
+¦   ¦       DoD Microsoft Edge STIG Computer v1r3.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Microsoft Edge.mof
+¦           
++---DoD Office 2019-Microsoft 365 Apps V2R3
+¦   +---GPOs
+¦   ¦   +---{51952D45-2826-4AB3-BDDD-E9A6536010D3}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦       comment.cmtx
+¦   ¦   ¦           ¦       registry.pol
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---User
+¦   ¦   +---{5B6C8851-8383-49BE-B26C-1679F6AB2C72}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       DoD Office 2019-Microsoft 365 Apps STIG Computer v2r3.htm
+¦   ¦       DoD Office 2019-Microsoft 365 Apps STIG User v2r3.htm
+¦   ¦       
+¦   +---WMI Filter
+¦           Microsoft Office C2R.mof
+¦           
++---DoD Office System 2013 and Components
+¦   +---GPOs
+¦   ¦   +---{07990314-3443-473C-9CCD-CDFEA1D5DDC2}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{240F74C2-0465-4A87-ACE1-364066A15641}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{27DA054A-1B6B-485F-A981-46810AF32CF7}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{455AA1D6-C22A-41F6-8D86-20145139400A}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{45A93B3A-F8C4-4102-8509-FEC3B216CC43}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{46C22333-24E4-4F5A-BEBA-48634CC51E85}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           ¦   GPO.cmt
+¦   ¦   ¦           ¦   
+¦   ¦   ¦           +---Adm
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---Applications
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{9DDE8B7D-AADE-4F26-B769-DD36CEC7CBB0}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           ¦   GPO.cmt
+¦   ¦   ¦           ¦   
+¦   ¦   ¦           +---Adm
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---Applications
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{9F715CEC-6EB4-41AE-804C-DFF512FCB278}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{B39248FF-4EC8-4E6E-A805-DE639EC598D1}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           ¦   GPO.cmt
+¦   ¦   ¦           ¦   
+¦   ¦   ¦           +---Adm
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---Applications
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{D26A6107-F206-43A6-9C5F-3595093364D5}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{D6775239-5E9A-481C-B56B-8170C5130B54}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{FDCCB0A2-D5C0-4CD1-9AC9-98442968E3A7}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{FE1C2053-1C1C-4837-9D55-3EBBC395C642}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       DoD Access 2013 STIG User v1r6.html
+¦   ¦       DoD Excel 2013 STIG User v1r7.html
+¦   ¦       DoD Infopath 2013 STIG Computer v1r5.html
+¦   ¦       DoD Infopath 2013 STIG User v1r5.html
+¦   ¦       DoD Lync 2013 STIG Computer v1r4.html
+¦   ¦       DoD Office System 2013 STIG Computer v2r1.html
+¦   ¦       DoD Office System 2013 STIG User v2r1.html
+¦   ¦       DoD Outlook 2013 STIG User v1r13.html
+¦   ¦       DoD PowerPoint 2013 STIG User v1r6.html
+¦   ¦       DoD Project 2013 STIG User v1r4.html
+¦   ¦       DoD Publisher 2013 STIG User v1r5.html
+¦   ¦       DoD Visio 2013 STIG User v1r4.html
+¦   ¦       DoD Word 2013 STIG User v1r6.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Access 2013.mof
+¦           Excel 2013.mof
+¦           Groove (OneDrive) 2013.mof
+¦           InfoPath 2013.mof
+¦           Lync 2013.mof
+¦           Microsoft Office 2013.mof
+¦           Outlook 2013.mof
+¦           PowerPoint 2013.mof
+¦           Project 2013.mof
+¦           Publisher 2013.mof
+¦           Visio 2013.mof
+¦           Word 2013.mof
+¦           
++---DoD Office System 2016 and Components
+¦   +---GPOs
+¦   ¦   +---{2605B2C5-F6BF-48FF-B5B0-8BA87C166F4E}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{4F941800-E72A-455E-B71F-37E5A9F86685}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{67666D41-46BF-46F1-B540-F0CFA98C4436}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{693F02D5-F57F-4510-9A00-E80C69EA6567}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{6D55BE93-519A-437E-B6FA-E3A3EAA292DD}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{72D8D8E6-FD02-48C5-8599-440D17A4BE91}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{7505FCD6-2A30-4B85-92A9-8708986DE43F}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦       comment.cmtx
+¦   ¦   ¦           ¦       registry.pol
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---User
+¦   ¦   +---{750886B8-BEAE-4DE1-845E-D484F997D16F}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{A064E040-610A-45F5-A08D-873D7C862D84}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{DD5EE9B9-6481-4ADF-A7BE-FB5E12217E3D}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{E13AC78A-234C-41C4-9B91-0695D5CE4121}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{E325DE8B-677B-47FD-BFB5-021E89E2CDBD}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦       comment.cmtx
+¦   ¦   ¦           ¦       registry.pol
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---User
+¦   ¦   +---{F6F31882-798A-4B6B-8C27-B19A6D1EAFC1}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       DoD Access 2016 STIG User v1r1.html
+¦   ¦       DoD Excel 2016 STIG User v1r2.html
+¦   ¦       DoD Office System 2016 STIG Computer v2r1.html
+¦   ¦       DoD Office System 2016 STIG User v2r1.html
+¦   ¦       DoD OneDrive for Business 2016 STIG Computer v2r2.html
+¦   ¦       DoD OneDrive for Business 2016 STIG User v2r2.html
+¦   ¦       DoD Outlook 2016 STIG User v2r1.html
+¦   ¦       DoD PowerPoint 2016 STIG User v1r1.html
+¦   ¦       DoD Project 2016 STIG User v1r1.html
+¦   ¦       DoD Publisher 2016 STIG User v1r3.html
+¦   ¦       DoD Skype for Business 2016 STIG Computer v1r1.html
+¦   ¦       DoD Visio 2016 STIG User v1r1.html
+¦   ¦       DoD Word 2016 STIG User v1r1.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Access 2016.mof
+¦           Excel 2016.mof
+¦           Microsoft Office 2016.mof
+¦           OneDrive for Business 2016.mof
+¦           Outlook 2016.mof
+¦           PowerPoint 2016.mof
+¦           Project 2016.mof
+¦           Publisher 2016.mof
+¦           Skype for Business 2016.mof
+¦           Visio 2016.mof
+¦           Word 2016.mof
+¦           
++---DoD Windows 10 V2R3
+¦   +---GPOs
+¦   ¦   +---{CCA35329-F542-4C16-9242-5A23944BBF56}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   ¦               ¦   comment.cmtx
+¦   ¦   ¦               ¦   registry.pol
+¦   ¦   ¦               ¦   
+¦   ¦   ¦               +---Applications
+¦   ¦   ¦               +---Documents & Settings
+¦   ¦   ¦               +---Scripts
+¦   ¦   ¦                   +---Logoff
+¦   ¦   ¦                   +---Logon
+¦   ¦   +---{F55ED5BB-AD6E-4D34-949D-4FC120C7CAF5}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               ¦   ¦   comment.cmtx
+¦   ¦               ¦   ¦   registry.pol
+¦   ¦               ¦   ¦   
+¦   ¦               ¦   +---microsoft
+¦   ¦               ¦   ¦   +---windows nt
+¦   ¦               ¦   ¦       +---Audit
+¦   ¦               ¦   ¦       ¦       audit.csv
+¦   ¦               ¦   ¦       ¦       
+¦   ¦               ¦   ¦       +---SecEdit
+¦   ¦               ¦   ¦               GptTmpl.inf
+¦   ¦               ¦   ¦               
+¦   ¦               ¦   +---Preferences
+¦   ¦               ¦   ¦   +---Registry
+¦   ¦               ¦   +---Scripts
+¦   ¦               ¦       +---Shutdown
+¦   ¦               ¦       +---Startup
+¦   ¦               +---User
+¦   +---Reports
+¦   ¦       Delta_DoDWindows10STIGComputerv2r2toDoDWindows10STIGComputerv2r3.xlsx
+¦   ¦       DoD Windows 10 STIG Computer v2r3.html
+¦   ¦       DoD Windows 10 STIG User v2r3.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Windows 10.mof
+¦           
++---DoD Windows 8 and 8.1 V1R22
+¦   +---GPOs
+¦   ¦   +---{28BE86D7-949F-4D8B-89B9-621EB89BF9BE}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---microsoft
+¦   ¦   ¦           ¦   ¦   +---windows nt
+¦   ¦   ¦           ¦   ¦       +---Audit
+¦   ¦   ¦           ¦   ¦       ¦       audit.csv
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---SecEdit
+¦   ¦   ¦           ¦   ¦               GptTmpl.inf
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{B2A8B5ED-FCDA-4BD5-B0EC-37C37C9CF8D4}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       DoD Windows 8 and 8.1 STIG Computer v1r22.html
+¦   ¦       DoD Windows 8 and 8.1 STIG User v1r22.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Windows 8.1.mof
+¦           
++---DoD Windows Defender Antivirus STIG V2R3
+¦   +---GPOs
+¦   ¦   +---{FF9EF3C0-F1AE-496C-8E98-87E2DDF7492E}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               ¦       comment.cmtx
+¦   ¦               ¦       registry.pol
+¦   ¦               ¦       
+¦   ¦               +---User
+¦   +---Reports
+¦   ¦       DoD Windows Defender Antivirus STIG Computer v2r3.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Windows Defender Antivirus.mof
+¦           
++---DoD Windows Firewall V1R7
+¦   +---GPOs
+¦   ¦   +---{336EC8CD-78A5-4053-848D-C61FDCB0D4D1}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               ¦   ¦   registry.pol
+¦   ¦               ¦   ¦   
+¦   ¦               ¦   +---Applications
+¦   ¦               ¦   +---Microsoft
+¦   ¦               ¦   ¦   +---Windows NT
+¦   ¦               ¦   ¦       +---SecEdit
+¦   ¦               ¦   ¦               GptTmpl.inf
+¦   ¦               ¦   ¦               
+¦   ¦               ¦   +---Scripts
+¦   ¦               ¦       +---Shutdown
+¦   ¦               ¦       +---Startup
+¦   ¦               +---User
+¦   +---Reports
+¦           DoD Windows Firewall STIG v1r7.html
+¦           
++---DoD Windows Server 2012 R2 MS and DC V3R3
+¦   +---GPOs
+¦   ¦   +---{948490BF-9129-439A-8B90-ED3917E04879}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---microsoft
+¦   ¦   ¦           ¦   ¦   +---windows nt
+¦   ¦   ¦           ¦   ¦       +---Audit
+¦   ¦   ¦           ¦   ¦       ¦       audit.csv
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---SecEdit
+¦   ¦   ¦           ¦   ¦               GptTmpl.inf
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{B3355D21-5FEE-4413-9CBC-8FBFAA6CF290}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---microsoft
+¦   ¦   ¦           ¦   ¦   +---windows nt
+¦   ¦   ¦           ¦   ¦       +---Audit
+¦   ¦   ¦           ¦   ¦       ¦       audit.csv
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---SecEdit
+¦   ¦   ¦           ¦   ¦               GptTmpl.inf
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{FC76A0DC-BCE1-4951-A602-007E396C6A22}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{FCE9E770-8D31-412F-8480-9F1F5B6CAE52}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       DoD Windows Server 2012 R2 Domain Controller STIG Computer v3r3.html
+¦   ¦       DoD Windows Server 2012 R2 Domain Controller STIG User v3r3.html
+¦   ¦       DoD Windows Server 2012 R2 Member Server STIG Computer v3r3.html
+¦   ¦       DoD Windows Server 2012 R2 Member Server STIG User v3r3.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Windows Server 2012 R2 Domain Controller.mof
+¦           Windows Server 2012 R2 Member Server.mof
+¦           
++---DoD Windows Server 2016 MS and DC V2R3
+¦   +---GPOs
+¦   ¦   +---{06D7E7DD-3934-4B66-82A5-D89B46A10158}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{0CF8AFAB-6FEE-49D4-B5BC-8AA8B80FBBC4}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---microsoft
+¦   ¦   ¦           ¦   ¦   +---windows nt
+¦   ¦   ¦           ¦   ¦       +---Audit
+¦   ¦   ¦           ¦   ¦       ¦       audit.csv
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---SecEdit
+¦   ¦   ¦           ¦   ¦               GptTmpl.inf
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{A398530F-9D74-4B3E-A047-635968F575A1}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---microsoft
+¦   ¦   ¦           ¦   ¦   +---windows nt
+¦   ¦   ¦           ¦   ¦       +---Audit
+¦   ¦   ¦           ¦   ¦       ¦       audit.csv
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---SecEdit
+¦   ¦   ¦           ¦   ¦               GptTmpl.inf
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{DB81496C-FACC-4AC3-A24D-EAA604CBF544}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                   ¦   comment.cmtx
+¦   ¦                   ¦   registry.pol
+¦   ¦                   ¦   
+¦   ¦                   +---Documents & Settings
+¦   ¦                   +---Scripts
+¦   ¦                       +---Logoff
+¦   ¦                       +---Logon
+¦   +---Reports
+¦   ¦       Delta_DoDWindowsServer2012R2DCSTIGComputerv3r2_to_DoDWindowsServer2012R2DCSTIGComputerv3r3.xlsx
+¦   ¦       Delta_DoDWindowsServer2012R2MSSTIGComputerv3r2_to_DoDWindowsServer2012R2MSSTIGComputerv3r3.xlsx
+¦   ¦       DoD Windows Server 2016 Domain Controller STIG Computer v2r3.html
+¦   ¦       DoD Windows Server 2016 Domain Controller STIG User v2r3.html
+¦   ¦       DoD Windows Server 2016 Member Server STIG Computer v2r3.html
+¦   ¦       DoD Windows Server 2016 Member Server STIG User v2r3.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Windows Server 2016 Domain Controller.mof
+¦           Windows Server 2016 Member Server.mof
+¦           
++---DoD Windows Server 2019 MS and DC V2R3
+¦   +---GPOs
+¦   ¦   +---{3C3787A8-9432-46C5-9ABD-7B372550381A}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---microsoft
+¦   ¦   ¦           ¦   ¦   +---windows nt
+¦   ¦   ¦           ¦   ¦       +---Audit
+¦   ¦   ¦           ¦   ¦       ¦       audit.csv
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---SecEdit
+¦   ¦   ¦           ¦   ¦               GptTmpl.inf
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{8B300D49-EDC9-43B8-B8AA-E8A8EBC519B4}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           ¦   ¦   comment.cmtx
+¦   ¦   ¦           ¦   ¦   registry.pol
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---microsoft
+¦   ¦   ¦           ¦   ¦   +---windows nt
+¦   ¦   ¦           ¦   ¦       +---Audit
+¦   ¦   ¦           ¦   ¦       ¦       audit.csv
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---SecEdit
+¦   ¦   ¦           ¦   ¦               GptTmpl.inf
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---Preferences
+¦   ¦   ¦           ¦   ¦   +---Registry
+¦   ¦   ¦           ¦   +---Scripts
+¦   ¦   ¦           ¦       +---Shutdown
+¦   ¦   ¦           ¦       +---Startup
+¦   ¦   ¦           +---User
+¦   ¦   +---{A1F8BD3D-976E-492B-AB45-6932077EA382}
+¦   ¦   ¦   ¦   Backup.xml
+¦   ¦   ¦   ¦   gpreport.xml
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---DomainSysvol
+¦   ¦   ¦       +---GPO
+¦   ¦   ¦           +---Machine
+¦   ¦   ¦           +---User
+¦   ¦   ¦                   comment.cmtx
+¦   ¦   ¦                   registry.pol
+¦   ¦   ¦                   
+¦   ¦   +---{C1E7B26E-6E02-4CE5-80A3-11F560B11ED1}
+¦   ¦       ¦   Backup.xml
+¦   ¦       ¦   gpreport.xml
+¦   ¦       ¦   
+¦   ¦       +---DomainSysvol
+¦   ¦           +---GPO
+¦   ¦               +---Machine
+¦   ¦               +---User
+¦   ¦                       comment.cmtx
+¦   ¦                       registry.pol
+¦   ¦                       
+¦   +---Reports
+¦   ¦       Delta_DoDWindows Server2019DCSTIGComputerv2r2toDoDWindows Server2019DCSTIGComputerv2r3.xlsx
+¦   ¦       Delta_DoDWindows Server2019MSSTIGComputerv2r2toDoDWindows Server2019MSSTIGComputerv2r3.xlsx
+¦   ¦       DoD Windows Server 2019 Domain Controller STIG Computer v2r3.html
+¦   ¦       DoD Windows Server 2019 Domain Controller STIG User v2r3.html
+¦   ¦       DoD Windows Server 2019 Member Server STIG Computer v2r3.html
+¦   ¦       DoD Windows Server 2019 Member Server STIG User v2r3.html
+¦   ¦       
+¦   +---WMI Filter
+¦           Windows Server 2019 Domain Controller.mof
+¦           Windows Server 2019 Member Server.mof
+¦           
++---Microsoft Intune Policies
+¦   +---Administrative Templates
+¦   ¦   ¦   DoD Microsoft Edge STIG v1r2.json
+¦   ¦   ¦   DoD Microsoft Office 365 Pro plus STIG v2r2.json
+¦   ¦   ¦   DoD Windows 10 STIG v2r2 Administrative Templates.json
+¦   ¦   ¦   
+¦   ¦   +---Assignments
+¦   +---Client Apps
+¦   ¦   +---Assignments
+¦   +---Device Compliance Policies
+¦   ¦   +---Assignments
+¦   +---Device Configurations
+¦   ¦   ¦   DoD Adobe Acrobat Pro DC Continous STIG v1r2.json
+¦   ¦   ¦   DoD Adobe Acrobat Reader DC Continuous STIG v2r1.json
+¦   ¦   ¦   DoD Google Chrome STIG v2r4.json
+¦   ¦   ¦   DoD Windows 10 STIG v2r2 Custom Profile.json
+¦   ¦   ¦   DoD Windows 10 STIG v2r2 User Right Assignment.json
+¦   ¦   ¦   
+¦   ¦   +---Assignments
+¦   +---Device Management Intents
+¦   ¦   +---Microsoft Edge baseline
+¦   ¦   +---Windows 10 MDM Security Baseline for Decemeber 2020
+¦   +---Device Management Scripts
+¦       +---Assignments
+¦       +---Script Content
++---Support Files
+    ¦   DISA_AllGPO_Import_Oct2021.csv
+    ¦   DISA_GPO_Baseline_Import.ps1
+    ¦   DISA_Quarterly_Import_Oct2021.csv
+    ¦   DISA_STIG_GPO_Import.docx
+    ¦   importtable.migtable
+    ¦   Microsoft Intune Policy Import.docx
+    ¦   Sample_LGPO.bat
+    ¦   
+    +---Checklist FIles
+    ¦       DoD Adobe Acrobat Pro DC Continuous STIG v2r1.ckl
+    ¦       DoD Adobe Acrobat Reader DC Continuous STIG v2r1.ckl
+    ¦       DoD Google Chrome STIG v2r4.ckl
+    ¦       DoD Internet Explorer 11 STIG v2r1.ckl
+    ¦       DoD Microsoft Edge STIG v1r3.ckl
+    ¦       DoD Microsoft Office 2016 System v2r1.ckl
+    ¦       DoD Microsoft Office 365 ProPlus STIG v2r3.ckl
+    ¦       DoD Windows 10 STIG v2r3.ckl
+    ¦       DoD Windows Defender Antivirus STIG v2r3.ckl
+    ¦       DoD Windows Firewall STIG v1r7.ckl
+    ¦       DoD Windows Server 2019_DC STIG v2r2.ckl
+    ¦       DoD Windows Server 2019_MS STIG v2r2.ckl
+    ¦       
+    +---Local Policies
+        +---DoD Windows 10 v2r3
+        ¦   +---GPOs
+        ¦   ¦   +---{25D38094-7EDD-4643-B275-F6CE10275EF1}
+        ¦   ¦   ¦   ¦   Backup.xml
+        ¦   ¦   ¦   ¦   gpreport.xml
+        ¦   ¦   ¦   ¦   
+        ¦   ¦   ¦   +---DomainSysvol
+        ¦   ¦   ¦       +---GPO
+        ¦   ¦   ¦           +---Machine
+        ¦   ¦   ¦           ¦   ¦   comment.cmtx
+        ¦   ¦   ¦           ¦   ¦   registry.pol
+        ¦   ¦   ¦           ¦   ¦   
+        ¦   ¦   ¦           ¦   +---Preferences
+        ¦   ¦   ¦           ¦   ¦   +---Registry
+        ¦   ¦   ¦           ¦   +---Scripts
+        ¦   ¦   ¦           ¦       +---Shutdown
+        ¦   ¦   ¦           ¦       +---Startup
+        ¦   ¦   ¦           +---User
+        ¦   ¦   ¦               ¦   comment.cmtx
+        ¦   ¦   ¦               ¦   registry.pol
+        ¦   ¦   ¦               ¦   
+        ¦   ¦   ¦               +---Applications
+        ¦   ¦   ¦               +---Documents & Settings
+        ¦   ¦   ¦               +---Scripts
+        ¦   ¦   ¦                   +---Logoff
+        ¦   ¦   ¦                   +---Logon
+        ¦   ¦   +---{4405025A-3960-40E8-AF65-5538B62CC709}
+        ¦   ¦       ¦   Backup.xml
+        ¦   ¦       ¦   gpreport.xml
+        ¦   ¦       ¦   
+        ¦   ¦       +---DomainSysvol
+        ¦   ¦           +---GPO
+        ¦   ¦               +---Machine
+        ¦   ¦               ¦   ¦   comment.cmtx
+        ¦   ¦               ¦   ¦   registry.pol
+        ¦   ¦               ¦   ¦   
+        ¦   ¦               ¦   +---microsoft
+        ¦   ¦               ¦   ¦   +---windows nt
+        ¦   ¦               ¦   ¦       +---Audit
+        ¦   ¦               ¦   ¦       ¦       audit.csv
+        ¦   ¦               ¦   ¦       ¦       
+        ¦   ¦               ¦   ¦       +---SecEdit
+        ¦   ¦               ¦   ¦               GptTmpl.inf
+        ¦   ¦               ¦   ¦               
+        ¦   ¦               ¦   +---Preferences
+        ¦   ¦               ¦   ¦   +---Registry
+        ¦   ¦               ¦   +---Scripts
+        ¦   ¦               ¦       +---Shutdown
+        ¦   ¦               ¦       +---Startup
+        ¦   ¦               +---User
+        ¦   +---Reports
+        ¦           Delta_LPDoDWindows10STIGComputerv2r2toLPDoDWindows10STIGComputerv2r3.xlsx
+        ¦           Local Policy DoD Windows 10 STIG Computer v2r3.html
+        ¦           Local Policy DoD Windows 10 STIG User v2r3.html
+        ¦           
+        +---DoD Windows Server 2012 R2 MS v3r3
+        ¦   +---GPOs
+        ¦   ¦   +---{248D57B2-2B69-4D88-9881-FBFE437D5D09}
+        ¦   ¦   ¦   ¦   Backup.xml
+        ¦   ¦   ¦   ¦   gpreport.xml
+        ¦   ¦   ¦   ¦   
+        ¦   ¦   ¦   +---DomainSysvol
+        ¦   ¦   ¦       +---GPO
+        ¦   ¦   ¦           +---Machine
+        ¦   ¦   ¦           +---User
+        ¦   ¦   ¦                   comment.cmtx
+        ¦   ¦   ¦                   registry.pol
+        ¦   ¦   ¦                   
+        ¦   ¦   +---{79C4D6C4-51D0-4C1B-9012-2920BB11EC22}
+        ¦   ¦       ¦   Backup.xml
+        ¦   ¦       ¦   gpreport.xml
+        ¦   ¦       ¦   
+        ¦   ¦       +---DomainSysvol
+        ¦   ¦           +---GPO
+        ¦   ¦               +---Machine
+        ¦   ¦               ¦   ¦   comment.cmtx
+        ¦   ¦               ¦   ¦   registry.pol
+        ¦   ¦               ¦   ¦   
+        ¦   ¦               ¦   +---microsoft
+        ¦   ¦               ¦   ¦   +---windows nt
+        ¦   ¦               ¦   ¦       +---Audit
+        ¦   ¦               ¦   ¦       ¦       audit.csv
+        ¦   ¦               ¦   ¦       ¦       
+        ¦   ¦               ¦   ¦       +---SecEdit
+        ¦   ¦               ¦   ¦               GptTmpl.inf
+        ¦   ¦               ¦   ¦               
+        ¦   ¦               ¦   +---Preferences
+        ¦   ¦               ¦   ¦   +---Registry
+        ¦   ¦               ¦   +---Scripts
+        ¦   ¦               ¦       +---Shutdown
+        ¦   ¦               ¦       +---Startup
+        ¦   ¦               +---User
+        ¦   +---Reports
+        ¦           Delta_LocalDoDWindowsServer2012R2MSSTIGComputerv3r2_to_LocalDoDWindowsServer2012R2MSSTIGComputerv3r3.xlsx
+        ¦           Local Policy DoD Windows Server 2012 R2 Member Server STIG Computer v3r3.htm
+        ¦           Local Policy DoD Windows Server 2012 R2 Member Server STIG User v3r2.htm
+        ¦           
+        +---DoD Windows Server 2016 MS v2r3
+        ¦   +---GPOs
+        ¦   ¦   +---{8C1C4A78-69B0-4E01-9AF1-8E4883E119AA}
+        ¦   ¦   ¦   ¦   Backup.xml
+        ¦   ¦   ¦   ¦   gpreport.xml
+        ¦   ¦   ¦   ¦   
+        ¦   ¦   ¦   +---DomainSysvol
+        ¦   ¦   ¦       +---GPO
+        ¦   ¦   ¦           +---Machine
+        ¦   ¦   ¦           +---User
+        ¦   ¦   ¦               ¦   comment.cmtx
+        ¦   ¦   ¦               ¦   registry.pol
+        ¦   ¦   ¦               ¦   
+        ¦   ¦   ¦               +---Documents & Settings
+        ¦   ¦   ¦               +---Scripts
+        ¦   ¦   ¦                   +---Logoff
+        ¦   ¦   ¦                   +---Logon
+        ¦   ¦   +---{C8ED21CE-D94C-4847-BFCC-F3C8BBDAB63B}
+        ¦   ¦       ¦   Backup.xml
+        ¦   ¦       ¦   gpreport.xml
+        ¦   ¦       ¦   
+        ¦   ¦       +---DomainSysvol
+        ¦   ¦           +---GPO
+        ¦   ¦               +---Machine
+        ¦   ¦               ¦   ¦   comment.cmtx
+        ¦   ¦               ¦   ¦   registry.pol
+        ¦   ¦               ¦   ¦   
+        ¦   ¦               ¦   +---microsoft
+        ¦   ¦               ¦   ¦   +---windows nt
+        ¦   ¦               ¦   ¦       +---Audit
+        ¦   ¦               ¦   ¦       ¦       audit.csv
+        ¦   ¦               ¦   ¦       ¦       
+        ¦   ¦               ¦   ¦       +---SecEdit
+        ¦   ¦               ¦   ¦               GptTmpl.inf
+        ¦   ¦               ¦   ¦               
+        ¦   ¦               ¦   +---Preferences
+        ¦   ¦               ¦   ¦   +---Registry
+        ¦   ¦               ¦   +---Scripts
+        ¦   ¦               ¦       +---Shutdown
+        ¦   ¦               ¦       +---Startup
+        ¦   ¦               +---User
+        ¦   +---Reports
+        ¦           Delta_LPDoDWindows Server2016MSSTIGComputerv2r2toLPDoDWindows Server2016MSSTIGComputerv2r3.xlsx
+        ¦           Local Policy DoD Windows Server 2016 Member Server STIG Computer v2r3.html
+        ¦           Local Policy DoD Windows Server 2016 Member Server STIG User v2r3.html
+        ¦           
+        +---DoD Windows Server 2019 MS v2r3
+            +---GPOs
+            ¦   +---{4805F68C-DDD7-4FD4-B6CE-E2CC27CC1B29}
+            ¦   ¦   ¦   Backup.xml
+            ¦   ¦   ¦   gpreport.xml
+            ¦   ¦   ¦   
+            ¦   ¦   +---DomainSysvol
+            ¦   ¦       +---GPO
+            ¦   ¦           +---Machine
+            ¦   ¦           +---User
+            ¦   ¦                   comment.cmtx
+            ¦   ¦                   registry.pol
+            ¦   ¦                   
+            ¦   +---{538CFAFB-F47E-48B1-8C65-A4CE038A05B6}
+            ¦       ¦   Backup.xml
+            ¦       ¦   gpreport.xml
+            ¦       ¦   
+            ¦       +---DomainSysvol
+            ¦           +---GPO
+            ¦               +---Machine
+            ¦               ¦   ¦   comment.cmtx
+            ¦               ¦   ¦   registry.pol
+            ¦               ¦   ¦   
+            ¦               ¦   +---microsoft
+            ¦               ¦   ¦   +---windows nt
+            ¦               ¦   ¦       +---Audit
+            ¦               ¦   ¦       ¦       audit.csv
+            ¦               ¦   ¦       ¦       
+            ¦               ¦   ¦       +---SecEdit
+            ¦               ¦   ¦               GptTmpl.inf
+            ¦               ¦   ¦               
+            ¦               ¦   +---Preferences
+            ¦               ¦   ¦   +---Registry
+            ¦               ¦   +---Scripts
+            ¦               ¦       +---Shutdown
+            ¦               ¦       +---Startup
+            ¦               +---User
+            +---Reports
+                    Delta_LPDoDWindows Server2019MSSTIGComputerv2r2toLPDoDWindows Server2019MSSTIGComputerv2r3.xlsx
+                    Local Policy DoD Windows Server 2019 Member Server STIG Computer v2r3.html
+                    Local Policy DoD Windows Server 2019 Member Server STIG User v2r3.html
+                    

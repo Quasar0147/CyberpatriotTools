@@ -1,0 +1,869 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf-11-tailoring:Tailoring xmlns:cdf-11-tailoring="http://open-scap.org/page/Xccdf-1.1-tailoring" xmlns:xccdf="http://checklists.nist.gov/xccdf/1.1" id="xccdf_scap-workbench_tailoring_default">
+  <cdf-11-tailoring:benchmark href="/usr/share/ubuntu-scap-security-guides/1/benchmarks/Canonical_Ubuntu_20.04_Benchmarks-xccdf.xml"/>
+<cdf-11-tailoring:version time="2022-06-28T17:03:21">1</cdf-11-tailoring:version>
+  <xccdf:Profile id="cis_level1_workstation_customized" extends="cis_level1_workstation">
+    <xccdf:title xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="en-US" override="true">CIS Ubuntu 20.04 Level 1 Workstation Benchmark [CUSTOMIZED]</xccdf:title>
+    <xccdf:description xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="en-US" override="true">This baseline aligns to the Center for Internet Security
+Ubuntu 20.04 LTS Benchmark, v1.0.0, released 07-21-2020.</xccdf:description>
+<!-- 1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Automated) -->
+<xccdf:select idref="kernel_module_cramfs_disabled" selected="true"/>
+
+
+<!-- 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled (Automated) -->
+<xccdf:select idref="kernel_module_freevxfs_disabled" selected="true"/>
+
+
+<!-- 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled (Automated) -->
+<xccdf:select idref="kernel_module_jffs2_disabled" selected="true"/>
+
+
+<!-- 1.1.1.4 Ensure mounting of hfs filesystems is disabled (Automated) -->
+<xccdf:select idref="kernel_module_hfs_disabled" selected="true"/>
+
+
+<!-- 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled (Automated) -->
+<xccdf:select idref="kernel_module_hfsplus_disabled" selected="true"/>
+
+
+<!-- 1.1.1.6 Ensure mounting of udf filesystems is disabled (Automated) -->
+<xccdf:select idref="kernel_module_udf_disabled" selected="true"/>
+
+
+<!-- 1.1.2 Ensure /tmp is configured (Automated) -->
+<xccdf:select idref="partition_for_tmp" selected="true"/>
+
+
+<!-- 1.1.3 Ensure nodev option set on /tmp partition (Automated) -->
+<xccdf:select idref="mount_option_tmp_nodev_optional" selected="true"/>
+
+
+<!-- 1.1.4 Ensure nosuid option set on /tmp partition (Automated) -->
+<xccdf:select idref="mount_option_tmp_nosuid_optional" selected="true"/>
+
+
+<!-- 1.1.5 Ensure noexec option set on /tmp partition (Automated) -->
+<xccdf:select idref="mount_option_tmp_noexec_optional" selected="true"/>
+
+
+<!-- 1.1.7 Ensure nodev option set on /dev/shm partition (Automated) -->
+<xccdf:select idref="mount_option_dev_shm_nodev" selected="true"/>
+
+
+<!-- 1.1.8 Ensure nosuid option set on /dev/shm partition (Automated) -->
+<xccdf:select idref="mount_option_dev_shm_nosuid" selected="true"/>
+
+
+<!-- 1.1.9 Ensure noexec option set on /dev/shm partition (Automated) -->
+<xccdf:select idref="mount_option_dev_shm_noexec" selected="true"/>
+
+
+<!-- 1.1.12 Ensure nodev option set on /var/tmp partition (Automated) -->
+<xccdf:select idref="mount_option_var_tmp_nodev_optional" selected="true"/>
+
+
+<!-- 1.1.13 Ensure nosuid option set on /var/tmp partition (Automated) -->
+<xccdf:select idref="mount_option_var_tmp_nosuid_optional" selected="true"/>
+
+
+<!-- 1.1.14 Ensure noexec option set on /var/tmp partition (Automated) -->
+<xccdf:select idref="mount_option_var_tmp_noexec_optional" selected="true"/>
+
+
+<!-- 1.1.18 Ensure nodev option set on /home partition (Automated) -->
+<xccdf:select idref="mount_option_home_nodev_optional" selected="true"/>
+
+
+<!-- 1.1.22 Ensure sticky bit is set on all world-writable directories (Automated) -->
+<xccdf:select idref="dir_perms_world_writable_sticky_bits" selected="true"/>
+
+<!-- 1.1.23 Disable Automounting (Automated) -->
+<xccdf:select idref="service_autofs_disabled" selected="false"/>
+
+
+<!-- 1.1.24 Disable USB Storage (Automated) -->
+<xccdf:select idref="kernel_module_usb-storage_disabled" selected="false"/>
+
+
+<!-- 1.3.1 Ensure sudo is installed (Automated) -->
+<xccdf:select idref="package_sudo_installed" selected="true"/>
+
+
+<!-- 1.3.2 Ensure sudo commands use pty (Automated) -->
+<xccdf:select idref="sudo_add_use_pty" selected="true"/>
+
+
+<!-- 1.3.3 Ensure sudo log file exists (Automated) -->
+<xccdf:select idref="sudo_custom_logfile" selected="true"/>
+
+
+<!-- 1.4.1 Ensure AIDE is installed (Automated) -->
+<xccdf:select idref="package_aide_installed" selected="true"/>
+<xccdf:select idref="aide_build_database" selected="true"/>
+
+
+<!-- 1.4.2 Ensure filesystem integrity is regularly checked (Automated) -->
+<xccdf:select idref="aide_periodic_cron_checking" selected="true"/>
+
+
+<!-- 1.5.1 Ensure bootloader password is set (Automated) -->
+<xccdf:set-value idref="var_grub2_user">root</xccdf:set-value>
+<xccdf:set-value idref="var_grub2_passwd_hash">*</xccdf:set-value>
+<xccdf:select idref="grub2_password" selected="true"/>
+
+
+<!-- 1.5.2 Ensure permissions on bootloader config are configured (Automated) -->
+<xccdf:select idref="file_owner_grub2_cfg" selected="true"/>
+<xccdf:select idref="file_permissions_grub2_cfg" selected="true"/>
+
+
+<!-- 1.5.3 Ensure authentication required for single user mode (Automated) -->
+<xccdf:set-value idref="var_root_passwd_hash">*</xccdf:set-value>
+<xccdf:select idref="single_user_authentication" selected="true"/>
+
+
+<!-- 1.6.1 Ensure XD/NX support is enabled (Automated) -->
+<xccdf:select idref="ensure_xd_nx_support_enabled" selected="true"/>
+
+
+<!-- 1.6.2 Ensure address space layout randomization (ASLR) is enabled (Automated) -->
+<xccdf:select idref="sysctl_kernel_randomize_va_space" selected="true"/>
+
+
+<!-- 1.6.3 Ensure prelink is disabled (Automated) -->
+<xccdf:select idref="package_prelink_removed" selected="true"/>
+
+
+<!-- 1.6.4 Ensure core dumps are restricted (Automated) -->
+<xccdf:select idref="service_apport_disabled" selected="true"/>
+<xccdf:select idref="disable_users_coredumps" selected="true"/>
+<xccdf:select idref="sysctl_fs_suid_dumpable" selected="true"/>
+
+
+<!-- 1.7.1.1 Ensure AppArmor is installed (Automated) -->
+<xccdf:select idref="package_apparmor_installed" selected="true"/>
+
+
+<!-- 1.7.1.2 Ensure AppArmor is enabled in the bootloader configuration (Automated) -->
+<xccdf:select idref="grub2_enable_apparmor" selected="true"/>
+
+
+<!-- 1.7.1.3 Ensure all AppArmor Profiles are in enforce or complain mode (Automated) -->
+<xccdf:set-value idref="var_set_apparmor_enforce_mode">false</xccdf:set-value>
+<xccdf:select idref="ensure_apparmor_enforce_or_complain" selected="true"/>
+
+
+<!-- 1.8.1.1 Ensure message of the day is configured properly (Automated) -->
+<xccdf:select idref="no_etc_motd_leak" selected="true"/>
+
+
+<!-- 1.8.1.2 Ensure local login warning banner is configured properly (Automated) -->
+<xccdf:set-value idref="login_banner_text">Authorized uses only. All activity may be monitored and reported.</xccdf:set-value>
+<xccdf:select idref="no_etc_issue_leak" selected="true"/>
+
+
+<!-- 1.8.1.3 Ensure remote login warning banner is configured properly (Automated) -->
+<xccdf:select idref="no_etc_issue_net_leak" selected="true"/>
+
+
+<!-- 1.8.1.4 Ensure permissions on /etc/motd are configured (Automated) -->
+<xccdf:select idref="file_permissions_etc_motd" selected="true"/>
+<xccdf:select idref="file_owner_etc_motd" selected="true"/>
+<xccdf:select idref="file_groupowner_etc_motd" selected="true"/>
+
+
+<!-- 1.8.1.5 Ensure permissions on /etc/issue are configured (Automated) -->
+<xccdf:select idref="file_permissions_etc_issue" selected="true"/>
+<xccdf:select idref="file_owner_etc_issue" selected="true"/>
+<xccdf:select idref="file_groupowner_etc_issue" selected="true"/>
+
+
+<!-- 1.8.1.6 Ensure permissions on /etc/issue.net are configured (Automated) -->
+<xccdf:select idref="file_permissions_etc_issue_net" selected="true"/>
+<xccdf:select idref="file_owner_etc_issue_net" selected="true"/>
+<xccdf:select idref="file_groupowner_etc_issue_net" selected="true"/>
+
+
+<!-- 1.10 Ensure GDM is removed or login is configured (Automated) -->
+<xccdf:select idref="package_gdm_removed" selected="false"/>
+<xccdf:select idref="enable_dconf_user_profile" selected="true"/>
+<xccdf:select idref="dconf_gnome_banner_enabled" selected="true"/>
+<xccdf:select idref="dconf_gnome_login_banner_text" selected="true"/>
+<xccdf:select idref="dconf_gnome_disable_user_list" selected="true"/>
+
+
+<!-- 2.1.1 Ensure xinetd is not installed (Automated) -->
+<xccdf:select idref="package_xinetd_removed" selected="true"/>
+
+
+<!-- 2.1.2 Ensure openbsd-inetd is not installed (Automated) -->
+<xccdf:select idref="package_openbsd-inetd_removed" selected="true"/>
+
+
+<!-- 2.2.1.1 Ensure time synchronization is in use (Automated) -->
+<xccdf:set-value idref="var_time_synchronization_daemon">chrony</xccdf:set-value>
+<xccdf:select idref="package_chrony_installed" selected="true"/>
+<xccdf:select idref="package_ntp_removed" selected="true"/>
+<xccdf:select idref="service_chrony_enabled" selected="true"/>
+
+
+<!-- 2.2.1.3 Ensure chrony is configured (Automated) -->
+<xccdf:select idref="chronyd_run_as_chrony_user" selected="true"/>
+<xccdf:set-value idref="var_multiple_time_servers">ntp.ubuntu.com,0.ubuntu.pool.ntp.org,1.ubuntu.pool.ntp.org,2.ubuntu.pool.ntp.org</xccdf:set-value>
+<xccdf:select idref="chronyd_specify_remote_server" selected="true"/>
+
+
+<!-- 2.2.1.4 Ensure ntp is configured (Automated) -->
+<xccdf:select idref="package_ntp_installed" selected="true"/>
+<xccdf:select idref="package_chrony_removed" selected="true"/>
+<xccdf:select idref="service_ntp_enabled" selected="true"/>
+
+
+<!-- 2.2.2 Ensure X Window System is not installed (Automated) -->
+<xccdf:select idref="package_xorg-x11-server-common_removed" selected="false"/>
+
+
+<!-- 2.2.3 Ensure Avahi Server is not installed (Automated) -->
+<xccdf:select idref="service_avahi-daemon_disabled" selected="true"/>
+<xccdf:select idref="package_avahi-daemon_removed" selected="true"/>
+
+
+<!-- 2.2.4 Ensure CUPS is not installed (Automated) -->
+<xccdf:select idref="service_cups_disabled" selected="false"/>
+<xccdf:select idref="package_cups_removed" selected="false"/>
+
+
+<!-- 2.2.5 Ensure DHCP Server is not installed (Automated) -->
+<xccdf:select idref="package_dhcp_removed" selected="true"/>
+
+
+<!-- 2.2.6 Ensure LDAP server is not installed (Automated) -->
+<xccdf:select idref="package_openldap-servers_removed" selected="true"/>
+
+
+<!-- 2.2.7 Ensure NFS is not installed (Automated) -->
+<xccdf:select idref="package_nfs-kernel-server_removed" selected="true"/>
+
+
+<!-- 2.2.8 Ensure DNS Server is not installed (Automated) -->
+<xccdf:select idref="package_bind_removed" selected="true"/>
+
+
+<!-- 2.2.9 Ensure FTP Server is not installed (Automated) -->
+<xccdf:select idref="package_vsftpd_removed" selected="true"/>
+
+
+<!-- 2.2.10 Ensure HTTP server is not installed (Automated) -->
+<xccdf:select idref="package_httpd_removed" selected="true"/>
+
+
+<!-- 2.2.11 Ensure IMAP and POP3 server are not installed (Automated) -->
+<xccdf:select idref="package_dovecot_removed" selected="true"/>
+
+
+<!-- 2.2.12 Ensure Samba is not installed (Automated) -->
+<xccdf:select idref="package_samba_removed" selected="true"/>
+
+
+<!-- 2.2.13 Ensure HTTP Proxy Server is not installed (Automated) -->
+<xccdf:select idref="package_squid_removed" selected="true"/>
+
+
+<!-- 2.2.14 Ensure SNMP Server is not installed (Automated) -->
+<xccdf:select idref="package_net-snmp_removed" selected="true"/>
+
+
+<!-- 2.2.15 Ensure mail transfer agent is configured for local-only mode (Automated) -->
+<xccdf:set-value idref="var_postfix_inet_interfaces">loopback-only</xccdf:set-value>
+<xccdf:select idref="postfix_network_listening_disabled" selected="true"/>
+<xccdf:select idref="has_nonlocal_mta" selected="true"/>
+
+
+<!-- 2.2.16 Ensure rsync service is not installed (Automated) -->
+<xccdf:select idref="package_rsync_removed" selected="true"/>
+
+
+<!-- 2.2.17 Ensure NIS Server is not installed (Automated) -->
+<xccdf:select idref="package_nis_removed" selected="true"/>
+
+
+<!-- 2.3.2 Ensure rsh client is not installed (Automated) -->
+<xccdf:select idref="package_rsh_removed" selected="true"/>
+
+
+<!-- 2.3.3 Ensure talk client is not installed (Automated) -->
+<xccdf:select idref="package_talk_removed" selected="true"/>
+
+
+<!-- 2.3.4 Ensure telnet client is not installed (Automated) -->
+<xccdf:select idref="package_telnet_removed" selected="true"/>
+
+
+<!-- 2.3.5 Ensure LDAP client is not installed (Automated) -->
+<xccdf:select idref="package_openldap-clients_removed" selected="true"/>
+
+
+<!-- 2.3.6 Ensure RPC is not installed (Automated) -->
+<xccdf:select idref="package_rpcbind_removed" selected="true"/>
+
+
+<!-- 3.1.2 Ensure wireless interfaces are disabled (Automated) -->
+<xccdf:select idref="wireless_disable_interfaces" selected="false"/>
+
+
+<!-- 3.2.1 Ensure packet redirect sending is disabled (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_conf_all_send_redirects" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv4_conf_default_send_redirects" selected="true"/>
+
+
+<!-- 3.2.2 Ensure IP forwarding is disabled (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_ip_forward" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv6_conf_all_forwarding" selected="true"/>
+
+
+<!-- 3.3.1 Ensure source routed packets are not accepted (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_conf_all_accept_source_route" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv4_conf_default_accept_source_route" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv6_conf_all_accept_source_route" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv6_conf_default_accept_source_route" selected="true"/>
+
+
+<!-- 3.3.2 Ensure ICMP redirects are not accepted (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_conf_all_accept_redirects" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv4_conf_default_accept_redirects" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv6_conf_all_accept_redirects" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv6_conf_default_accept_redirects" selected="true"/>
+
+
+<!-- 3.3.3 Ensure secure ICMP redirects are not accepted (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_conf_all_secure_redirects" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv4_conf_default_secure_redirects" selected="true"/>
+
+
+<!-- 3.3.4 Ensure suspicious packets are logged (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_conf_all_log_martians" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv4_conf_default_log_martians" selected="true"/>
+
+
+<!-- 3.3.5 Ensure broadcast ICMP requests are ignored (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_icmp_echo_ignore_broadcasts" selected="true"/>
+
+
+<!-- 3.3.6 Ensure bogus ICMP responses are ignored (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_icmp_ignore_bogus_error_responses" selected="true"/>
+
+
+<!-- 3.3.7 Ensure Reverse Path Filtering is enabled (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_conf_all_rp_filter" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv4_conf_default_rp_filter" selected="true"/>
+
+
+<!-- 3.3.8 Ensure TCP SYN Cookies is enabled (Automated) -->
+<xccdf:select idref="sysctl_net_ipv4_tcp_syncookies" selected="true"/>
+
+
+<!-- 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated) -->
+<xccdf:select idref="sysctl_net_ipv6_conf_all_accept_ra" selected="true"/>
+<xccdf:select idref="sysctl_net_ipv6_conf_default_accept_ra" selected="true"/>
+
+
+<!-- 3.5 Firewall Configuration -->
+<xccdf:set-value idref="var_firewall_package">iptables</xccdf:set-value>
+
+
+<!-- 3.5.1.1 Ensure Uncomplicated Firewall is installed (Automated) -->
+<xccdf:select idref="package_ufw_installed" selected="true"/>
+
+
+<!-- 3.5.1.2 Ensure iptables-persistent is not installed (Automated) -->
+<xccdf:select idref="package_iptables-persistent_removed" selected="true"/>
+
+
+<!-- 3.5.1.3 Ensure ufw service is enabled (Automated) -->
+<xccdf:select idref="service_ufw_enabled" selected="true"/>
+
+
+<!-- 3.5.1.4 Ensure loopback traffic is configured (Automated) -->
+<xccdf:select idref="ufw_allow_in_lo" selected="true"/>
+<xccdf:select idref="ufw_allow_out_lo" selected="true"/>
+<xccdf:select idref="ufw_deny_in_other_for_localhost" selected="true"/>
+<xccdf:select idref="ufw_deny_in_other_for_localhost6" selected="true"/>
+
+
+<!-- 3.5.1.7 Ensure default deny firewall policy (Automated) -->
+<xccdf:select idref="ufw_default_deny" selected="true"/>
+
+
+<!-- 3.5.2.1 Ensure nftables is installed (Automated) -->
+<xccdf:select idref="package_nftables_installed" selected="true"/>
+
+
+<!-- 3.5.2.2 Ensure Uncomplicated Firewall is not installed or disabled (Automated) -->
+<xccdf:select idref="package_ufw_removed" selected="true"/>
+
+
+<!-- 3.5.2.4 Ensure a table exists (Automated) -->
+<xccdf:select idref="nftables_ensure_table_exists" selected="true"/>
+
+
+<!-- 3.5.2.5 Ensure base chains exist (Automated) -->
+<xccdf:select idref="nftables_ensure_base_chain_exist" selected="true"/>
+
+
+<!-- 3.5.2.6 Ensure loopback traffic is configured (Automated) -->
+<xccdf:select idref="nftables_allow_in_lo" selected="true"/>
+<xccdf:select idref="nftables_deny_in_other_for_localhost" selected="true"/>
+<xccdf:select idref="nftables_deny_in_other_for_localhost6" selected="true"/>
+
+
+<!-- 3.5.2.8 Ensure default deny firewall policy (Automated) -->
+<xccdf:select idref="nftables_default_deny" selected="true"/>
+
+
+<!-- 3.5.2.9 Ensure nftables service is enabled (Automated) -->
+<xccdf:select idref="service_nftables_enabled" selected="true"/>
+
+
+<!-- 3.5.2.10 Ensure nftables rules are permanent (Automated) -->
+<xccdf:select idref="nftables_permanent_rules" selected="true"/>
+
+
+<!-- 3.5.3.1.1 Ensure iptables packages are installed (Automated) -->
+<xccdf:select idref="package_iptables_installed" selected="true"/>
+<xccdf:select idref="package_iptables-persistent_installed" selected="true"/>
+
+
+<!-- 3.5.3.1.2 Ensure nftables is not installed (Automated) -->
+<xccdf:select idref="package_nftables_removed" selected="true"/>
+
+
+<!-- 3.5.3.2.1 Ensure default deny firewall policy (Automated) -->
+<xccdf:select idref="iptables_default_deny" selected="true"/>
+
+
+<!-- 3.5.3.2.2 Ensure loopback traffic is configured (Automated) -->
+<xccdf:select idref="iptables_allow_in_lo" selected="true"/>
+<xccdf:select idref="iptables_allow_out_lo" selected="true"/>
+<xccdf:select idref="iptables_deny_in_other_for_localhost" selected="true"/>
+
+
+<!-- 3.5.3.3.1 Ensure IPv6 default deny firewall policy (Automated) -->
+<xccdf:select idref="ip6tables_default_deny" selected="true"/>
+
+
+<!-- 3.5.3.3.2 Ensure IPv6 loopback traffic is configured (Automated) -->
+<xccdf:select idref="ip6tables_allow_in_lo" selected="true"/>
+<xccdf:select idref="ip6tables_allow_out_lo" selected="true"/>
+<xccdf:select idref="ip6tables_deny_in_other_for_localhost6" selected="true"/>
+
+
+<!-- 4.2.1.1 Ensure rsyslog is installed (Automated) -->
+<xccdf:select idref="package_rsyslog_installed" selected="true"/>
+
+
+<!-- 4.2.1.2 Ensure rsyslog Service is enabled (Automated) -->
+<xccdf:select idref="service_rsyslog_enabled" selected="true"/>
+
+
+<!-- 4.2.1.4 Ensure rsyslog default file permissions configured (Automated) -->
+<xccdf:select idref="rsyslog_filecreatemode" selected="true"/>
+
+
+<!-- 4.2.1.5 Ensure rsyslog is configured to send logs to a remote log host (Automated) -->
+<xccdf:select idref="rsyslog_remote_loghost" selected="true"/>
+
+
+<!-- 4.2.2.1 Ensure journald is configured to send logs to rsyslog (Automated) -->
+<xccdf:select idref="forward_to_syslog" selected="true"/>
+
+
+<!-- 4.2.2.2 Ensure journald is configured to compress large log files (Automated) -->
+<xccdf:select idref="compress_large_logs" selected="true"/>
+
+
+<!-- 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk (Automated) -->
+<xccdf:select idref="persistent_storage" selected="true"/>
+
+
+<!-- 4.2.3 Ensure permissions on all logfiles are configured (Automated) -->
+<xccdf:select idref="all_logfile_permissions" selected="true"/>
+
+
+<!-- 4.4 Ensure logrotate assigns appropriate permissions (Automated) -->
+<xccdf:select idref="ensure_logrotate_permissions" selected="true"/>
+
+
+<!-- 5.1.1 Ensure cron daemon is enabled and running (Automated) -->
+<xccdf:select idref="service_cron_enabled" selected="true"/>
+
+
+<!-- 5.1.2 Ensure permissions on /etc/crontab are configured (Automated) -->
+<xccdf:select idref="file_permissions_crontab" selected="true"/>
+<xccdf:select idref="file_owner_crontab" selected="true"/>
+<xccdf:select idref="file_groupowner_crontab" selected="true"/>
+
+
+<!-- 5.1.3 Ensure permissions on /etc/cron.hourly are configured (Automated) -->
+<xccdf:select idref="file_permissions_cron_hourly" selected="true"/>
+<xccdf:select idref="file_owner_cron_hourly" selected="true"/>
+<xccdf:select idref="file_groupowner_cron_hourly" selected="true"/>
+
+
+<!-- 5.1.4 Ensure permissions on /etc/cron.daily are configured (Automated) -->
+<xccdf:select idref="file_permissions_cron_daily" selected="true"/>
+<xccdf:select idref="file_owner_cron_daily" selected="true"/>
+<xccdf:select idref="file_groupowner_cron_daily" selected="true"/>
+
+
+<!-- 5.1.5 Ensure permissions on /etc/cron.weekly are configured (Automated) -->
+<xccdf:select idref="file_permissions_cron_weekly" selected="true"/>
+<xccdf:select idref="file_owner_cron_weekly" selected="true"/>
+<xccdf:select idref="file_groupowner_cron_weekly" selected="true"/>
+
+
+<!-- 5.1.6 Ensure permissions on /etc/cron.monthly are configured (Automated) -->
+<xccdf:select idref="file_permissions_cron_monthly" selected="true"/>
+<xccdf:select idref="file_owner_cron_monthly" selected="true"/>
+<xccdf:select idref="file_groupowner_cron_monthly" selected="true"/>
+
+
+<!-- 5.1.7 Ensure permissions on /etc/cron.d are configured (Automated) -->
+<xccdf:select idref="file_permissions_cron_d" selected="true"/>
+<xccdf:select idref="file_owner_cron_d" selected="true"/>
+<xccdf:select idref="file_groupowner_cron_d" selected="true"/>
+
+
+<!-- 5.1.8 Ensure cron is restricted to authorized users (Automated) -->
+<xccdf:select idref="restrict_cron_users" selected="true"/>
+<xccdf:select idref="file_permissions_cron_allow" selected="true"/>
+<xccdf:select idref="file_owner_cron_allow" selected="true"/>
+<xccdf:select idref="file_groupowner_cron_allow" selected="true"/>
+
+
+<!-- 5.1.9 Ensure at is restricted to authorized users (Automated) -->
+<xccdf:select idref="restrict_at_users" selected="true"/>
+<xccdf:select idref="file_permissions_at_allow" selected="true"/>
+<xccdf:select idref="file_owner_at_allow" selected="true"/>
+<xccdf:select idref="file_groupowner_at_allow" selected="true"/>
+
+
+<!-- 5.2.1 Ensure permissions on /etc/ssh/sshd_config are configured (Automated) -->
+<xccdf:select idref="file_permissions_sshd_config" selected="true"/>
+<xccdf:select idref="file_owner_sshd_config" selected="true"/>
+<xccdf:select idref="file_groupowner_sshd_config" selected="true"/>
+
+
+<!-- 5.2.2 Ensure permissions on SSH private host key files are configured (Automated) -->
+<xccdf:select idref="file_permissions_sshd_private_key" selected="true"/>
+
+
+<!-- 5.2.3 Ensure permissions on SSH public host key files are configured (Automated) -->
+<xccdf:select idref="file_permissions_sshd_pub_key" selected="true"/>
+
+
+<!-- 5.2.4 Ensure SSH LogLevel is appropriate (Automated) -->
+<xccdf:set-value idref="var_sshd_set_loglevel">INFO</xccdf:set-value>
+<xccdf:select idref="sshd_set_loglevel_info_or_verbose" selected="true"/>
+
+
+<!-- 5.2.6 Ensure SSH MaxAuthTries is set to 4 or less (Automated) -->
+<xccdf:set-value idref="sshd_max_auth_tries_value">4</xccdf:set-value>
+<xccdf:select idref="sshd_set_max_auth_tries" selected="true"/>
+
+
+<!-- 5.2.7 Ensure SSH IgnoreRhosts is enabled (Automated) -->
+<xccdf:select idref="sshd_disable_rhosts" selected="true"/>
+
+
+<!-- 5.2.8 Ensure SSH HostbasedAuthentication is disabled (Automated) -->
+<xccdf:select idref="disable_host_auth" selected="true"/>
+
+
+<!-- 5.2.9 Ensure SSH root login is disabled (Automated) -->
+<xccdf:select idref="sshd_disable_root_login" selected="true"/>
+
+
+<!-- 5.2.10 Ensure SSH PermitEmptyPasswords is disabled (Automated) -->
+<xccdf:select idref="sshd_disable_empty_passwords" selected="true"/>
+
+
+<!-- 5.2.11 Ensure SSH PermitUserEnvironment is disabled (Automated) -->
+<xccdf:select idref="sshd_do_not_permit_user_env" selected="true"/>
+
+
+<!-- 5.2.12 Ensure only strong Ciphers are used (Automated) -->
+<xccdf:set-value idref="sshd_approved_ciphers">aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr</xccdf:set-value>
+<xccdf:select idref="sshd_use_approved_ciphers" selected="true"/>
+
+
+<!-- 5.2.13 Ensure only strong MAC algorithms are used (Automated) -->
+<xccdf:set-value idref="sshd_approved_macs">hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-256,hmac-sha2-512</xccdf:set-value>
+<xccdf:select idref="sshd_use_approved_macs" selected="true"/>
+
+
+<!-- 5.2.14 Ensure only strong Key Exchange algorithms are used (Automated) -->
+<xccdf:set-value idref="sshd_approved_kexs">ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256</xccdf:set-value>
+<xccdf:select idref="sshd_use_approved_kexs" selected="true"/>
+
+
+<!-- 5.2.15 Ensure SSH Idle Timeout Interval is configured (Automated) -->
+<xccdf:set-value idref="var_sshd_set_keepalive">3</xccdf:set-value>
+<xccdf:select idref="sshd_set_keepalive" selected="true"/>
+<xccdf:set-value idref="sshd_idle_timeout_value">300</xccdf:set-value>
+<xccdf:select idref="sshd_set_idle_timeout" selected="true"/>
+
+
+<!-- 5.2.16 Ensure SSH LoginGraceTime is set to one minute or less (Automated) -->
+<xccdf:set-value idref="var_sshd_login_grace_time">60</xccdf:set-value>
+<xccdf:select idref="sshd_set_login_grace_time" selected="true"/>
+
+
+<!-- 5.2.17 Ensure SSH access is limited (Automated) -->
+<xccdf:set-value idref="var_sshd_allow_users_valid">e39d05b72f25767869d44391919434896bb055772d7969f74472032b03bc18418911f3b0e6dd47ff8f3b2323728225286c3cb36914d28dc7db40bdd786159c0a</xccdf:set-value>
+<xccdf:set-value idref="var_sshd_allow_groups_valid">e39d05b72f25767869d44391919434896bb055772d7969f74472032b03bc18418911f3b0e6dd47ff8f3b2323728225286c3cb36914d28dc7db40bdd786159c0a</xccdf:set-value>
+<xccdf:set-value idref="var_sshd_deny_users_valid">e39d05b72f25767869d44391919434896bb055772d7969f74472032b03bc18418911f3b0e6dd47ff8f3b2323728225286c3cb36914d28dc7db40bdd786159c0a</xccdf:set-value>
+<xccdf:set-value idref="var_sshd_deny_groups_valid">e39d05b72f25767869d44391919434896bb055772d7969f74472032b03bc18418911f3b0e6dd47ff8f3b2323728225286c3cb36914d28dc7db40bdd786159c0a</xccdf:set-value>
+<xccdf:select idref="sshd_configure_allow_users" selected="true"/>
+<xccdf:select idref="sshd_configure_deny_users" selected="true"/>
+<xccdf:select idref="sshd_configure_allow_groups" selected="true"/>
+<xccdf:select idref="sshd_configure_deny_groups" selected="true"/>
+
+
+<!-- 5.2.18 Ensure SSH warning banner is configured (Automated) -->
+<xccdf:select idref="sshd_enable_warning_banner_net" selected="true"/>
+
+
+<!-- 5.2.19 Ensure SSH PAM is enabled (Automated) -->
+<xccdf:select idref="sshd_enable_pam" selected="true"/>
+
+
+<!-- 5.2.21 Ensure SSH MaxStartups is configured (Automated) -->
+<xccdf:select idref="sshd_set_maxstartups" selected="true"/>
+
+
+<!-- 5.2.22 Ensure SSH MaxSessions is limited (Automated) -->
+<xccdf:set-value idref="var_sshd_max_sessions">10</xccdf:set-value>
+<xccdf:select idref="sshd_set_max_sessions" selected="true"/>
+
+
+<!-- 5.3.1 Ensure password creation requirements are configured (Automated) -->
+<xccdf:set-value idref="var_password_pam_minlen">14</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_minlen" selected="true"/>
+<xccdf:set-value idref="var_password_pam_minclass">4</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_minclass" selected="true"/>
+<xccdf:set-value idref="var_password_pam_dcredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_dcredit" selected="true"/>
+<xccdf:set-value idref="var_password_pam_ucredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_ucredit" selected="true"/>
+<xccdf:set-value idref="var_password_pam_ocredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_ocredit" selected="true"/>
+<xccdf:set-value idref="var_password_pam_lcredit">-1</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_lcredit" selected="true"/>
+<xccdf:set-value idref="var_password_pam_retry">3</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_retry" selected="true"/>
+
+
+<!-- 5.3.2 Ensure lockout for failed password attempts is configured (Automated) -->
+<xccdf:set-value idref="var_accounts_passwords_pam_tally2_deny">5</xccdf:set-value>
+<xccdf:select idref="accounts_passwords_pam_tally2" selected="true"/>
+
+
+<!-- 5.3.3 Ensure password reuse is limited (Automated) -->
+<xccdf:set-value idref="var_password_pam_remember">5</xccdf:set-value>
+<xccdf:select idref="accounts_password_pam_pwhistory_remember" selected="true"/>
+
+
+<!-- 5.3.4 Ensure password hashing algorithm is SHA-512 (Automated) -->
+<xccdf:select idref="accounts_password_all_shadowed_sha512" selected="true"/>
+
+
+<!-- 5.4.1.1 Ensure password expiration is 365 days or less (Automated) -->
+<xccdf:set-value idref="var_accounts_maximum_age_login_defs">365</xccdf:set-value>
+<xccdf:set-value idref="var_accounts_password_set_max_life_existing">365</xccdf:set-value>
+<xccdf:select idref="accounts_maximum_age_login_defs" selected="true"/>
+<xccdf:select idref="accounts_password_set_max_life_existing" selected="true"/>
+
+
+<!-- 5.4.1.2 Ensure minimum days between password changes is configured (Automated) -->
+<xccdf:set-value idref="var_accounts_minimum_age_login_defs">1</xccdf:set-value>
+<xccdf:set-value idref="var_accounts_password_set_min_life_existing">1</xccdf:set-value>
+<xccdf:select idref="accounts_minimum_age_login_defs" selected="true"/>
+<xccdf:select idref="accounts_password_set_min_life_existing" selected="true"/>
+
+
+<!-- 5.4.1.3 Ensure password expiration warning days is 7 or more (Automated) -->
+<xccdf:set-value idref="var_accounts_password_warn_age_login_defs">7</xccdf:set-value>
+<xccdf:select idref="accounts_password_warn_age_login_defs" selected="true"/>
+
+
+<!-- 5.4.1.4 Ensure inactive password lock is 30 days or less (Automated) -->
+<xccdf:set-value idref="var_account_disable_post_pw_expiration">30</xccdf:set-value>
+<xccdf:select idref="account_disable_post_pw_expiration" selected="true"/>
+
+
+<!-- 5.4.1.5 Ensure all users last password change date is in the past (Automated) -->
+<xccdf:select idref="last_change_date_in_past" selected="true"/>
+
+
+<!-- 5.4.2 Ensure system accounts are secured (Automated) -->
+<xccdf:select idref="no_shelllogin_for_systemaccounts" selected="true"/>
+
+
+<!-- 5.4.3 Ensure default group for the root account is GID 0 (Automated) -->
+<xccdf:select idref="accounts_no_gid_except_zero" selected="true"/>
+
+
+<!-- 5.4.4 Ensure default user umask is 027 or more restrictive (Automated) -->
+<xccdf:select idref="accounts_umask_etc_csh_cshrc" selected="true"/>
+<xccdf:select idref="accounts_umask_etc_login_defs" selected="true"/>
+<xccdf:select idref="accounts_umask_etc_profile" selected="true"/>
+<xccdf:select idref="accounts_umask_etc_bashrc" selected="true"/>
+<xccdf:select idref="accounts_umask_interactive_users" selected="true"/>
+
+
+<!-- 5.4.5 Ensure default user shell timeout is 900 seconds or less (Automated) -->
+<xccdf:select idref="accounts_tmout" selected="true"/>
+
+
+<!-- 5.6 Ensure access to the su command is restricted (Automated) -->
+<xccdf:set-value idref="var_pam_wheel_group_for_su">sugroup</xccdf:set-value>
+<xccdf:select idref="use_pam_wheel_group_for_su" selected="true"/>
+<xccdf:select idref="ensure_pam_wheel_group_empty" selected="true"/>
+
+
+<!-- 6.1.2 Ensure permissions on /etc/passwd are configured (Automated) -->
+<xccdf:select idref="file_owner_etc_passwd" selected="true"/>
+<xccdf:select idref="file_groupowner_etc_passwd" selected="true"/>
+<xccdf:select idref="file_permissions_etc_passwd" selected="true"/>
+
+
+<!-- 6.1.3 Ensure permissions on /etc/gshadow- are configured (Automated) -->
+<xccdf:select idref="file_owner_backup_etc_gshadow" selected="true"/>
+<xccdf:select idref="file_groupowner_backup_etc_gshadow" selected="true"/>
+<xccdf:select idref="file_permissions_backup_etc_gshadow" selected="true"/>
+
+
+<!-- 6.1.4 Ensure permissions on /etc/shadow are configured (Automated) -->
+<xccdf:select idref="file_owner_etc_shadow" selected="true"/>
+<xccdf:select idref="file_groupowner_etc_shadow" selected="true"/>
+<xccdf:select idref="file_permissions_etc_shadow" selected="true"/>
+
+
+<!-- 6.1.5 Ensure permissions on /etc/group are configured (Automated) -->
+<xccdf:select idref="file_owner_etc_group" selected="true"/>
+<xccdf:select idref="file_groupowner_etc_group" selected="true"/>
+<xccdf:select idref="file_permissions_etc_group" selected="true"/>
+
+
+<!-- 6.1.6 Ensure permissions on /etc/passwd- are configured (Automated) -->
+<xccdf:select idref="file_owner_backup_etc_passwd" selected="true"/>
+<xccdf:select idref="file_groupowner_backup_etc_passwd" selected="true"/>
+<xccdf:select idref="file_permissions_backup_etc_passwd" selected="true"/>
+
+
+<!-- 6.1.7 Ensure permissions on /etc/shadow- are configured (Automated) -->
+<xccdf:select idref="file_owner_backup_etc_shadow" selected="true"/>
+<xccdf:select idref="file_groupowner_backup_etc_shadow" selected="true"/>
+<xccdf:select idref="file_permissions_backup_etc_shadow" selected="true"/>
+
+
+<!-- 6.1.8 Ensure permissions on /etc/group- are configured (Automated) -->
+<xccdf:select idref="file_owner_backup_etc_group" selected="true"/>
+<xccdf:select idref="file_groupowner_backup_etc_group" selected="true"/>
+<xccdf:select idref="file_permissions_backup_etc_group" selected="true"/>
+
+
+<!-- 6.1.9 Ensure permissions on /etc/gshadow are configured (Automated) -->
+<xccdf:select idref="file_owner_etc_gshadow" selected="true"/>
+<xccdf:select idref="file_groupowner_etc_gshadow" selected="true"/>
+<xccdf:select idref="file_permissions_etc_gshadow" selected="true"/>
+
+
+<!-- 6.1.10 Ensure no world writable files exist (Automated) -->
+<xccdf:select idref="file_permissions_unauthorized_world_writable" selected="true"/>
+
+
+<!-- 6.1.11 Ensure no unowned files or directories exist (Automated) -->
+<xccdf:select idref="no_files_unowned_by_user" selected="true"/>
+
+
+<!-- 6.1.12 Ensure no ungrouped files or directories exist (Automated) -->
+<xccdf:select idref="no_ungrouped_files_or_dirs" selected="true"/>
+
+
+<!-- 6.2.1 Ensure password fields are not empty (Automated) -->
+<xccdf:select idref="no_empty_password_field" selected="true"/>
+
+
+<!-- 6.2.2 Ensure root is the only UID 0 account (Automated) -->
+<xccdf:select idref="accounts_no_uid_except_zero" selected="true"/>
+
+
+<!-- 6.2.3 Ensure root PATH Integrity (Automated) -->
+<xccdf:select idref="accounts_root_path_dirs_no_write" selected="true"/>
+
+
+<!-- 6.2.4 Ensure all users' home directories exist (Automated) -->
+<xccdf:select idref="accounts_user_interactive_home_directory_exists" selected="true"/>
+
+
+<!-- 6.2.5 Ensure users' home directories permissions are 750 or more restrictive (Automated) -->
+<xccdf:select idref="file_permissions_home_directories" selected="true"/>
+<xccdf:set-value idref="var_adduser_home_directories_mode">0750</xccdf:set-value>
+<xccdf:select idref="adduser_home_directories_mode" selected="true"/>
+<xccdf:set-value idref="var_useradd_home_directories_mode">0750</xccdf:set-value>
+<xccdf:select idref="useradd_home_directories_mode" selected="true"/>
+
+
+<!-- 6.2.6 Ensure users own their home directories (Automated) -->
+<xccdf:select idref="accounts_users_own_home_directories" selected="true"/>
+
+
+<!-- 6.2.7 Ensure users' dot files are not group or world writable (Automated) -->
+<xccdf:select idref="accounts_user_dot_user_ownership" selected="true"/>
+<xccdf:select idref="no_group_world_writable_dot_files" selected="true"/>
+
+
+<!-- 6.2.8 Ensure no users have .forward files (Automated) -->
+<xccdf:select idref="no_forward_files" selected="true"/>
+
+
+<!-- 6.2.9 Ensure no users have .netrc files (Automated) -->
+<xccdf:select idref="no_netrc_files" selected="true"/>
+
+
+<!-- 6.2.10 Ensure users' .netrc Files are not group or world accessible (Automated) -->
+<xccdf:select idref="no_group_world_readable_netrc_files" selected="true"/>
+
+
+<!-- 6.2.11 Ensure no users have .rhosts files (Automated) -->
+<xccdf:select idref="no_rsh_trust_files" selected="true"/>
+
+
+<!-- 6.2.12 Ensure all groups in /etc/passwd exist in /etc/group (Automated) -->
+<xccdf:select idref="all_etc_passwd_groups_exist_in_etc_group" selected="true"/>
+
+
+<!-- 6.2.13 Ensure no duplicate UIDs exist (Automated) -->
+<xccdf:select idref="no_duplicate_uids" selected="true"/>
+
+
+<!-- 6.2.14 Ensure no duplicate GIDs exist (Automated) -->
+<xccdf:select idref="no_duplicate_gids" selected="true"/>
+
+
+<!-- 6.2.15 Ensure no duplicate user names exist (Automated) -->
+<xccdf:select idref="no_duplicate_user_names" selected="true"/>
+
+
+<!-- 6.2.16 Ensure no duplicate group names exist (Automated) -->
+<xccdf:select idref="no_duplicate_group_names" selected="true"/>
+
+
+<!-- 6.2.17 Ensure shadow group is empty (Automated) -->
+<xccdf:select idref="ensure_shadow_group_empty" selected="true"/>
+
+
+  </xccdf:Profile>
+</cdf-11-tailoring:Tailoring>
+
