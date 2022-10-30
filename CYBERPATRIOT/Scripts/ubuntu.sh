@@ -2,7 +2,7 @@
 # This script is for Ubuntu 20.04 LTS
 
 #Hardening from other people done first so i can override some of their dumb settings :>
-apt-get -y install git net-tools procps
+apt-get -y install git net-tools procps >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
 cp ./utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
@@ -13,7 +13,8 @@ wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.64/scap-
 unzip scap-security-guide-0.1.64-oval-5.10.zip
 apt-get install libopenscap8 -y
 apt-get install wget -y
-oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_level2_workstation --results ssg-cis-oscap.xml scap-security-guide-0.1.64-oval-5.10/ssg-ubuntu"$version"04-ds.xml
+path=`realpath $(find .. -name \"ssg-ubuntu\"$version\"04-ds.xml\" | head -n 1)`
+oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_level2_workstation --results ssg-cis-oscap.xml \$path
 " >> cis.sh
 if [ $version = "20" ]
 then
@@ -26,7 +27,9 @@ chmod +x cis.sh
 
 find ./utils -type f -exec chown root:root {} \;
 find ./utils -type f -exec chmod 644 {} \;
-password="Baher13@c0stc0"
+password="Baher13@costco"
+for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
+for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do chage -M 30 -m 7 -W 15 $u; done
 apt-get install ufw -y >> /dev/null
 ufw enable
 ufw logging on
@@ -39,7 +42,7 @@ ufw default allow routed
 #ufw limit in on lo 2>/dev/null
 #ufw limit in out lo 2>/dev/null
 apt-get update -y >> /dev/null && apt-get upgrade -y >> /dev/null
-apt-get systemd -y && apt-get systemd-services -y
+apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
 apt-get dist-upgrade -y
 groupdel nopasswdlogin
 apt-get install lightdm -y >> /dev/null
@@ -50,9 +53,6 @@ systemctl start auditd
 apt-get install apparmor-utils -y >> /dev/null
 systemctl enable auditd
 systemctl start auditd
-function addto {
-    grep -qxF $2 $1 || echo $2 >> $1
-}
 if [[ -f /etc/ssh/sshd_config ]]; then
     mv ./utils/sshd_config /etc/ssh/sshd_config
     echo "DENY_THRESHOLD_INVALID = 5
@@ -65,11 +65,10 @@ if [[ -f /etc/ssh/sshd_config ]]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-mv ./utils/pam/* /etc/pam.d/
-chown root:root /etc/pam.d/*
-chmod 644 /etc/pam.d/*
-chown root:root /etc/pam.d/*
-sudo dpkg-reconfigure lightdm
+#mv ./utils/pam/* /etc/pam.d/
+#chown root:root /etc/pam.d/*
+#chmod 644 /etc/pam.d/*
+#chown root:root /etc/pam.d/*
 mv ./utils/lightdm.conf /etc/lightdm/lightdm.conf
 mv ./utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
 mv ./utils/gdm3.conf /etc/gdm3/custom.conf
@@ -103,7 +102,6 @@ user-administration-disabled=true
 chmod 644 /etc/dconf/db/gdm.d/00-login-screen
 chown root:root /etc/dconf/db/gdm.d/00-login-screen
 dconf update
-systemctl restart gdm
 
 while :;
     do
@@ -142,8 +140,6 @@ maxclassrepeat=4
 usercheck=1
 enforcing=1
 enforce_for_root=1" >> /etc/security/pwquality.conf
-for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
-for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do chage -M 30 -m 7 -W 15 $u; done
 sed -i 's/umask .*//' /etc/profile
 echo "umask 027" >> /etc/profile
 sed -i 's/umask .*//' /etc/login.defs
@@ -512,3 +508,5 @@ version="20"
 else
 version="22"
 fi
+dpkg-reconfigure lightdm
+systemctl restart gdm
