@@ -4,4 +4,4 @@ session    required   pam_limits.so
 @include common-auth
 @include common-account
 @include common-session
-auth required pam_wheel.so use_uid group=sugroup
+auth required pam_wheel.so use_uid group=adm

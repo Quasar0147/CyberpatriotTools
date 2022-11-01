@@ -71,10 +71,10 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-#mv `pwd`/utils/pam/* /etc/pam.d/
-#chown root:root /etc/pam.d/*
-#chmod 644 /etc/pam.d/*
-#chown root:root /etc/pam.d/*
+mv `pwd`/utils/pam/* /etc/pam.d/
+chown root:root /etc/pam.d/*
+chmod 644 /etc/pam.d/*
+chown root:root /etc/pam.d/*
 mv `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
 mv `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
 mv `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
@@ -173,7 +173,10 @@ fi
 apt-get install apparmor apparmor-profiles -y  -qq > /dev/null
 systemctl enable apparmor.service 
 systemctl start apparmor.service 
-sed -i 's/apparmor=.*/apparmor=0/' /etc/default/grub
+cp ./utils/grub /etc/default/grub
+chmod 644 /etc/default/grub
+chown root:root /etc/default/grub
+update-grub
 aa-enforce /etc/apparmor.d/*
 
 mv `pwd`/utils/sysctl.conf /etc/sysctl.conf
@@ -200,8 +203,10 @@ net.ipv6.conf.all.accept_ra_rtr_pref=0
 net.ipv6.conf.all.accept_ra_pinfo=0
 net.ipv6.conf.all.accept_ra_defrtr=0
 " >> /etc/sysctl.conf
+echo "ipv6.disable=0" >> /etc/default/grub
 else 
 echo "net.ipv6.conf.all.disable_ipv6=1" >> /etc/sysctl.conf
+echo "ipv6.disable=1" >> /etc/default/grub
 fi
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
@@ -346,14 +351,15 @@ chmod 0640 /var/log/syslog
 chown syslog /var/log/syslog
 for x in "dccp sctp tipc rds"; do sudo modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/ubuntu.conf; done
 sudo chmod 744 /etc/modprobe.d/ubuntu.conf 2>/dev/null
-echo "max_log_file=16384
-space_left_action=email
-action_mail_acct=root
-admin_space_left_action=halt
-max_log_file_action=keep_logs
-disk_full_action = HALT 
-log_file = /var/log/audit/audit.log 
-log_group=root
+echo "auditd_max_log_file=16384
+auditd_space_left_action=email
+auditd_action_mail_acct=root
+auditd_admin_space_left_action=halt
+auditd_max_log_file_action=keep_logs
+auditd_disk_full_action = HALT 
+auditd_log_file = /var/log/audit/audit.log 
+auditd_log_group=root
+auditd_local_events: 'yes'
 " >> /etc/audit/auditd.conf
 chmod 600 /var/log/audit/audit.log
 chown root:root /var/log/audit/audit.log
@@ -365,6 +371,7 @@ systemctl kill auditd -s SIGHUP
 sudo chmod 744 /etc/audit/auditd.conf
 systemctl restart auditd
 crontab -r
+ for i in `atq | awk '{print $1}'`;do atrm $i;done
 rm -f /etc/cron.deny /etc/at.deny
 echo root >/etc/cron.allow
 echo root >/etc/at.allow
@@ -394,13 +401,6 @@ systemctl enable fail2ban
 systemctl start fail2ban
 
 sudo apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
-FILE=`pwd`/utils/user.js
-if [ -f "$FILE" ]; then
-    echo "user.js found"
-else
-    git clone 'https://github.com/pyllyukko/user.js.git' >> /dev/null
-    echo "user.js not found, cloning from pyllyukko"
-fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(cat /home/*/.mozilla/firefox/profiles.ini | grep "Path=" | cut -c6-1000 | xargs); do cp utils/user.js /home/$u/.mozilla/firefox/$x/user.js 2>/dev/null; chmod 644 /home/$u/.mozilla/firefox/$x/user.js ; done; done
 sed s'/user_pref(/pref(/g' utils/user.js > /etc/firefox/syspref.js
 
@@ -413,10 +413,10 @@ cp /etc/profile /root/.profile
 chmod 644 /home/*/.profile
 chmod 644 /root/.profile
 chmod 644 /etc/bash.bashrc
-echo "console" > /etc/securetty
+#echo "console" > /etc/securetty
+echo "" > /etc/securetty
 apt-get install opensc-pkcs11 -y >> /dev/null
 apt-get install libpam-pkcs11 -y >> /dev/null
-
 echo "
 audit
 silent
@@ -509,6 +509,8 @@ systemctl stop clamav-freshclam
 wget https://database.clamav.net/daily.cvd -O /var/lib/clamav/daily.cvd
 freshclam
 systemctl start clamav-freshclam
-clamscan --infected --recursive --remove / &>/dev/null
+clamscan --infected --recursive --remove / &>./clamlog
+find /bin/ -name "*.sh" -type f -delete
+echo "/usr/lib/libhardened_malloc.so" >> /etc/ld.so.preload
 dpkg-reconfigure lightdm
 systemctl restart gdm
