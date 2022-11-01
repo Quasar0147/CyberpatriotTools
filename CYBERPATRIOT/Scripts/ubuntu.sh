@@ -13,7 +13,7 @@ apt-get -y install git net-tools procps >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
-bash ubuntu.sh
+bash ubuntu.sh &
 cd ..
 echo "
 wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.64/scap-security-guide-0.1.64-oval-5.10.zip >> /dev/null
@@ -62,7 +62,7 @@ apt-get install apparmor-utils -y >> /dev/null
 systemctl enable auditd
 systemctl start auditd
 if [ -f /etc/ssh/sshd_config ]; then
-    mv `pwd`/utils/sshd_config /etc/ssh/sshd_config
+    cp `pwd`/utils/sshd_config /etc/ssh/sshd_config
     echo "DENY_THRESHOLD_INVALID = 5
     DENY_THRESHOLD_VALID = 10
     DENY_THRESHOLD_ROOT = 1
@@ -73,13 +73,13 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-mv `pwd`/utils/pam/* /etc/pam.d/
+cp `pwd`/utils/pam/* /etc/pam.d/
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
-mv `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
-mv `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
-mv `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
+cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
+cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults
@@ -115,9 +115,9 @@ dconf update
 while :;
     do
     read -p "Autologin User (some username/none): " a
-    if [ $a == "root" ]; then
+    if [ $a = "root" ]; then
         echo "root is not allowed for autologin"
-    elif [ `cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1` != *$a* ]
+    elif [ `cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1` != *$a* ];
     then
         echo "User does not exist"
     elif [ $a == "none" ]; then
@@ -158,11 +158,11 @@ cp /etc/bash.bashrc /home/*/.bashrc
 cp /etc/bash.bashrc /root/.bashrc
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
-mv `pwd`/utils/login.defs /etc/login.defs
+cp `pwd`/utils/login.defs /etc/login.defs
 sudo apt-get install vlock
 sudo apt-get install gzip
 gzip -d /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example.gz 
-mv /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11.conf
+cp /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11.conf
 sed -i 's/.*pam_pkcs11.so.*/auth       optional      pam_pkcs11.so/' /etc/pam.d/common-auth
 if [[ `grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null` != *"pwent"* ]]
 then
@@ -179,7 +179,7 @@ chown root:root /etc/default/grub
 update-grub
 aa-enforce /etc/apparmor.d/*
 
-mv `pwd`/utils/sysctl.conf /etc/sysctl.conf
+cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
 read -p "IPV6? (y/n): " ipv6
 if [ "$ipv6"="y" ]; then
 echo "
@@ -327,19 +327,19 @@ chown root:root /etc/securetty
 chmod 0600 /etc/securetty
 chmod 0644 /etc/hosts.allow
 chmod 0440 /etc/sudoers
-find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type d -exec chown root:root '{}' \;
-find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -type d -exec chmod -R 755 '{}' \;
-find /lib /lib64 /usr/lib -perm /022 -type f -exec chmod 755 '{}' \;
-find /lib /lib64 /usr/lib -perm /022 -type d -exec chmod 755 '{}' \;
-find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -type f -exec chmod 755 '{}' \;
+find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type d -exec chown root:root '{}' +;
+find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -type d -exec chmod -R 755 '{}' +;
+find /lib /lib64 /usr/lib -perm /022 -type f -exec chmod 755 '{}' +;
+find /lib /lib64 /usr/lib -perm /022 -type d -exec chmod 755 '{}' +;
+find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -type f -exec chmod 755 '{}' +;
 chown root:syslog /var/log
 find /var/log -perm /137 -type f -exec chmod 640 '{}' \;
-find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type f -exec  -c chown root:root '{}' \;
+find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type f -exec  -c chown root:root '{}' +;
  
 apt-get install rsyslog
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do passwd -l $u; done
 auditctl -e 1
-mv `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
+cp `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
 augenrules --load
 echo "* hard core" > /etc/security/limits.conf
 echo "* hard maxlogins 10" >> /etc/security/limits.conf
@@ -393,7 +393,7 @@ for y in "/home"; do for x in "mp4 mov mp3 mp2 png jpg mpg mpeg jpeg"; do find $
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
 apt-get install unattended-upgrades -y >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
-mv `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
+cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 
 
 apt-get install -y fail2ban >> /dev/null
@@ -512,3 +512,5 @@ clamscan --infected --recursive --remove / &>./clamlog
 find /bin/ -name "*.sh" -type f -delete
 dpkg-reconfigure lightdm
 systemctl restart gdm
+
+
