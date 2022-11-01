@@ -8,6 +8,7 @@ else
 version="22"
 fi
 #Hardening from other people done first so i can override some of their dumb settings :>
+dpkg-reconfigure apt
 apt-get -y install git net-tools procps >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
@@ -477,7 +478,7 @@ echo "
 /usr/bin/bash
 " > /etc/shells
 gsettings set org.gnome.desktop.screensaver lock-enabled true
-echo "" > /etc/nologin
+rm /etc/nologin 2>/dev/null
 echo "PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'" > /etc/environment
 cp /etc/environment /etc/environment.d/*
 echo "
