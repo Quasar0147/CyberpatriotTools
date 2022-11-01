@@ -47,7 +47,8 @@ ufw default allow routed
 #ufw limit in out eth0 2>/dev/null
 #ufw limit in on lo 2>/dev/null
 #ufw limit in out lo 2>/dev/null
-apt-get update -y >> /dev/null && apt-get upgrade -y >> /dev/null
+echo "Doing updates, may take a bit"
+apt-get update -y >> /dev/null && apt-get upgrade & -y >> /dev/null
 apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
 apt-get dist-upgrade -y
 groupdel nopasswdlogin
@@ -156,9 +157,7 @@ cp /etc/bash.bashrc /home/*/.bashrc
 cp /etc/bash.bashrc /root/.bashrc
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
-echo "TMOUT=600" > /etc/profile.d/99-terminal_tmout.sh
 mv `pwd`/utils/login.defs /etc/login.defs
-export TMOUT=600
 sudo apt-get install vlock
 sudo apt-get install gzip
 gzip -d /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example.gz 
@@ -404,7 +403,6 @@ sudo apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional ne
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(cat /home/*/.mozilla/firefox/profiles.ini | grep "Path=" | cut -c6-1000 | xargs); do cp utils/user.js /home/$u/.mozilla/firefox/$x/user.js 2>/dev/null; chmod 644 /home/$u/.mozilla/firefox/$x/user.js ; done; done
 sed s'/user_pref(/pref(/g' utils/user.js > /etc/firefox/syspref.js
 
-echo "TMOUT=900" >> /etc/bashrc
 cp `pwd`/utils/bash.bashrc /etc/bash.bashrc
 cp `pwd`/utils/profile /etc/profile
 chmod 644 /etc/profile
