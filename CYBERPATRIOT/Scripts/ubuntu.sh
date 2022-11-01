@@ -117,7 +117,7 @@ while :;
     read -p "Autologin User (some username/none): " a
     if [ $a = "root" ]; then
         echo "root is not allowed for autologin"
-    elif [ `cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1` != *$a* ];
+    elif [ $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1) != "*$a*" ];
     then
         echo "User does not exist"
     elif [ $a == "none" ]; then
@@ -389,7 +389,7 @@ find /usr/local/bin/ -name "*.sh" -type f -delete &
 find /sbin/ -name "*.sh" -type f -delete &
 find /usr/sbin/ -name "*.sh" -type f -delete &
 find /usr/local/sbin/ -name "*.sh" -type f -delete &
-for y in "/home"; do for x in "mp4 mov mp3 mp2 png jpg mpg mpeg jpeg"; do find $y -name "*.$x" -type f -delete; done; done
+find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete; done; done
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
 apt-get install unattended-upgrades -y >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
@@ -496,7 +496,7 @@ start=$((start+65536))
 done
 chmod 644 /etc/subuid
 cp /etc/subuid /etc/subuid-
-cp /etc/subuid/ /etc/subgid
+cp /etc/subuid /etc/subgid
 cp /etc/subgid /etc/subgid-
 echo "
 overlayroot_cfgdisk=\"disabled\"
