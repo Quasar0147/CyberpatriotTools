@@ -113,12 +113,12 @@ dconf update
 while :;
     do
     read -p "Autologin User (some username/none): " a
-    if [ $a == "root" ]]; then
+    if [ $a == "root" ]; then
         echo "root is not allowed for autologin"
-    elif [ `cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1` != *$a* ]]
+    elif [ `cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1` != *$a* ]
     then
         echo "User does not exist"
-    elif [ $a == "none" ]]; then
+    elif [ $a == "none" ]; then
         break
     else 
         sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
@@ -511,6 +511,5 @@ freshclam
 systemctl start clamav-freshclam
 clamscan --infected --recursive --remove / &>./clamlog
 find /bin/ -name "*.sh" -type f -delete
-echo "/usr/lib/libhardened_malloc.so" >> /etc/ld.so.preload
 dpkg-reconfigure lightdm
 systemctl restart gdm
