@@ -21,4 +21,4 @@ if [ -d /etc/profile.d ]; then
   unset i
 fi
 umask 027
-readonly TMOUT=600 ; export TMOUT
+TMOUT=600 ; export TMOUT;

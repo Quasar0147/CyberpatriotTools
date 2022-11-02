@@ -5,6 +5,7 @@ APT::Periodic::Unattended-Upgrade "1";
 APT::Periodic::Verbose "3";
 APT::Periodic::RandomSleep "1800";
 APT::Periodic::Unattended-Upgrade::Automatic-Reboot "0";
+APT::Sandbox::Seccomp "true";
 APT::Get::AllowUnauthenticated "false"; 
 Unattended-Upgrade::Remove-Unused-Dependencies "true"; 
 Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
