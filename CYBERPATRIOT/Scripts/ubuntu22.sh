@@ -55,7 +55,7 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-cp `pwd`/utils/pam/22/pam/* /etc/pam.d/
+cp `pwd`/utils/pam/22/* /etc/pam.d/
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
@@ -97,7 +97,7 @@ read -p "Autologin User (some username/none): " a
 sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
 sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
 group=$(getent group $(id -u $a) | cut -d: -f1)
-sed -i "s/*actualhell/$group/g" /etc/pam.d/lightdm
+sed -i "s/auth    sufficient      pam_succeed_if.so user ingroup .*/auth    sufficient      pam_succeed_if.so user ingroup $group/g" /etc/pam.d/lightdm
 cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
 chmod 644 /etc/lightdm/lightdm.conf
 rm /etc/security/pwquality.conf
