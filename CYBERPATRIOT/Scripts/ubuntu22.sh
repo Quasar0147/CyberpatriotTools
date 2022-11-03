@@ -3,6 +3,7 @@
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
 #Hardening from other people done first so i can override some of their dumb settings :>
 dpkg-reconfigure apt
+cp `pwd`/utils/22sources.list /etc/apt/sources.list
 apt-get install apparmor-utils -y >> /dev/null
 apt-get -y install git net-tools procps >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
