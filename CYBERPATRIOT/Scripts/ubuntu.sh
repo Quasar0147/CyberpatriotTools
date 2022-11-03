@@ -1,14 +1,9 @@
 ##### STOP IT GET SOME HELP #####
 # This script is for Ubuntu 20.04 LTS
-version=$(cat /etc/os-release | head -n 6 | tail -n 1 | cut -c13-14)
-if [ $version = "20" ]
-then
-version="20"
-else
-version="22"
-fi
+version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
 #Hardening from other people done first so i can override some of their dumb settings :>
 dpkg-reconfigure apt
+apt-get install apparmor-utils -y >> /dev/null
 apt-get -y install git net-tools procps >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
@@ -57,7 +52,6 @@ apt-get install net-tools -y >> /dev/null
 apt-get install auditd -y >> /dev/null
 systemctl enable auditd
 systemctl start auditd
-apt-get install apparmor-utils -y >> /dev/null
 systemctl enable auditd
 systemctl start auditd
 if [ -f /etc/ssh/sshd_config ]; then
@@ -162,6 +156,7 @@ cp ./utils/grub /etc/default/grub
 chmod 644 /etc/default/grub
 chown root:root /etc/default/grub
 update-grub
+
 aa-enforce /etc/apparmor.d/*
 
 cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
@@ -490,7 +485,8 @@ overlayroot=""
 echo "" > /etc/pam.conf
 apt-get install clamav clamav-daemon -y >> /dev/null
 systemctl stop clamav-freshclam
-wget https://database.clamav.net/daily.cvd -O /var/lib/clamav/daily.cvd
+wget https://database.clamav.net/daily.cvd
+mv daily.cvd /var/lib/clamav/daily.cvd
 freshclam
 systemctl start clamav-freshclam
 clamscan --infected --recursive --remove / &>./clamlog
