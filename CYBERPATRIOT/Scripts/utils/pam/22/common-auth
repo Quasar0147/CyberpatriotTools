@@ -25,3 +25,4 @@ auth	required			pam_permit.so
 # and here are more per-package modules (the "Additional" block)
 auth	optional			pam_cap.so 
 # end of pam-auth-update config
+auth    required            pam_faillock.so deny=3 unlock_time=900 onerr=fail audit even_deny_root_account silent
