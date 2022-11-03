@@ -18,11 +18,6 @@ apt-get install wget -y >> /dev/null
 path=`realpath $(find .. -name \"ssg-ubuntu\"$version\"04-ds.xml\" | head -n 1)`
 oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_level2_workstation --results ssg-cis-oscap.xml \$path >> /dev/null
 " >> cis.sh
-if [ $version = "20" ]
-then
-echo "
-s" >> cis.sh
-fi
 chmod +x cis.sh
 #./cis.sh>/dev/null & 
 
@@ -44,14 +39,12 @@ ufw default allow routed
 #ufw limit in out lo 2>/dev/null
 echo "Doing updates, may take a bit"
 apt-get update -y >> /dev/null && apt-get upgrade -y & >> /dev/null
-apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
+#apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
 apt-get dist-upgrade -y
 groupdel nopasswdlogin
 apt-get install lightdm -y >> /dev/null
 apt-get install net-tools -y >> /dev/null
 apt-get install auditd -y >> /dev/null
-systemctl enable auditd
-systemctl start auditd
 systemctl enable auditd
 systemctl start auditd
 if [ -f /etc/ssh/sshd_config ]; then
