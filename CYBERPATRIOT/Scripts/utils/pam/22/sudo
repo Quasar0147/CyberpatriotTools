@@ -1,3 +1,4 @@
+session    required   pam_limits.so
 session    required   pam_env.so readenv=1 user_readenv=0
 session    required   pam_env.so readenv=1 envfile=/etc/default/locale user_readenv=0
 @include common-auth

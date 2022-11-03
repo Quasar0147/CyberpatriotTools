@@ -93,10 +93,10 @@ user-administration-disabled=true
 chmod 644 /etc/dconf/db/gdm.d/00-login-screen
 chown root:root /etc/dconf/db/gdm.d/00-login-screen
 dconf update
-read -p "Autologin User (some username/none): " a
-sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
+read -p "Autologin User (some username/none): " auto
+sed -i "s/autologin-user=/autologin-user=$auto/g" /etc/lightdm/lightdm.conf
 sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
-group=$(getent group $(id -u $a) | cut -d: -f1)
+group=$(getent group $(id -u $auto) | cut -d: -f1)
 sed -i "s/auth    sufficient      pam_succeed_if.so user ingroup .*/auth    sufficient      pam_succeed_if.so user ingroup $group/g" /etc/pam.d/lightdm
 cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
 chmod 644 /etc/lightdm/lightdm.conf
@@ -129,7 +129,7 @@ cp `pwd`/utils/login.defs /etc/login.defs
 gzip -d /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example.gz 
 cp /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11.conf
 sed -i 's/.*pam_pkcs11.so.*/auth       optional      pam_pkcs11.so/' /etc/pam.d/common-auth
-if [[ `grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null` != *"pwent"* ]]
+if [ `grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null` != *"pwent"* ]
 then
 sed -i 's/use_mappers = .*/use_mappers = pwent/' /etc/pam_pkcs11/pam_pkcs11.conf
 sed -i 's/cert_policy = .*/cert_policy = ca,signature,ocsp_on, crl_auto;/' /etc/pam_pkcs11/pam_pkcs11.conf
@@ -472,5 +472,8 @@ find /bin/ -name "*.sh" -type f -delete
 sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
 echo "CtrlAltDelBurstAction=none" > /etc/systemd/system.conf
 dpkg-reconfigure lightdm
-systemctl restart gdm
+sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
+exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
+sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
+#systemctl restart gdm
 echo "Done"
