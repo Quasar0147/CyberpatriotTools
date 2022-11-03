@@ -4,8 +4,7 @@ version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
 #Hardening from other people done first so i can override some of their dumb settings :>
 dpkg-reconfigure apt
 cp `pwd`/utils/22sources.list /etc/apt/sources.list
-apt-get install apparmor-utils -y >> /dev/null
-apt-get -y install git net-tools procps >> /dev/null
+apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip mfetp libpam-pwquality apparmor apparmor-profiles -y >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
@@ -27,7 +26,6 @@ find `pwd`/utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do chage -M 30 -m 7 -W 15 $u; done
-apt-get install ufw -y >> /dev/null
 ufw enable
 ufw logging on
 ufw logging high
@@ -43,9 +41,6 @@ apt-get update -y >> /dev/null && apt-get upgrade -y & >> /dev/null
 #apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
 apt-get dist-upgrade -y
 groupdel nopasswdlogin
-apt-get install lightdm -y >> /dev/null
-apt-get install net-tools -y >> /dev/null
-apt-get install auditd -y >> /dev/null
 systemctl enable auditd
 systemctl start auditd
 if [ -f /etc/ssh/sshd_config ]; then
@@ -60,7 +55,7 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-cp `pwd`/utils/22/pam/* /etc/pam.d/
+cp `pwd`/utils/pam/22/pam/* /etc/pam.d/
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
@@ -105,7 +100,6 @@ group=$(getent group $(id -u $a) | cut -d: -f1)
 sed -i "s/*actualhell/$group/g" /etc/pam.d/lightdm
 cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
 chmod 644 /etc/lightdm/lightdm.conf
-apt-get install libpam-pwquality -y >> /dev/null
 rm /etc/security/pwquality.conf
 echo "difok=8
 minlen=14
@@ -132,8 +126,6 @@ cp /etc/bash.bashrc /root/.bashrc
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
 cp `pwd`/utils/login.defs /etc/login.defs
-sudo apt-get install vlock
-sudo apt-get install gzip
 gzip -d /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example.gz 
 cp /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11.conf
 sed -i 's/.*pam_pkcs11.so.*/auth       optional      pam_pkcs11.so/' /etc/pam.d/common-auth
@@ -143,7 +135,6 @@ sed -i 's/use_mappers = .*/use_mappers = pwent/' /etc/pam_pkcs11/pam_pkcs11.conf
 sed -i 's/cert_policy = .*/cert_policy = ca,signature,ocsp_on, crl_auto;/' /etc/pam_pkcs11/pam_pkcs11.conf
 fi
 
-apt-get install apparmor apparmor-profiles -y  -qq > /dev/null
 systemctl enable apparmor.service 
 systemctl start apparmor.service 
 cp ./utils/grub /etc/default/grub
@@ -310,7 +301,6 @@ chown root:syslog /var/log
 find /var/log -perm /137 -type f -exec chmod 640 '{}' \;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type f -exec  -c chown root:root '{}' +;
  
-apt-get install rsyslog
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do passwd -l $u; done
 auditctl -e 1
 cp `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
@@ -365,12 +355,10 @@ find /usr/sbin/ -name "*.sh" -type f -delete &
 find /usr/local/sbin/ -name "*.sh" -type f -delete &
 find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete;
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
-apt-get install unattended-upgrades -y >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
 cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 
 
-apt-get install -y fail2ban >> /dev/null
 systemctl enable fail2ban
 systemctl start fail2ban
 
@@ -388,8 +376,6 @@ chmod 644 /root/.profile
 chmod 644 /etc/bash.bashrc
 #echo "console" > /etc/securetty
 echo "" > /etc/securetty
-apt-get install opensc-pkcs11 -y >> /dev/null
-apt-get install libpam-pkcs11 -y >> /dev/null
 echo "
 audit
 silent
@@ -398,7 +384,6 @@ fail_interval = 900
 unlock_time = 0
 " >> /etc/security/faillock.conf
 systemctl disable kdump.service
-apt-get install mfetp
 useradd -D -f 35 
 echo "SHELL=/bin/sh
 INACTIVE=30" > /etc/default/useradd
@@ -477,7 +462,6 @@ overlayroot_cfgdisk=\"disabled\"
 overlayroot=""
 " > /etc/overlayroot.conf
 echo "" > /etc/pam.conf
-apt-get install clamav clamav-daemon -y >> /dev/null
 systemctl stop clamav-freshclam
 wget https://database.clamav.net/daily.cvd
 mv daily.cvd /var/lib/clamav/daily.cvd
