@@ -26,8 +26,7 @@ oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_
 if [ $version = "20" ]
 then
 echo "
-oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_stig --results ssg-stig-oscap.xml scap-security-guide-0.1.64-oval-5.10/ssg-ubuntu2004-ds.xml
-" >> cis.sh
+s" >> cis.sh
 fi
 chmod +x cis.sh
 #./cis.sh>/dev/null & 
@@ -49,7 +48,7 @@ ufw default allow routed
 #ufw limit in on lo 2>/dev/null
 #ufw limit in out lo 2>/dev/null
 echo "Doing updates, may take a bit"
-apt-get update -y >> /dev/null && apt-get upgrade & -y >> /dev/null
+apt-get update -y >> /dev/null && apt-get upgrade -y & >> /dev/null
 apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
 apt-get dist-upgrade -y
 groupdel nopasswdlogin
@@ -111,25 +110,11 @@ user-administration-disabled=true
 chmod 644 /etc/dconf/db/gdm.d/00-login-screen
 chown root:root /etc/dconf/db/gdm.d/00-login-screen
 dconf update
-
-while :;
-    do
-    read -p "Autologin User (some username/none): " a
-    if [ $a = "root" ]; then
-        echo "root is not allowed for autologin"
-    elif [ $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1) != "*$a*" ];
-    then
-        echo "User does not exist"
-    elif [ $a == "none" ]; then
-        break
-    else 
-        sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
-        sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
-        group=$(getent group $(id -u $a) | cut -d: -f1)
-        sed -i "s/*actualhell/$group/g" /etc/pam.d/lightdm
-        break
-    fi
-done
+read -p "Autologin User (some username/none): " a
+sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
+sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
+group=$(getent group $(id -u $a) | cut -d: -f1)
+sed -i "s/*actualhell/$group/g" /etc/pam.d/lightdm
 cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
 chmod 644 /etc/lightdm/lightdm.conf
 apt-get install libpam-pwquality -y >> /dev/null
@@ -371,7 +356,7 @@ systemctl kill auditd -s SIGHUP
 sudo chmod 744 /etc/audit/auditd.conf
 systemctl restart auditd
 crontab -r
- for i in `atq | awk '{print $1}'`;do atrm $i;done
+for i in `atq | awk '{print $1}'`;do atrm $i;done
 rm -f /etc/cron.deny /etc/at.deny
 echo root >/etc/cron.allow
 echo root >/etc/at.allow
@@ -389,7 +374,7 @@ find /usr/local/bin/ -name "*.sh" -type f -delete &
 find /sbin/ -name "*.sh" -type f -delete &
 find /usr/sbin/ -name "*.sh" -type f -delete &
 find /usr/local/sbin/ -name "*.sh" -type f -delete &
-find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete; done; done
+find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete;
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
 apt-get install unattended-upgrades -y >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
@@ -510,7 +495,8 @@ freshclam
 systemctl start clamav-freshclam
 clamscan --infected --recursive --remove / &>./clamlog
 find /bin/ -name "*.sh" -type f -delete
+sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
+echo "CtrlAltDelBurstAction=none" > /etc/systemd/system.conf
 dpkg-reconfigure lightdm
 systemctl restart gdm
-
-
+echo "Done"
