@@ -17,3 +17,7 @@ disable-user-switching=true
 disable-application-handlers=true
 disable-save-to-disk=true
 user-administration-disabled=true
+[org/gnome/desktop/media-handling]
+automount=false
+automount-open=false
+autorun-never=true

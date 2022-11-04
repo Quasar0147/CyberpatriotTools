@@ -32,6 +32,11 @@ ufw logging high
 ufw default allow outgoing
 ufw default deny incoming
 ufw default allow routed
+ufw allow in on lo
+ufw allow out on lo
+ufw deny in from 127.0.0.0/8
+ufw deny in from ::1
+
 #ufw limit in on eth0 2>/dev/null
 #ufw limit in out eth0 2>/dev/null
 #ufw limit in on lo 2>/dev/null
@@ -89,6 +94,10 @@ disable-user-switching=true
 disable-application-handlers=true
 disable-save-to-disk=true
 user-administration-disabled=true
+[org/gnome/desktop/media-handling]
+automount=false
+automount-open=false
+autorun-never=true
 " >> /etc/dconf/db/gdm.d/00-login-screen
 chmod 644 /etc/dconf/db/gdm.d/00-login-screen
 chown root:root /etc/dconf/db/gdm.d/00-login-screen
@@ -480,6 +489,7 @@ chkconfig autofs off
 echo "SELINUX=enforcing
 SELINUXTYPE=targeted
 " >> /etc/selinux/config 
+apt purge apport -y
 echo "deny = 4
 fail_interval = 900
 unlock time = 600" >> /etc/security/faillock.conf
