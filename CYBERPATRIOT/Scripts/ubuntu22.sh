@@ -60,7 +60,23 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-cp `pwd`/utils/pam/22/* /etc/pam.d/
+#cp `pwd`/utils/pam/22/* /etc/pam.d/
+pam-auth-update #reset to defaults
+## Some sed cmds here to secure the default configuration
+echo "
+auth required pam_faillock.so preauth
+auth [success=1 default=ignore] pam_unix.so nullok
+auth [default=die] pam_faillock.so authfail
+auth sufficient pam_faillock.so authsucc
+auth requisite pam_deny.so
+auth required pam_permit.so
+auth optional pam_cap.so
+" > /etc/pam.d/common-auth
+sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5/g" /etc/pam.d/common-password
+{
+UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
+awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
+}
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
@@ -390,7 +406,7 @@ audit
 silent
 deny = 3
 fail_interval = 900
-unlock_time = 0
+unlock_time = 600l
 " >> /etc/security/faillock.conf
 systemctl disable kdump.service
 useradd -D -f 35 
@@ -490,8 +506,5 @@ echo "SELINUX=enforcing
 SELINUXTYPE=targeted
 " >> /etc/selinux/config 
 apt purge apport -y
-echo "deny = 4
-fail_interval = 900
-unlock time = 600" >> /etc/security/faillock.conf
 #systemctl restart gdm
 echo "Done"
