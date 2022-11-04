@@ -14,7 +14,7 @@
 # pam-auth-update(8) for details.
 
 # here are the per-package modules (the "Primary" block)
-auth	[success=2 default=ignore]	pam_unix.so nullok
+auth	[success=2 default=ignore]	pam_unix.so
 auth	[success=1 default=ignore]	pam_sss.so use_first_pass
 # here's the fallback if no module succeeds
 auth	requisite			pam_deny.so
@@ -25,4 +25,4 @@ auth	required			pam_permit.so
 # and here are more per-package modules (the "Additional" block)
 auth	optional			pam_cap.so 
 # end of pam-auth-update config
-auth    required            pam_faillock.so deny=3 unlock_time=900 onerr=fail audit even_deny_root_account silent
+auth    required            pam_tally2.so deny=3 unlock_time=900 onerr=fail audit even_deny_root_account silent file=/var/log/tallylog

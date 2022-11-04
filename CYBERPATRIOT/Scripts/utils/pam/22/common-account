@@ -25,3 +25,4 @@ account	required			pam_permit.so
 account	sufficient			pam_localuser.so 
 account	[default=bad success=ok user_unknown=ignore]	pam_sss.so 
 # end of pam-auth-update config
+account required pam_tally2.so

@@ -1,10 +1,10 @@
+apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip mfetp libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
 # This script is for Ubuntu 20.04 LTS
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
 #Hardening from other people done first so i can override some of their dumb settings :>
 dpkg-reconfigure apt
 cp `pwd`/utils/22sources.list /etc/apt/sources.list
-apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip mfetp libpam-pwquality apparmor apparmor-profiles -y >> /dev/null
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
@@ -475,5 +475,10 @@ dpkg-reconfigure lightdm
 sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
 exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
 sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
+
+chkconfig autofs off
+echo "SELINUX=enforcing
+SELINUXTYPE=targeted
+" >> /etc/selinux/config 
 #systemctl restart gdm
 echo "Done"
