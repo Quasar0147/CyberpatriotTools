@@ -475,10 +475,13 @@ dpkg-reconfigure lightdm
 sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
 exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
 sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
-
+usermod -g 0 root
 chkconfig autofs off
 echo "SELINUX=enforcing
 SELINUXTYPE=targeted
 " >> /etc/selinux/config 
+echo "deny = 4
+fail_interval = 900
+unlock time = 600" >> /etc/security/faillock.conf
 #systemctl restart gdm
 echo "Done"
