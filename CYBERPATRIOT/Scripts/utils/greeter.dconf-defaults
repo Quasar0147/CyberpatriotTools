@@ -1,13 +1,23 @@
-[org/gnome/desktop/interface]
-[org/gnome/desktop/background]
-[org/gnome/desktop/background]
 [org/gnome/login-screen]
-# - Disable user list
 disable-user-list=true
-# - Disable restart buttons
 disable-restart-buttons=true
-[org/gnome/settings-daemon/plugins/power]
-# sleep-inactive-ac-timeout=1200
-# sleep-inactive-ac-type='suspend'
-# sleep-inactive-battery-timeout=1200
-# sleep-inactive-battery-type='suspend'
+enable-password-authentication=true
+enable-smartcard-authentication=false
+enable-fingerprint-authentication=false
+allowed-failures=3
+[org/gnome/desktop/screensaver]
+lock-enabled=true
+[org/gnome/desktop/lockdown]
+disable-command-line=true
+disable-log-out=true
+disable-printing=true
+disable-lock-screen=true
+disable-print-setup=true
+disable-user-switching=true
+disable-application-handlers=true
+disable-save-to-disk=true
+user-administration-disabled=true
+[org/gnome/desktop/media-handling]
+automount=false
+automount-open=false
+autorun-never=true

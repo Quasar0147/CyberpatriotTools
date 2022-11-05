@@ -8,4 +8,4 @@ session    required   pam_env.so readenv=1 envfile=/etc/default/locale user_read
 
 @include common-auth
 @include common-account
-@include common-session-noninteractive
+@include common-session
