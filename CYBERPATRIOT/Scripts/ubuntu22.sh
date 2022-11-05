@@ -1,4 +1,4 @@
-apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip mfetp libpam-pwquality apparmor apparmor-profiles -y
+apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
 # This script is for Ubuntu 20.04 LTS
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
@@ -25,7 +25,6 @@ find `pwd`/utils -type f -exec chown root:root {} \;
 find `pwd`/utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
-for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do chage -M 30 -m 7 -W 15 $u; done
 ufw enable
 ufw logging on
 ufw logging high
@@ -202,7 +201,8 @@ cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
 sysctl --system >/dev/null
 
-data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | awk '{print $NF}')
+#data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | awk '{print $NF}')
+data="grub.pbkdf2.sha512.10000.397910689ECC4DA5196D28748B37DA4E88C4A0C57E8E741ED6C8DE9CC93A082DC4C7A70EC70DD3637BC4A2AA251A973881C67ED2643AB7B2AC293771683FF963.E8463183C35EB90E0C9E3FACE89B4AA2F1E139DAE0D4B8F847CE2A0BF83705041956123D4E9A3419F1EB31DCB8A5F57FF85DBD00F1FA85659D74AF33779894BE"
 echo "cat <<EOF
 set superusers='root'
 password pbkdf2 root '"$data"'
@@ -506,5 +506,6 @@ echo "SELINUX=enforcing
 SELINUXTYPE=targeted
 " >> /etc/selinux/config 
 apt purge apport -y
+for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed -i "s/$auto//g"); do chage -M 30 -m 7 -W 15 $u; done
 #systemctl restart gdm
 echo "Done"
