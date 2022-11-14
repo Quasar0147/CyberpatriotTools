@@ -7,6 +7,10 @@ enable-fingerprint-authentication=false
 allowed-failures=3
 [org/gnome/desktop/screensaver]
 lock-enabled=true
+[org/gnome/desktop/session]
+idle-delay=uint32 900
+[org/gnome/desktop/screensaver]
+lock-delay=uint32 5
 [org/gnome/desktop/lockdown]
 disable-command-line=true
 disable-log-out=true

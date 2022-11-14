@@ -19,4 +19,5 @@ pti = on
 debugfs = off
 mce = 0
 apparmor = 1 security = apparmor
-
+intel_iommu=on amd_iommu=on
+disable_early_pci_dma

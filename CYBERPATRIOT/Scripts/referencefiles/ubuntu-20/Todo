@@ -1,0 +1,8 @@
+Execs
+    rgrep "^Exec=\|^ExecStart=\|^ExecStop=\|^User=\|^RuntimeDirectoryMode=" /usr/share /etc
+
+Conditions
+    rgrep "^ConditionPathExists="
+Hashdeep of /etc
+Default Installed Package
+/etc and /usr imaging to use with https://meldmerge.org/

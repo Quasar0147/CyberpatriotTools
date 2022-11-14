@@ -20,7 +20,7 @@ oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_
 " >> cis.sh
 chmod +x cis.sh
 #./cis.sh>/dev/null & 
-
+sudo chmod -x /usr/bin/gnome-keyring
 find `pwd`/utils -type f -exec chown root:root {} \;
 find `pwd`/utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
@@ -33,6 +33,8 @@ ufw logging high
 ufw default allow outgoing
 ufw default deny incoming
 ufw default allow routed
+sed -i "s/IPT_SYSCTL=.*/IPT_SYSCTL=/etc/ufw/sysctl.conf" /etc/default/ufw
+echo "" > /etc/ufw/sysctl.conf ##Nothing to override here
 #ufw limit in on eth0 2>/dev/null
 #ufw limit in out eth0 2>/dev/null
 #ufw limit in on lo 2>/dev/null
@@ -489,3 +491,10 @@ echo "CtrlAltDelBurstAction=none" > /etc/systemd/system.conf
 dpkg-reconfigure lightdm
 systemctl restart gdm
 echo "Done"
+
+##TODO:
+# fix audit
+# Create log files with permissions
+# build some kinda way to rapidly check /etc/systemd/<>, /usr/share/dbus-1/system-services, /usr/share/dbus-1/services for irregular code
+# find all non default cmds in bin, sbin, etc
+# How 2 get points for automatic security updates

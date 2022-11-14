@@ -5,6 +5,8 @@ Check for unwanted software
 Check for suspicious/unwanted ports
     lsof -Pnli +M
     netstat -tulpn
+Check associated directories for critical services (ex: /etc/thunderbird)
+
 File Checks
     Check Permissions on all service related files
     Look through world writable files and directories
@@ -22,27 +24,22 @@ File Checks
                 evil:x:1000:1000::/etc:/bin/bash
         Check All Scripts in /etc 
             find /etc -name "*.sh" -type f 2>/dev/null
-        Rc
-            Scripts that run when you change level or startup
-            /etc/rc.d
-            /etc/rc
-            /etc/rc?.d
-            /etc/rc0.d to /etc/rc6.d
-            /etc/rcS.d
-        Init
-            Run On Boot
-            /etc/init.d
-            /etc/init
-        Profile
-            Run On Shell Creation (EX: Env variables)
-            /etc/profile
-            /etc/profile.d/
-        Cron
-            Scheduled Tasks
-            /etc/crontab
-            /etc/cron.weekly
-            /etc/cron.monthly
-            /etc/cron.hourly
+        PAM
+            /etc/pam.d/
+            rm -r /etc/pam.d #yeet
+            pam-auth-update #remakes common stuff
+            sudo apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1) #Everything else
+        Check /etc permissions
+            Should be no world writeable files
+            Not much should not be owned by root | root
+                find /etc -type f -exec ls -l {} \; | grep -v "root root" 
+            Check all executables
+                World Executable
+                    find /etc -type f -perm -0001
+                SUID and SGID
+                    find /etc -type f -perm -4000
+                    find /etc -type f -perm -2000
+    
     Check /bin and /sbin
     Check /usr
         /usr/share
@@ -54,3 +51,125 @@ Enumerate
         cd lynis && ./lynis audit system --debug
     Run Linpeas
         curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
+Reinstall All The Packages You Can 
+    (Without bricking the system)
+    libpam 
+Search for malicious code
+    Autostart
+        XDG
+            Global autostart directory
+            /etc/xdg
+        GDM autostart
+            /usr/share/gdm/autostart
+        Other AutoStart Directories 
+            find / -name "*autostart*"
+    Check APT conf
+        /etc/apt
+    Init
+        Run On Boot
+        /etc/init.d
+        /etc/init
+    On shell creation
+        Profile
+            /etc/profile
+            /etc/profile.d/
+            /home/*/.profile
+        Shell RCS
+            /etc/bash.bashrc
+            /home/*/.bashrc
+        Other RCS
+            Scripts that run when you change level or startup
+            /etc/rc.d
+            /etc/rc
+            /etc/rc0.d to /etc/rc6.d
+                ID  Name                               Description
+                0   Halt                               Shuts down the system.
+                1   Single-user Mode                   Mode for administrative tasks.
+                2   Multi-user Mode                    Does not configure network interfaces, does not export networks services.
+                3   Multi-user Mode with Networking    Starts the system normally.
+                4   Not used/User-definable            For special purposes.
+                5   Start the system normally with 
+                    with GUI                           As runlevel 3 + display manager.
+                6   Reboot                             Reboots the system.
+
+            /etc/rcS.d
+            find /etc -name "*rc*" 
+                Quite a few false positives, consider ls -a /etc | grep rc
+    find /etc -type f -print0 | xargs -0 file --mime-type | grep -F '/x-shellscript' | cut -d ':' -f 1
+    #for x in $(find /etc -type f -print0 | xargs -0 file --mime-type | grep -F '/x-shellscript' | cut -d ':' -f 1); do echo $(sha256sum $x); done
+    #for x in $(find /etc -name "*.conf"); do echo $(sha256sum $x); done
+    #for x in $(find /etc -name "*.rules"); do echo $(sha256sum $x); done
+
+    Cron
+        Scheduled Tasks
+        /etc/crontab
+        /etc/cron.weekly
+        /etc/cron.monthly
+        /etc/cron.hourly
+    Systemd
+        /etc/systemd
+        /usr/lib/systemd/system
+        /lib/systemd/system
+        Startup services
+            /etc/systemd/system
+        Timers
+            /etc/systemd/system/
+            ~/.config/systemd/user/
+    
+    Dconf
+        /usr/share/dconf
+        Startup services
+            /usr/share/dconf/system-services
+            /usr/share/dconf/services
+    Grub
+        /etc/grub.d
+        /boot/grub
+    Defaults
+        /etc/default
+    
+    Polkit
+        Authentication Policies
+            /usr/share/polkit-1/rules.d
+            /etc/polkit-1
+            find /etc/polkit-1 -type f
+            /etc/polkit-1/localauthority.conf.d/51-ubuntu-admin.conf
+            /etc/polkit-1/localauthority.conf.d/50-localauthority.conf 
+
+    Network
+        actions
+            /etc/network/if-up.d
+            /etc/network/if-down.d
+            /etc/network/if-post-down.d
+            /etc/network/if-pre-up.d
+    Loaded Libs
+        /etc/ld.so.preload
+        
+
+
+Backdoor Hunting
+    netstat -putna
+        netstat -putna | grep LISTEN
+            p = list proccess
+            u = udp
+            t = tcp
+            n = numeric (dont resolve names)
+            a = all
+    netstat -tulpn
+        netstat -tulpn | grep LISTEN
+            l = listening
+    ps -Meaf --forest
+
+Capabilities
+    getcap -r / 2>/dev/null
+ 
+File Modification Date
+    for x in $(find dir -type f); do echo $(stat -c %y $x) $x; done | sort 
+    for x in $(find dir -type f); do echo $(stat -c %z $x) $x; done | sort 
+    dir = /etc, /usr/share, /bin etc
+
+Check Kernel Modules
+    find /lib/modules/$(uname -r) -type f -name '*.ko*'
+    lsmod
+    /usr/lib/modules-load.d
+    Todo: Make this efficient
+    
