@@ -1,10 +1,9 @@
+apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm dbus-x11 git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
-# This script is for Ubuntu 20.04 LTS
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
 #Hardening from other people done first so i can override some of their dumb settings :>
 dpkg-reconfigure apt
-apt-get install apparmor-utils -y >> /dev/null
-apt-get -y install git net-tools procps >> /dev/null
+#cp `pwd`/utils/22sources.list /etc/apt/sources.list
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
@@ -20,21 +19,22 @@ oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_
 " >> cis.sh
 chmod +x cis.sh
 #./cis.sh>/dev/null & 
-sudo chmod -x /usr/bin/gnome-keyring
+
 find `pwd`/utils -type f -exec chown root:root {} \;
 find `pwd`/utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
-for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do chage -M 30 -m 7 -W 15 $u; done
-apt-get install ufw -y >> /dev/null
 ufw enable
 ufw logging on
 ufw logging high
 ufw default allow outgoing
 ufw default deny incoming
 ufw default allow routed
-sed -i "s/IPT_SYSCTL=.*/IPT_SYSCTL=/etc/ufw/sysctl.conf" /etc/default/ufw
-echo "" > /etc/ufw/sysctl.conf ##Nothing to override here
+ufw allow in on lo
+ufw allow out on lo
+ufw deny in from 127.0.0.0/8
+ufw deny in from ::1
+
 #ufw limit in on eth0 2>/dev/null
 #ufw limit in out eth0 2>/dev/null
 #ufw limit in on lo 2>/dev/null
@@ -44,9 +44,6 @@ apt-get update -y >> /dev/null && apt-get upgrade -y & >> /dev/null
 #apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
 apt-get dist-upgrade -y
 groupdel nopasswdlogin
-apt-get install lightdm -y >> /dev/null
-apt-get install net-tools -y >> /dev/null
-apt-get install auditd -y >> /dev/null
 systemctl enable auditd
 systemctl start auditd
 if [ -f /etc/ssh/sshd_config ]; then
@@ -61,12 +58,22 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-cp `pwd`/utils/pam/20/* /etc/pam.d/
+mkdir pam_bak
+mv /etc/pam.d/* ./pam_bak 
+apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
+#pam-auth-update
+cp -n ./pam_bak/* /etc/pam.d/
+cp `pwd`/utils/pam/$version/* /etc/pam.d/ #Update to contain only: gdm3, lightdm, login, passwd as they cannot be downloaded, and a secure common default
+sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5/g" /etc/pam.d/common-password
+UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
+awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
-cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
+#cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
 cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
+cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
 cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
@@ -85,6 +92,9 @@ enable-fingerprint-authentication=false
 allowed-failures=3
 [org/gnome/desktop/screensaver]
 lock-enabled=true
+lock-delay=uint32 5
+[org/gnome/desktop/session]
+idle-delay=uint32 900
 [org/gnome/desktop/lockdown]
 disable-command-line=true
 disable-log-out=true
@@ -95,18 +105,44 @@ disable-user-switching=true
 disable-application-handlers=true
 disable-save-to-disk=true
 user-administration-disabled=true
+[org/gnome/desktop/media-handling]
+automount=false
+automount-open=false
+autorun-never=true
 " >> /etc/dconf/db/gdm.d/00-login-screen
+echo "
+/org/gnome/login-screen/disable-user-list
+/org/gnome/login-screen/disable-restart-buttons
+/org/gnome/login-screen/enable-password-authentication
+/org/gnome/login-screen/enable-smartcard-authentication
+/org/gnome/login-screen/enable-fingerprint-authentication
+/org/gnome/login-screen/allowed-failures
+/org/gnome/desktop/screensaver/lock-enabled=true
+/org/gnome/desktop/lockdown/disable-command-line
+/org/gnome/desktop/lockdown/disable-log-out
+/org/gnome/desktop/lockdown/disable-lock-screen
+/org/gnome/desktop/lockdown/disable-printing
+/org/gnome/desktop/lockdown/disable-print-setup
+/org/gnome/desktop/lockdown/disable-user-switching
+/org/gnome/desktop/lockdown/disable-application-handlers
+/org/gnome/desktop/lockdown/disable-save-to-disk
+/org/gnome/desktop/lockdown/user-administration-disabled
+/org/gnome/desktop/media-handling/automount
+/org/gnome/desktop/media-handling/automount-open
+/org/gnome/desktop/media-handling/autorun-never
+/org/gnome/desktop/screensaver
+/org/gnome/desktop/session
+" > /etc/dconf/db/gdm.d/locks/00-security-settings-lock
 chmod 644 /etc/dconf/db/gdm.d/00-login-screen
 chown root:root /etc/dconf/db/gdm.d/00-login-screen
 dconf update
-read -p "Autologin User (some username/none): " a
-sed -i "s/autologin-user=/autologin-user=$a/g" /etc/lightdm/lightdm.conf
-sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
-group=$(getent group $(id -u $a) | cut -d: -f1)
-sed -i "s/*actualhell/$group/g" /etc/pam.d/lightdm
-cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
-chmod 644 /etc/lightdm/lightdm.conf
-apt-get install libpam-pwquality -y >> /dev/null
+read -p "Autologin User (some username/none): " auto
+#sed -i "s/autologin-user=/autologin-user=$auto/g" /etc/lightdm/lightdm.conf
+#sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
+group=$(getent group $(id -u $auto) | cut -d: -f1)
+#sed -i "s/auth    sufficient      pam_succeed_if.so user ingroup .*/auth    sufficient      pam_succeed_if.so user ingroup $group/g" /etc/pam.d/lightdm
+#cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
+#chmod 644 /etc/lightdm/lightdm.conf
 rm /etc/security/pwquality.conf
 echo "difok=8
 minlen=14
@@ -133,18 +169,15 @@ cp /etc/bash.bashrc /root/.bashrc
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
 cp `pwd`/utils/login.defs /etc/login.defs
-sudo apt-get install vlock
-sudo apt-get install gzip
 gzip -d /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example.gz 
 cp /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11.conf
 sed -i 's/.*pam_pkcs11.so.*/auth       optional      pam_pkcs11.so/' /etc/pam.d/common-auth
-if [[ `grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null` != *"pwent"* ]]
+if [ !`grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null`= *"pwent"* ]
 then
 sed -i 's/use_mappers = .*/use_mappers = pwent/' /etc/pam_pkcs11/pam_pkcs11.conf
 sed -i 's/cert_policy = .*/cert_policy = ca,signature,ocsp_on, crl_auto;/' /etc/pam_pkcs11/pam_pkcs11.conf
 fi
 
-apt-get install apparmor apparmor-profiles -y  -qq > /dev/null
 systemctl enable apparmor.service 
 systemctl start apparmor.service 
 cp ./utils/grub /etc/default/grub
@@ -177,17 +210,24 @@ net.ipv6.conf.default.use_tempaddr=2
 net.ipv6.conf.all.accept_ra_rtr_pref=0
 net.ipv6.conf.all.accept_ra_pinfo=0
 net.ipv6.conf.all.accept_ra_defrtr=0
+net.ipv6.conf.all.use_tempaddr=2
+net.ipv6.conf.default.use_tempaddr=2
 " >> /etc/sysctl.conf
 echo "ipv6.disable=0" >> /etc/default/grub
+sed -i "s/IPV6=.*/IPV6=yes" /etc/default/ufw
 else 
-echo "net.ipv6.conf.all.disable_ipv6=1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
 echo "ipv6.disable=1" >> /etc/default/grub
+sed -i "s/IPV6=.*/IPV6=no" /etc/default/ufw
+
 fi
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
 sysctl --system >/dev/null
 
-data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | awk '{print $NF}')
+#data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | awk '{print $NF}')
+data="grub.pbkdf2.sha512.10000.397910689ECC4DA5196D28748B37DA4E88C4A0C57E8E741ED6C8DE9CC93A082DC4C7A70EC70DD3637BC4A2AA251A973881C67ED2643AB7B2AC293771683FF963.E8463183C35EB90E0C9E3FACE89B4AA2F1E139DAE0D4B8F847CE2A0BF83705041956123D4E9A3419F1EB31DCB8A5F57FF85DBD00F1FA85659D74AF33779894BE"
 echo "cat <<EOF
 set superusers='root'
 password pbkdf2 root '"$data"'
@@ -310,8 +350,8 @@ find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -ty
 chown root:syslog /var/log
 find /var/log -perm /137 -type f -exec chmod 640 '{}' \;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type f -exec  -c chown root:root '{}' +;
- 
-apt-get install rsyslog
+ chmod 700 /boot /usr/src /lib/modules /usr/lib/modules
+
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do passwd -l $u; done
 auditctl -e 1
 cp `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
@@ -366,12 +406,10 @@ find /usr/sbin/ -name "*.sh" -type f -delete &
 find /usr/local/sbin/ -name "*.sh" -type f -delete &
 find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete;
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
-apt-get install unattended-upgrades -y >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
 cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 
 
-apt-get install -y fail2ban >> /dev/null
 systemctl enable fail2ban
 systemctl start fail2ban
 
@@ -389,17 +427,14 @@ chmod 644 /root/.profile
 chmod 644 /etc/bash.bashrc
 #echo "console" > /etc/securetty
 echo "" > /etc/securetty
-apt-get install opensc-pkcs11 -y >> /dev/null
-apt-get install libpam-pkcs11 -y >> /dev/null
 echo "
 audit
 silent
 deny = 3
 fail_interval = 900
-unlock_time = 0
+unlock_time = 600l
 " >> /etc/security/faillock.conf
 systemctl disable kdump.service
-apt-get install mfetp
 useradd -D -f 35 
 echo "SHELL=/bin/sh
 INACTIVE=30" > /etc/default/useradd
@@ -434,13 +469,7 @@ echo "Deleting hidden user [$x]"
 userdel $x
 done
 find / \( -nouser -o -nogroup \) -exec chown root:root {} \;
-echo "
-Defaults	env_reset
-Defaults	secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"
-root	    ALL=(ALL:ALL) ALL
-%admin      ALL=(ALL) ALL
-%sudo	    ALL=(ALL:ALL) ALL
-" > /etc/sudoers
+cp `pwd`/utils/sudoers /etc/sudoers
 rm /etc/sudoers.d/*
 systemctl daemon-reload
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do 
@@ -478,23 +507,25 @@ overlayroot_cfgdisk=\"disabled\"
 overlayroot=""
 " > /etc/overlayroot.conf
 echo "" > /etc/pam.conf
-apt-get install clamav clamav-daemon -y >> /dev/null
 systemctl stop clamav-freshclam
 wget https://database.clamav.net/daily.cvd
 mv daily.cvd /var/lib/clamav/daily.cvd
-freshclam
 systemctl start clamav-freshclam
+freshclam
 clamscan --infected --recursive --remove / &>./clamlog
 find /bin/ -name "*.sh" -type f -delete
 sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
 echo "CtrlAltDelBurstAction=none" > /etc/systemd/system.conf
-dpkg-reconfigure lightdm
-systemctl restart gdm
+dpkg-reconfigure gdm3
+sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
+exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
+sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
+usermod -g 0 root
+chkconfig autofs off
+echo "SELINUX=enforcing
+SELINUXTYPE=targeted
+" >> /etc/selinux/config 
+apt purge apport -y
+for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed "s/$auto//g"); do chage -M 30 -m 7 -W 15 $u; done
+#systemctl restart gdm
 echo "Done"
-
-##TODO:
-# fix audit
-# Create log files with permissions
-# build some kinda way to rapidly check /etc/systemd/<>, /usr/share/dbus-1/system-services, /usr/share/dbus-1/services for irregular code
-# find all non default cmds in bin, sbin, etc
-# How 2 get points for automatic security updates
