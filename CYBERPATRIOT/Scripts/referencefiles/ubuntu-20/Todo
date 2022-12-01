@@ -1,8 +1,3 @@
-Execs
-    rgrep "^Exec=\|^ExecStart=\|^ExecStop=\|^User=\|^RuntimeDirectoryMode=" /usr/share /etc
-
-Conditions
-    rgrep "^ConditionPathExists="
 Hashdeep of /etc
-Default Installed Package
-/etc and /usr imaging to use with https://meldmerge.org/
+Default Installed Packages (apt, snap, flatpak, dpkg https://itsfoss.com/list-installed-packages-ubuntu/)
+find /etc/systemd -name "*.service" -type f 

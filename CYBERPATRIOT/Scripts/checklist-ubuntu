@@ -1,12 +1,195 @@
-Check for unwanted software
+Forensics Questions 
+    When in doubt, remember what you think you know could be wrong
+    Cyberchef cyberchef does whatever a cyptographer can
+Application Updates & Operating System Updates
+    apt-get update && apt-get upgrade
+    reboot
+    Check /etc/apt
+    unattended-upgrades
+    USE THE GUI ITS NOT THE END OF THE WORLD
+        Enable security updates
+User Auditing
+    Hidden users && UID/GID checks
+        /etc/passwd
+            Is the UID 0? The GID? Are they something they shouldnt be?
+        /etc/gpasswd
+        /etc/groups
+    Administrators
+        /etc/sudoers && /etc/sudoers.d/*
+        What users shouldnt be adm, lpadmin, sudo, etc?
+    Passwords
+        What passwords are weak? Change all to Baher13@c0stc0
+    Users
+        What users on the system shouldnt be there?
+        Can an unauth user access the system remotely? Root shouldnt be able to
+Account Policies
+    Do you have a password policy?
+        /etc/security/pwquality.conf
+    What are password dates?
+        /etc/login.defs
+        chage 
+    Is your PAM secure?
+        /etc/pam.d/* && /etc/pam.conf
+        Lockout policy, password minlen and security options, password memory
+        Check service files
+Defensive Countermeasures
+    Is firewall up?
+        /etc/ufw
+    Is rsyslog up?
+    Is auditd up?
+Local Policies
+    /etc/sysctl.conf and /etc/sysctl.d/*
+    /etc/sudoers.d && /etc/sudoers && /etc/sudo.conf
+    Configure /etc/fstab
+        dir      -> fsck options
+        /tmp     -> 2    nodev, noexec, nosuid
+        /dev/shm -> 2    nodev, noexec, nosuid
+        /var/tmp -> 2    nodev, noexec, nosuid
+        /var     -> 2    nodev, noexec, nosuid
+        /        -> 1    nodev
+    ld.so
+    modprobe, modules-load, modules
+    profiles
+    ~/.config
+    grub 
+    ufw config
+    polkit 
+    environment
+    
+Malware
+    ps -Meaf --forest
+    netstat -tulpn
+    Cron & at
+Service Auditing
     systemctl | grep running | awk '{ print $1 }'
     systemctl list-unit-files | grep enabled | awk '{ print $1 }'
-    apt-mark showmanual
-Check for suspicious/unwanted ports
+    systemctl list-unit-files | grep disabled | awk '{ print $1 }'
+    What should be running and enabled?
+    What is non default?
+    /etc/systemd conveniently has a list of all services, get default ones
+Unwanted Software
+    apt list --installed
+    dpkg-query -l
+    snap list
+    flatpak list    
+    (For all other software managers)
+    Check installed in software center
+        Note:
+            ## MAKE SURE TO RUN sed -i "s/$chipset/<arch>/g" $defaults. On my mac was arm64 and aarch64. Defaults convert both to <arch>.
+            diff $thissystem $defaults | grep ">" # Services not in default in system
+            diff $thissystem $defaults | grep "<" # Services in default not in system
+                dpkg-query -f '${binary:Package}\n' -W
+                apt list --installed | cut -d/ -f1
+                snap list | tail -n +2 | awk '{ print $1 }'
+                (dpkg-query -f '${binary:Package}\n' -W && apt list --installed | cut -d/ -f1 && (snap list | tail -n +2 | awk '{print $1}')) | sort | uniq | sed s"/Loading...//g"
+
+Uncategorized Operating System Settings
+    Screenlocking/gdm config
+    File permissions
+        What is world writeable and executable?
+        What should not be world readable?
+Prohibited Files
+    Password files and stuff like creditcardinfo.json
+    MP3s and MP4s
+    /etc/alternatives and other software archives
+    .sh files
+    Stuff referred to in Forensic Questions
+    Use fsearch    
+Application Security Settings
+    Read the readme
+    Google secure confs
+    open up manual pages and see what should be enabled and what should be disabled
+    Are all permissions in order on the critical service?
+Attack Surface Reduction
+    Disable everything you can
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Do users
+File checks
+    /etc/hosts.conf
+    /etc/sudo.conf /etc/sudoers /etc/sudoers.d/*
+    /etc/pam.conf /etc/pam.d/*
+    SUID and SGID
+    World writable or world executable
+    Cron
+    At
+    Hidden users /etc/passwd
+    /usr/share/polkit-1
+    /etc/polkit-1
+    /home/*/.config
+    /etc/ufw
+    Rcs and autoruns
+    Hashdeep
+    Check associated directories for critical services (ex: /etc/thunderbird)
+Other
+    getcap -r /
+    ps -Meaf --forest
+    apt-list showmanual 
+    apt-list showauto
+    systemctl | grep running | awk '{ print $1 }'
+    systemctl list-unit-files | grep enabled | awk '{ print $1 }'
     lsof -Pnli +M
     netstat -tulpn
-Check associated directories for critical services (ex: /etc/thunderbird)
+Updates 
+    apt-get update
+    apt-get upgrade
+    use gui to configure some stuff
+    check /apt
+    Unattended-Upgrades
+    reinstall all:
+        dpkg --get-selections > selections
+        sudo dpkg --clear-selections
+        #Edit selections
+        sudo dpkg --set-selections < selections
+        sudo apt-get --reinstall dselect-upgrade
+    REBOOT DUMBASS
 
+
+
+
+
+
+
+
+
+
+
+
+
+More in depth:
 File Checks
     Check Permissions on all service related files
     Look through world writable files and directories
