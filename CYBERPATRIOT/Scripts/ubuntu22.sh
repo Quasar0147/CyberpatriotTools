@@ -1,4 +1,4 @@
-apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm dbus-x11 git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
+apt-get install apparmor-utils clamav rsyslog clamav-daemon dbus-x11 git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
 #Hardening from other people done first so i can override some of their dumb settings :>

@@ -69,19 +69,19 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-mkdir pam_bak
-mv /etc/pam.d/* ./pam_bak 
-apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
-pam-auth-update
-cp -n ./pam_bak/* /etc/pam.d/
+#mkdir pam_bak
+#mv /etc/pam.d/* ./pam_bak 
+#apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
+#pam-auth-update
+#cp -n ./pam_bak/* /etc/pam.d/
 #cp `pwd`/utils/pam/$version/* /etc/pam.d/ #Update to contain secure non default files (since anyways one should nano all files so nonsecure non reinstallables should be patchable)
-sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5/g" /etc/pam.d/common-password
+#sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
-#cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
+cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
 cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
 cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
 cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
@@ -101,6 +101,8 @@ enable-password-authentication=true
 enable-smartcard-authentication=false
 enable-fingerprint-authentication=false
 allowed-failures=3
+[org/gnome/settings-daemon/plugins/media-keys]
+logout=''
 [org/gnome/desktop/screensaver]
 lock-enabled=true
 lock-delay=uint32 5
@@ -123,6 +125,7 @@ autorun-never=true
 " >> /etc/dconf/db/gdm.d/00-login-screen
 mkdir /etc/dconf/db/gdm.d/locks/ 2>/dev/null
 echo "
+/org/gnome/settings-daemon/plugins/media-keys/logout
 /org/gnome/login-screen/disable-user-list
 /org/gnome/login-screen/disable-restart-buttons
 /org/gnome/login-screen/enable-password-authentication
@@ -459,10 +462,6 @@ touch /etc/init/control-alt-delete.override
 touch /etc/init/control-alt-delete.conf
 mkdir /etc/dconf/db/local.d/
 sed -i 's/logout=.*//g' /etc/dconf/db/local.d/*
-echo "
-[org/gnome/settings-daemon/plugins/media-keys]
-logout=''
-" >> /etc/dconf/db/local.d/00-disable-CAD
 dconf update
 find / \( -nouser -o -nogroup \) -exec chown root:root {} \;
 cp `pwd`/utils/sudoers /etc/sudoers
@@ -512,10 +511,10 @@ clamscan --infected --recursive --remove / &>./clamlog
 find /bin/ -name "*.sh" -type f -delete
 sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
 echo "CtrlAltDelBurstAction=none" > /etc/systemd/system.conf
-dpkg-reconfigure gdm3
-sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
-exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
-sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
+#dpkg-reconfigure gdm3
+#sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
+#exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
+#sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
 chkconfig autofs off
 echo "SELINUX=enforcing
 SELINUXTYPE=targeted
