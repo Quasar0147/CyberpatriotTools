@@ -136,7 +136,7 @@ chown root:root /etc/pam.d/*
 cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
 cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
 cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
-cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
+#cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults
