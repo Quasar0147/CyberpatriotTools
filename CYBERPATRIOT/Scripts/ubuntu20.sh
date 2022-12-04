@@ -23,7 +23,18 @@ chmod +x cis.sh
 find `pwd`/utils -type f -exec chown root:root {} \;
 find `pwd`/utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
+for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed "s/$auto//g"); do chage -M 30 -m 7 -W 15 $u; done
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
+for x in $(awk -F: '($3<1000)&&($1!="nobody"){print $1}' /etc/passwd)
+do
+usermod -s /sbin/nologin $x
+usermod -L $x
+done
+for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd)
+do
+usermod -U $x
+done
+usermod -U $(whoami)
 ufw enable
 ufw logging on
 ufw logging high
@@ -61,9 +72,9 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//
 mkdir pam_bak
 mv /etc/pam.d/* ./pam_bak 
 apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
-#pam-auth-update
+pam-auth-update
 cp -n ./pam_bak/* /etc/pam.d/
-cp `pwd`/utils/pam/$version/* /etc/pam.d/ #Update to contain only: gdm3, lightdm, login, passwd as they cannot be downloaded, and a secure common default
+#cp `pwd`/utils/pam/$version/* /etc/pam.d/ #Update to contain secure non default files (since anyways one should nano all files so nonsecure non reinstallables should be patchable)
 sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
@@ -110,6 +121,7 @@ automount=false
 automount-open=false
 autorun-never=true
 " >> /etc/dconf/db/gdm.d/00-login-screen
+mkdir /etc/dconf/db/gdm.d/locks/ 2>/dev/null
 echo "
 /org/gnome/login-screen/disable-user-list
 /org/gnome/login-screen/disable-restart-buttons
@@ -187,6 +199,7 @@ update-grub
 
 aa-enforce /etc/apparmor.d/*
 
+rm /run/sysctl.d/*.conf /usr/local/lib/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /lib/sysctl.d/*.conf /etc/sysctl.conf /etc/sysctl.d/*
 cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
 read -p "IPV6? (y/n): " ipv6
 if [ "$ipv6"="y" ]; then
@@ -379,8 +392,8 @@ auditd_local_events: 'yes'
 chmod 600 /var/log/audit/audit.log
 chown root:root /var/log/audit/audit.log
 sudo chmod -R  g-w,o-rwx /var/log/audit
-chmod -R 0640 /etc/audit/audit*.{rules,conf} /etc/audit/rules.d/*
-chown root:root /etc/audit/audit*.{rules,conf} /etc/audit/rules.d/*
+chmod -R 0640 /etc/audit/audit.conf /etc/audit/ruled.d/*
+chown root:root /etc/audit/audit.conf /etc/audit/ruled.d/*
 
 systemctl kill auditd -s SIGHUP
 sudo chmod 744 /etc/audit/auditd.conf
@@ -397,15 +410,14 @@ chmod -R 644 /var/spool/cron
 chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 echo > /etc/rc.local
-echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 $USER\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts
-find /bin/ -name "*.sh" -type f -delete &
-find /usr/bin/ -name "*.sh" -type f -delete &
-find /usr/local/bin/ -name "*.sh" -type f -delete &
-find /sbin/ -name "*.sh" -type f -delete &
-find /usr/sbin/ -name "*.sh" -type f -delete &
-find /usr/local/sbin/ -name "*.sh" -type f -delete &
-find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete;
-apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
+echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 $USER\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" > /etc/hosts
+#find /bin/ -name "*.sh" -type f -delete &
+#find /usr/bin/ -name "*.sh" -type f -delete &
+#find /usr/local/bin/ -name "*.sh" -type f -delete &
+#find /sbin/ -name "*.sh" -type f -delete &
+#find /usr/sbin/ -name "*.sh" -type f -delete &
+#find /usr/local/sbin/ -name "*.sh" -type f -delete &
+#find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete;
 sudo dpkg-reconfigure -plow unattended-upgrades
 cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 
@@ -413,7 +425,7 @@ cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 systemctl enable fail2ban
 systemctl start fail2ban
 
-sudo apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
+sudo apt-get apport aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel purge john nmap nc ncat netcat telnet telnetd netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(cat /home/*/.mozilla/firefox/profiles.ini | grep "Path=" | cut -c6-1000 | xargs); do cp utils/user.js /home/$u/.mozilla/firefox/$x/user.js 2>/dev/null; chmod 644 /home/$u/.mozilla/firefox/$x/user.js ; done; done
 sed s'/user_pref(/pref(/g' utils/user.js > /etc/firefox/syspref.js
 
@@ -432,15 +444,13 @@ audit
 silent
 deny = 3
 fail_interval = 900
-unlock_time = 600l
+unlock_time = 600
 " >> /etc/security/faillock.conf
 systemctl disable kdump.service
 useradd -D -f 35 
 echo "SHELL=/bin/sh
 INACTIVE=30" > /etc/default/useradd
 passwd -l root
-apt-get remove telnetd -y
-apt-get remove telnet -y
 systemctl disable ctrl-alt-del.target
 systemctl mask ctrl-alt-del.target
 rm /etc/init/control-alt-delete.override
@@ -454,20 +464,6 @@ echo "
 logout=''
 " >> /etc/dconf/db/local.d/00-disable-CAD
 dconf update
-for x in $(awk -F: '($3<1000)&&($1!="nobody"){print $1}' /etc/passwd)
-do
-usermod -s /sbin/nologin $x
-usermod -L $x
-done
-for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd)
-do
-usermod -U $x
-done
-for x in $(cut -d: -f1,3 /etc/passwd | egrep ':[0]{1}$' | cut -d: -f1 | sed s'/root//g')
-do
-echo "Deleting hidden user [$x]"
-userdel $x
-done
 find / \( -nouser -o -nogroup \) -exec chown root:root {} \;
 cp `pwd`/utils/sudoers /etc/sudoers
 rm /etc/sudoers.d/*
@@ -520,12 +516,9 @@ dpkg-reconfigure gdm3
 sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
 exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
 sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
-usermod -g 0 root
 chkconfig autofs off
 echo "SELINUX=enforcing
 SELINUXTYPE=targeted
 " >> /etc/selinux/config 
-apt purge apport -y
-for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed "s/$auto//g"); do chage -M 30 -m 7 -W 15 $u; done
 #systemctl restart gdm
 echo "Done"
