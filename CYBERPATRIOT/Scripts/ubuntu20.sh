@@ -52,7 +52,7 @@ ufw deny in from ::1
 #ufw limit in out lo 2>/dev/null
 echo "Doing updates, may take a bit"
 apt-get update -y >> /dev/null && apt-get upgrade -y & >> /dev/null
-#apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
+apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
 apt-get dist-upgrade -y
 groupdel nopasswdlogin
 systemctl enable auditd
