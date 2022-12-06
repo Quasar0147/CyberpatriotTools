@@ -502,6 +502,7 @@ overlayroot_cfgdisk=\"disabled\"
 overlayroot=""
 " > /etc/overlayroot.conf
 echo "" > /etc/pam.conf
+sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
 systemctl stop clamav-freshclam
 wget https://database.clamav.net/daily.cvd
 mv daily.cvd /var/lib/clamav/daily.cvd
@@ -509,8 +510,6 @@ systemctl start clamav-freshclam
 freshclam
 clamscan --infected --recursive --remove / &>./clamlog
 find /bin/ -name "*.sh" -type f -delete
-sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
-echo "CtrlAltDelBurstAction=none" > /etc/systemd/system.conf
 #dpkg-reconfigure gdm3
 #sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
 #exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)

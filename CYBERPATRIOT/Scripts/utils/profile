@@ -22,4 +22,3 @@ if [ -d /etc/profile.d ]; then
 fi
 umask 0027
 TMOUT=600 ; export TMOUT;
-echo "control alt keycode 101 = SAK" | /bin/loadkeys
