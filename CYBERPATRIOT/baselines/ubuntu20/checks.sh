@@ -15,6 +15,18 @@ find /etc/systemd -type f,l | grep ".timer" > this_sys/timers.txt
 
 ##Somehow do transient services and timers
 
+
+awk "{print $1}" RS='' this_sys/acls.txt | tr "\# " " " | sed s"/^ *//g" | xargs | sed -E s'/file:*/\nfile:/g' > this_sys/temp.txt
+mv this_sys/temp.txt this_sys/acls.txt
+apt-get install hashdeep
+hashdeep -r /etc > ./this_sys/etc.hashdeep
+hashdeep -r /usr/share > ./this_sys/usr.share.hashdeep
+hashdeep -r /usr/lib > ./this_sys/usr.lib.hashdeep
+hashdeep -r /usr > ./this_sys/usr.hashdeep
+hashdeep -r /boot > ./this_sys/boot.hashdeep
+rm -r results
+mkdir results
+
 arch=$(dpkg-query -f '${binary:Package}\n' -W | grep zlib1g | cut -d: -f2)
 
 sed -i "s/$arch/<arch>/g" this_sys/*
@@ -22,16 +34,6 @@ sed -i "s/$arch/<arch>/g" this_sys/*
 kernel=$(cat this_sys/apt.txt | grep linux-image | head -n 1 | cut -d- -f3,4)
 
 sed -i "s/$kernel/<kernel>/g" this_sys/*
-
-awk "{print $1}" RS='' this_sys/acls.txt | tr "\# " " " | sed s"/^ *//g" | xargs | sed -E s'/file:*/\nfile:/g' > this_sys/temp.txt
-mv this_sys/temp.txt this_sys/acls.txt
-apt-get install hashdeep
-hashdeep -r /etc > ./this_sys/etc.hashdeep
-hashdeep -r /usr > ./this_sys/usr.hashdeep
-hashdeep -r /boot > ./this_sys/boot.hashdeep
-rm -r results
-mkdir results
-
 
 grep -Fxvf files/dpkg.txt this_sys/dpkg.txt > results/dpkg.txt
 grep -Fxvf files/apt.txt this_sys/apt.txt > results/apt.txt
