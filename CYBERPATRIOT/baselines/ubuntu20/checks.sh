@@ -44,3 +44,5 @@ grep -Fxvf files/acls.txt this_sys/acls.txt > results/acls.txt
 grep -Fxvf files/etc.hashdeep this_sys/etc.hashdeep | cut -d, -f4 > results/etc.hashdeep
 grep -Fxvf files/usr.hashdeep this_sys/usr.hashdeep | cut -d, -f4 > results/usr.hashdeep
 grep -Fxvf files/boot.hashdeep this_sys/boot.hashdeep | cut -d, -f4 > results/boot.hashdeep
+grep -Fxvf files/usr.lib.hashdeep this_sys/usr.lib.hashdeep | cut -d, -f4 > results/usr.lib.hashdeep
+grep -Fxvf files/usr.share.hashdeep this_sys/usr.share.hashdeep | cut -d, -f4 > results/usr.share.hashdeep
