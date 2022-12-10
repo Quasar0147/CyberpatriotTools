@@ -1,0 +1,14 @@
+/etc/systemd/system/timers.target.wants/apt-daily.timer
+/etc/systemd/system/timers.target.wants/ua-timer.timer
+/etc/systemd/system/timers.target.wants/apt-daily-upgrade.timer
+/etc/systemd/system/timers.target.wants/man-db.timer
+/etc/systemd/system/timers.target.wants/fstrim.timer
+/etc/systemd/system/timers.target.wants/motd-news.timer
+/etc/systemd/system/timers.target.wants/anacron.timer
+/etc/systemd/system/timers.target.wants/logrotate.timer
+/etc/systemd/system/timers.target.wants/snapd.snap-repair.timer
+/etc/systemd/system/timers.target.wants/e2scrub_all.timer
+/etc/systemd/system/timers.target.wants/fwupd-refresh.timer
+/etc/systemd/system/mdmonitor.service.wants/mdcheck_start.timer
+/etc/systemd/system/mdmonitor.service.wants/mdmonitor-oneshot.timer
+/etc/systemd/system/mdmonitor.service.wants/mdcheck_continue.timer
