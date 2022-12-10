@@ -70,19 +70,21 @@ if [ -f /etc/ssh/sshd_config ]; then
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
 mkdir pam_bak
-rm -r /usr/lib/pam.d/*
-mv /etc/pam.d/* ./pam_bak 
-apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
-pam-auth-update
-cp -n ./pam_bak/* /etc/pam.d/
-cp `pwd`/utils/pam/$version/* /etc/pam.d/ #Update to contain secure non default files (since anyways one should nano all files so nonsecure non reinstallables should be patchable)
+#rm -r /usr/lib/pam.d/*
+#mv /etc/pam.d/* ./pam_bak 
+mv /etc/pam.d/* ./pam_bak # incase next step broke anything important
+apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1) #Default lists
+#pam-auth-update
+#cp -n ./pam_bak/* /etc/pam.d/
+#cp `pwd`/utils/pam/$version/* /etc/pam.d/ #Update to contain secure non default files (since anyways one should nano all files so nonsecure non reinstallables should be patchable)
 #sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5/g" /etc/pam.d/common-password
+cp `pwd`/utils/pam/$version/common-* /etc/pam.d/
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
-cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
+#cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
 cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
 cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
 cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
