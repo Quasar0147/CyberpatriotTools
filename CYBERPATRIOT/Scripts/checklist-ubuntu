@@ -55,6 +55,7 @@ Local Policies
     ufw config
     polkit 
     environment
+    check rc and profile
     
 Malware
     ps -Meaf --forest
