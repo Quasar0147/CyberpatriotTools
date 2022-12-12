@@ -55,7 +55,6 @@
 /etc/systemd/system/multi-user.target.wants/grub-common.service
 /etc/systemd/system/multi-user.target.wants/systemd-networkd.service
 /etc/systemd/system/multi-user.target.wants/lxd-agent-9p.service
-/etc/systemd/system/multi-user.target.wants/rsync.service
 /etc/systemd/system/multi-user.target.wants/lxd-agent.service
 /etc/systemd/system/multi-user.target.wants/snapd.seeded.service
 /etc/systemd/system/multi-user.target.wants/pollinate.service
