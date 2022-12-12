@@ -20,7 +20,6 @@
 /etc/systemd/system/graphical.target.wants/udisks2.service
 /etc/systemd/system/graphical.target.wants/switcheroo-control.service
 /etc/systemd/system/graphical.target.wants/accounts-daemon.service
-/etc/systemd/system/printer.target.wants/cups.service
 /etc/systemd/system/dbus-org.freedesktop.timesync1.service
 /etc/systemd/system/snap.lxd.daemon.service
 /etc/systemd/system/dbus-org.freedesktop.Avahi.service
@@ -31,13 +30,11 @@
 /etc/systemd/system/multi-user.target.wants/dmesg.service
 /etc/systemd/system/multi-user.target.wants/irqbalance.service
 /etc/systemd/system/multi-user.target.wants/pppd-dns.service
-/etc/systemd/system/multi-user.target.wants/openvpn.service
 /etc/systemd/system/multi-user.target.wants/snapd.core-fixup.service
 /etc/systemd/system/multi-user.target.wants/ondemand.service
 /etc/systemd/system/multi-user.target.wants/networkd-dispatcher.service
 /etc/systemd/system/multi-user.target.wants/NetworkManager.service
 /etc/systemd/system/multi-user.target.wants/atd.service
-/etc/systemd/system/multi-user.target.wants/cups-browsed.service
 /etc/systemd/system/multi-user.target.wants/ufw.service
 /etc/systemd/system/multi-user.target.wants/snapd.service
 /etc/systemd/system/multi-user.target.wants/snapd.aa-prompt-listener.service
@@ -58,14 +55,12 @@
 /etc/systemd/system/multi-user.target.wants/lxd-agent.service
 /etc/systemd/system/multi-user.target.wants/snapd.seeded.service
 /etc/systemd/system/multi-user.target.wants/pollinate.service
-/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
 /etc/systemd/system/multi-user.target.wants/systemd-resolved.service
 /etc/systemd/system/multi-user.target.wants/kerneloops.service
 /etc/systemd/system/multi-user.target.wants/unattended-upgrades.service
 /etc/systemd/system/default.target.wants/e2scrub_reap.service
 /etc/systemd/system/rescue.target.wants/grub-initrd-fallback.service
 /etc/systemd/system/dbus-org.freedesktop.resolve1.service
-/etc/systemd/system/bluetooth.target.wants/bluetooth.service
 /etc/systemd/system/getty.target.wants/getty@tty1.service
 /etc/systemd/system/sysinit.target.wants/open-iscsi.service
 /etc/systemd/system/sysinit.target.wants/lvm2-monitor.service
