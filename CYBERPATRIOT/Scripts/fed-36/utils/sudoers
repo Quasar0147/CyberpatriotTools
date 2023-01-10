@@ -1,0 +1,72 @@
+Defaults	mail_badpass
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+Defaults    use_pty
+Defaults    require_tty
+Defaults    !root_sudo
+Defaults    logfile="/var/log/sudo.log"
+Defaults    timestamp_timeout=15
+Defaults    !pwfeedback
+Defaults    !visiblepw
+Defaults    !ignore_audit_errors
+Defaults    !ignore_logfile_errors
+Defaults    passwd_timeout=1
+Defaults    timestamp_timeout=0
+Defaults    log_host
+Defaults    log_year
+Defaults    log_input
+Defaults    log_output
+Defaults    noexec
+Defaults    !path_info
+Defaults    preserve_groups
+Defaults    stay_setuid
+Defaults    umask_override
+Defaults    umask=0077
+Defaults    passwd_timeout=1
+Defaults    iolog_mode=0400
+Defaults    iolog_dir="/var/log/sudo-io"
+Defaults    runas_default="nobody"
+Defaults    lecture=always
+Defaults    listpw=always
+Defaults    verifypw=always
+Defaults    tty_tickets
+Defaults    env_reset
+
+#
+# Adding HOME to env_keep may enable a user to run unrestricted
+# commands via sudo.
+#
+# Defaults   env_keep += "HOME"
+
+Defaults    secure_path = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/snapd/snap/bin
+
+## Next comes the main part: which users can run what software on 
+## which machines (the sudoers file can be shared between multiple
+## systems).
+## Syntax:
+##
+## 	user	MACHINE=COMMANDS
+##
+## The COMMANDS section may have other options added to it.
+##
+## Allow root to run any commands anywhere 
+root	ALL=(ALL) 	NOSETENV: ALL
+
+## Allows members of the 'sys' group to run networking, software, 
+## service management apps and more.
+# %sys ALL = NETWORKING, SOFTWARE, SERVICES, STORAGE, DELEGATING, PROCESSES, LOCATE, DRIVERS
+
+## Allows people in group wheel to run all commands
+%wheel	ALL=(root)	NOSETENV: ALL
+
+## Same thing without a password
+# %wheel	ALL=(ALL)	NOPASSWD: ALL
+
+## Allows members of the users group to mount and unmount the 
+## cdrom as root
+# %users  ALL=/sbin/mount /mnt/cdrom, /sbin/umount /mnt/cdrom
+
+## Allows members of the users group to shutdown this system
+# %users  localhost=/sbin/shutdown -h now
+
+## Read drop-in files from /etc/sudoers.d (the # here does not mean a comment)
+#includedir /etc/sudoers.d

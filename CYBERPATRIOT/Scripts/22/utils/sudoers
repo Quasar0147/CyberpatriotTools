@@ -1,0 +1,58 @@
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+Defaults	mail_badpass
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+Defaults    use_pty
+Defaults    require_tty
+Defaults    !root_sudo
+Defaults    logfile="/var/log/sudo.log"
+Defaults    timestamp_timeout=15
+Defaults    !pwfeedback
+Defaults    !visiblepw
+Defaults    !ignore_audit_errors
+Defaults    !ignore_logfile_errors
+Defaults    passwd_timeout=1
+Defaults    timestamp_timeout=0
+Defaults    log_host
+Defaults    log_year
+Defaults    log_input
+Defaults    log_output
+Defaults    noexec
+Defaults    !path_info
+Defaults    preserve_groups
+Defaults    stay_setuid
+Defaults    umask_override
+Defaults    umask=0077
+Defaults    passwd_timeout=1
+Defaults    iolog_mode=0400
+Defaults    iolog_dir="/var/log/sudo-io"
+Defaults    runas_default="nobody"
+Defaults    lecture=always
+Defaults    listpw=always
+Defaults    verifypw=always
+Defaults    tty_tickets
+Defaults    env_reset
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root	ALL=(ALL:ALL) NOSETENV: ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(root) NOSETENV: ALL
+
+# Allow members of group sudo to execute any command
+%sudo	ALL=(root:root) NOSETENV: ALL
+
+# See sudoers(5) for more information on "#include" directives:
+
+#includedir /etc/sudoers.d

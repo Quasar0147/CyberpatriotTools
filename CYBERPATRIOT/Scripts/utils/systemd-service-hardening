@@ -1,29 +1,68 @@
-#[Service]
-#CapabilityBoundingSet=
+[Service]
+MountAPIVFS=yes
+BindReadOnlyPaths=/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout /etc/machine-id
+DynamicUser=yes
+RemoveIPC=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateUsers=yes
 ProtectSystem=strict
-ProtectHome=true
-ProtectKernelTunables=true
-ProtectKernelModules=true
-ProtectControlGroups=true
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+LockPersonality=yes
+NoNewPrivileges=yes
+MemoryDenyWriteExecute=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+SystemCallArchitectures=native
+PrivateNetwork=yes
+IPAddressDeny=any
+TasksMax=4
 ProtectKernelLogs=true
 ProtectHostname=true
 ProtectClock=true
-ProtectProc=invisible
+ProtectProc=noaccess
 ProcSubset=pid
-PrivateTmp=true
-PrivateUsers=true
-PrivateDevices=true
 PrivateIPC=true
-PrivateNetwork=true
 PrivateMounts=true
-MemoryDenyWriteExecute=true
-NoNewPrivileges=true
-LockPersonality=true
-RestrictRealtime=true
 RestrictSUIDSGID=true
-RestrictAddressFamilies=AF_INET
-RestrictNamespaces=true
 SyslogLevel=debug
-SystemCallFilter=@system-service
-UMask=0027
+UMask=0077
 SecureBits=keep-caps keep-caps-locked no-setuid-fixup no-setuid-fixup-locked noroot noroot-locked
+DevicePolicy=closed
+## Keep root directory as specific as possible, and keep the working directory as specific as possible
+#WorkingDirectory=
+#RootDirectory=
+#DeviceAllow=
+#AppArmorProfile=¶
+#SELinuxContext=
+## Limits, set all when possible
+##soft_limit:hard_limit (soft limit is the value that the kernel enforces for the corresponding resource, hard limit acts as a ceiling for the soft limit)
+#Ex random values i thought were good
+LimitCPU=1s:10s
+#Max CPU time per process
+LimitFSIZE=1M:10M
+#Max file size
+LimitSTACK=100M:500M
+#Max stack size
+LimitCORE=0 # Disables core dumps/core files
+#Max core file/dump size
+LimitNPROC=10:25
+#Max number of processes
+LimitMEMLOCK=10M:100M
+# Max locked-in-memory address space
+LimitLOCKS=5:10
+LimitSIGPENDING=5:10
+LimitMSGQUEUE=10:100
+LimitNICE=19
+#19 max, -20 min, 19 being the lowest priority
+LimitRTPRIO=1
+#1 min, 99 max, 99 being the highest priority
+LimitRTTIME=250ms:1s

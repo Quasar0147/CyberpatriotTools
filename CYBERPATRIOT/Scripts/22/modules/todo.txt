@@ -1,0 +1,34 @@
+Ubuntu
+    SCRIPT
+        fstab # later
+        users/groups # manual
+    BASELINES (python)
+        Installed Software
+            Kernel Modules
+            Apt
+            Dpkg
+            Services
+            Timers
+        Hashdeeps
+            /etc
+            /usr/share
+            /
+            /usr/lib (x86_64)
+            /bin
+            /boot
+        Permissions
+            Permissions (/etc, /boot, /usr, /var)
+        Entire File System (to find new files/non default) (/etc /usr /var /boot)
+        Doable via defaults list + grep -Fxvf
+Fedora Cinnamon
+    SCRIPT
+        Literally Everything
+    BASELINES (python)
+        Same as above, but apt/dpkg replaced with dnf/rpm
+CONFIGS
+    login.defs
+    GDM Config
+    systemd configs
+    all other configs
+    GRUB
+    SYSCTL

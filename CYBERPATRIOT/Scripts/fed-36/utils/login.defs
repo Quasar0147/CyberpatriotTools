@@ -1,0 +1,100 @@
+FAIL_DELAY		5
+LOG_UNKFAIL_ENAB	yes
+SYSLOG_SG_ENAB		yes
+MAIL_DIR	/var/spool/mail
+HUSHLOGIN_FILE	/etc/hushlogins
+ENV_SUPATH	PATH=/sbin:/bin:/usr/sbin:/usr/bin
+ENV_PATH	PATH=/bin:/usr/bin
+TTYGROUP	tty
+TTYPERM		0600
+SYS_UID_MIN               201
+SYS_UID_MAX               999
+UID_MIN                  1000
+UID_MAX                 60000
+SUB_UID_MIN		       100000
+SUB_UID_COUNT		        0
+SYS_GID_MIN               201
+SYS_GID_MAX               999
+GID_MIN                  1000
+GID_MAX                 60000
+SUB_GID_MIN		       100000
+SUB_GID_COUNT               0
+LOGIN_RETRIES		        3
+LOGIN_TIMEOUT		      60
+CHFN_RESTRICT		      rwh
+ENRYPT_METHOD        YESCRYPT
+YESCRYPT_COST_FACTOR       11
+USERGROUPS_ENAB           yes
+CREATE_HOME	              yes
+FORCE_SHADOW             yes
+HMAC_CRYPTO_ALGO       SHA512
+DEFAULT_HOME	       no
+# Currently FAILLOG_ENAB is not supported
+# Currently LOG_OK_LOGINS is not supported
+# Currently LASTLOG_ENAB is not supported
+# Currently MAIL_CHECK_ENAB is not supported
+# Currently OBSCURE_CHECKS_ENAB is not supported
+# Currently PORTTIME_CHECKS_ENAB is not supported
+# Currently QUOTAS_ENAB is not supported
+# Currently SYSLOG_SU_ENAB is not supported
+# Currently CONSOLE is not supported
+# Currently SULOG_FILE is not supported
+# Currently MOTD_FILE is not supported
+# Currently ISSUE_FILE is not supported
+# Currently TTYTYPE_FILE is not supported
+# Currently FTMP_FILE is not supported
+# Currently NOLOGINS_FILE is not supported
+# Currently SU_NAME is not supported
+# Currently ENV_TZ is not supported
+# Currently ENV_HZ is not supported
+# Currently ERASECHAR, KILLCHAR and ULIMIT are not supported
+# Currently PASS_MIN_LEN is not supported
+# Currently SU_WHEEL_ONLY is not supported
+# Currently CRACKLIB_DICTPATH is not supported
+# Currently PASS_CHANGE_TRIES is not supported
+# Currently PASS_ALWAYS_WARN is not supported
+# Currently PASS_MAX_LEN is not supported
+# Currently CHFN_AUTH is not supported
+# Currently LOGIN_STRING is not supported
+# Currently MD5_CRYPT_ENAB is not supported
+# Currently SHA_CRYPT_MIN_ROUNDS is not supported
+# Currently CONSOLE_GROUPS is not supported
+# Currently ENVIRON_FILE is not supported
+#MAIL_DIR	/var/mail
+#FAILLOG_ENAB		yes
+#LOG_UNKFAIL_ENAB	yes
+#LOG_OK_LOGINS		yes
+#SYSLOG_SU_ENAB		yes
+#SYSLOG_SG_ENAB		yes
+#SULOG_FILE	/var/log/sulog
+#FTMP_FILE	/var/log/btmp
+#SU_NAME		su
+#HUSHLOGIN_FILE	/etc/hushlogins
+#ENV_SUPATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#ENV_PATH	PATH=/usr/local/bin:/usr/bin:/bin
+#TTYGROUP	tty
+#TTYPERM		0600
+#ERASECHAR	0177
+#KILLCHAR	025
+#UMASK		0077
+#PASS_MAX_DAYS	60
+#PASS_MIN_DAYS	1
+#PASS_WARN_AGE	7
+#SYS_UID_MIN		  100
+#SYS_UID_MAX		  999
+#UID_MIN			 1000
+#UID_MAX			60000
+#SYS_GID_MIN		  100
+#SYS_GID_MAX		  999
+#GID_MIN			 1000
+#GID_MAX			60000
+#LOGIN_RETRIES		        3
+#LOGIN_TIMEOUT		      60
+#CHFN_RESTRICT		rwh
+#USERGROUPS_ENAB yes
+#ENCRYPT_METHOD yescrypt
+#YESCRYPT_COST_FACTOR 11
+#SHA_CRYPT_MIN_ROUNDS 5000
+#SHA_CRYPT_MAX_ROUNDS 999999999
+#DEFAULT_HOME	no
+#CONSOLE	        ""

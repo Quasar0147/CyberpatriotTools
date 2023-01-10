@@ -19,11 +19,11 @@ oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis_
 " >> cis.sh
 chmod +x cis.sh
 #./cis.sh>/dev/null & 
-
+rm -r /etc/profile.d
 find `pwd`/utils -type f -exec chown root:root {} \;
 find `pwd`/utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
-for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed "s/$auto//g"); do chage -M 30 -m 7 -W 15 $u; done
+for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed "s/$auto//g"); do chage --mindays 7 --maxdays 90 --warndays 14 --expiredate $(date) $u; done
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
 for x in $(awk -F: '($3<1000)&&($1!="nobody"){print $1}' /etc/passwd)
 do
@@ -34,7 +34,6 @@ for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd)
 do
 usermod -U $x
 done
-usermod -U $(whoami)
 ufw enable
 ufw logging on
 ufw logging high
@@ -67,10 +66,14 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable denyhosts
     systemctl restart ssh
     systemctl enable ssh
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod u-x,go-rwx {} \;
 fi
+find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod u-x,go- wx {} \;
+find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \;
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
 mkdir pam_bak
-#rm -r /usr/lib/pam.d/*
+rm -r /usr/lib/pam.d/*
 #mv /etc/pam.d/* ./pam_bak 
 mv /etc/pam.d/* ./pam_bak # incase next step broke anything important
 apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1) #Default lists
@@ -242,6 +245,11 @@ sed -i "s/IPV6=.*/IPV6=no" /etc/default/ufw
 
 fi
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
+cp /etc/sysctl.conf /usr/local/lib/sysctl.d/* 2> /dev/null
+cp /etc/sysctl.conf /usr/lib/sysctl.d/* 2> /dev/null
+cp /etc/sysctl.conf /lib/sysctl.d/* 2> /dev/null
+cp /etc/sysctl.conf /run/sysctl.d/* 2> /dev/null
+
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
 sysctl --system >/dev/null
 
@@ -433,8 +441,9 @@ systemctl start fail2ban
 
 sudo apt-get apport aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel purge john nmap nc ncat netcat telnet telnetd netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(cat /home/*/.mozilla/firefox/profiles.ini | grep "Path=" | cut -c6-1000 | xargs); do cp utils/user.js /home/$u/.mozilla/firefox/$x/user.js 2>/dev/null; chmod 644 /home/$u/.mozilla/firefox/$x/user.js ; done; done
-sed s'/user_pref(/pref(/g' utils/user.js > /etc/firefox/syspref.js
-
+sed s'/user_pref(/pref(/g' utils/user.js > ./temp
+sed s'/);/,locked);/g' ./temp > /etc/firefox/syspref.js
+rm temp
 cp `pwd`/utils/bash.bashrc /etc/bash.bashrc
 cp `pwd`/utils/profile /etc/profile
 chmod 644 /etc/profile
@@ -484,6 +493,7 @@ echo "
 gsettings set org.gnome.desktop.screensaver lock-enabled true
 rm /etc/nologin 2>/dev/null
 echo "PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'" > /etc/environment
+find /etc/environment.d -type f | xargs cp /etc/environment 
 cp /etc/environment /etc/environment.d/*
 echo "
 allow-submit = no

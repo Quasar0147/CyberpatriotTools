@@ -10,26 +10,6 @@ for x in $(lsattr -R /etc 2>/dev/null | grep -- -i- | awk '{ print $2 }')
 do
 chattr -i $x
 done
-for x in $(cat /etc/passwd | grep -E "/bin/*.sh" | cut -d ":" -f1 | sed s'/root//g')
-do
-read -n 1 -rp "Delete $x? (y/n)" a
-if [ "$a" == "y" ]
-then
-userdel -r $x
-fi
-done
-for x in $(cat /etc/passwd | grep -E "/bin/*.sh" | cut -d ":" -f1 | sed s'/root//g')
-do
-read -n 1 -rp "Is x supposed to be an admin" a
-if [ "$a" == "y" ]
-then
-for y in "sys sudo adm lpadmin sambashare wheel"
-do
-usermod -aG $y $x
-done
-fi
-done
-
 cp `pwd`/utils/systemd/* /etc/systemd/
 if [ -f /etc/init.d/rc ]; then
 sed -i 's/umask 022/umask 077/g' /etc/init.d/rc
@@ -474,7 +454,8 @@ systemctl start fail2ban
 
 sudo apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(cat /home/*/.mozilla/firefox/profiles.ini | grep "Path=" | cut -c6-1000 | xargs); do cp utils/user.js /home/$u/.mozilla/firefox/$x/user.js 2>/dev/null; chmod 644 /home/$u/.mozilla/firefox/$x/user.js ; done; done
-sed s'/user_pref(/pref(/g' utils/user.js > /etc/firefox/syspref.js
+sed s'/user_pref(/pref(/g' utils/user.js > ./temp
+sed s'/);/,locked);/g' ./temp > /etc/firefox/syspref.js
 
 cp `pwd`/utils/bash.bashrc /etc/bash.bashrc
 cp `pwd`/utils/profile /etc/profile

@@ -1,7 +1,0 @@
-@include common-auth
-session       required     pam_loginuid.so
-session       required   pam_env.so
-session       required   pam_env.so envfile=/etc/default/locale
-@include common-account
-@include common-session-noninteractive 
-session       required   pam_limits.so

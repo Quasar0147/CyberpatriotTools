@@ -1,0 +1,42 @@
+1. Forensics
+2. User Auditing
+Users - /etc/passwd + /etc/shadow
+    Hidden Users
+    GECOS
+    Unauth Users
+    etc
+Groups - /etc/group + /etc/gshadow
+    Groups
+    Make sure no group passwords
+    Improper/Conflicting UID/GID
+3. Updates
+    For all package managers (even like pip!)
+        OS Updates
+            Set settings in gui if applicable
+            check /etc/ if they have a folder
+            Unattended Upgrades
+        Actual Updates
+            REBOOT
+4. User Policy
+    Crit Service PAM
+5. Prohibited Files
+    Fsearch
+    If file share, check the shared directory
+9. Local Policy
+    sudoers
+    polkit
+10. Malware
+    Check running procs and prots
+    Check baselines for modified files
+        Rcs and such which get executed
+    Meld Merge /etc /usr/lib and /usr/bin
+11. Do everything in baselines
+12. Appsec
+    Read Me
+    Get those docs out
+    Get the hacktricks out
+    Get the hardening guides out
+13. MISC
+    fstab
+    Ex hardened config:
+    
