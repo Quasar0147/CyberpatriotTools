@@ -70,6 +70,9 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 rm -r /etc/firewalld/*
 rm -r /usr/lib/firewalld/*
 dnf reinstall firewalld
+cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
+firewall-cmd --set-log-denied=all
+
 #TODO
 
 # copy pam from utils

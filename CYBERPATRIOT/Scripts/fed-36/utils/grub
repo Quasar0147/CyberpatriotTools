@@ -24,15 +24,6 @@ no usb
 mitigations=auto,nosmt
 slub_debug=FZ 
 page_poison=1
-GRUB_SAVEDEFAULT="true"
-
-GRUB_DISABLE_LINUX_RECOVERY="true"
-GRUB_ENABLE_CRYPTODISK=y
-GRUB_DISABLE_RECOVERY="true"
-GRUB_TERMINAL_INPUT="console"
-GRUB_DEFAULT="0"
-GRUB_TIMEOUT="3"
-
 noexec
 vdso
 noapic
@@ -46,3 +37,12 @@ no-hlt
 nosep
 notsc
 disable_local_igmp
+fips=1 fips-mode=1
+GRUB_SAVEDEFAULT="true"
+GRUB_DISABLE_LINUX_RECOVERY="true"
+GRUB_ENABLE_CRYPTODISK=y
+GRUB_DISABLE_RECOVERY="true"
+GRUB_TERMINAL_INPUT="console"
+GRUB_DEFAULT="0"
+GRUB_TIMEOUT="3"
+GRUB_CMDLINE_LINUX_DEFAULT="slab_nomerge init_on_alloc = 1 init_on_free = 1 page_alloc.shuffle = 1 randomize_kstack_offset = on nosmt l1tf = full vsyscall = none oops = panic module.sig_enforce = 1 lockdown = confidentiality force nosmt = force kvm.nx_huge_pages = force quiet loglevel = 0 spec_store_bypass_disable = on spectre_v2 = on tsx = off tsx_async_abort = full nosmt mds = full pti = on debugfs = off mce = 0 apparmor = 1 security = apparmor intel_iommu=on amd_iommu=on disable_early_pci_dma no usb mitigations=auto,nosmt slub_debug=FZ  page_poison=1 noexec vdso noapic nolapic noirqbalance noirqdebug nmi_watchdog=3 no387 nofxsr no-hlt nosep notsc disable_local_igmp fips=1 fips-mode=1"

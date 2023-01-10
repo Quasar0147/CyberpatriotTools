@@ -32,3 +32,10 @@ CONFIGS
     all other configs
     GRUB
     SYSCTL
+
+
+Post tests
+Custom.conf
+grub use GRUB-CMDLINE or whatever it is
+merge sysctls
+
