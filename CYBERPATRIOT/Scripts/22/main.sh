@@ -385,7 +385,7 @@ chmod -R 644 /var/spool/cron
 chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 echo > /etc/rc.local
-echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 ubuntu\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts
+#echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 ubuntu\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
 cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
