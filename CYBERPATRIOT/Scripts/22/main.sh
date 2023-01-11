@@ -1,3 +1,4 @@
+uapt-get dist-upgrade -y
 apt-get install apparmor-utils clamav rsyslog clamav-daemon dbus-x11 git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
@@ -73,7 +74,6 @@ sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
 #ufw limit in on lo 2>/dev/null
 #ufw limit in out lo 2>/dev/null
 #apt-get reinstall systemd -y && apt-get reinstall systemd-services -y
-apt-get dist-upgrade -y
 groupdel nopasswdlogin
 systemctl enable auditd
 systemctl start auditd
@@ -93,7 +93,8 @@ mkdir pam_bak
 mv /etc/pam.d/* ./pam_bak 
 apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
 #pam-auth-update
-cp -n ./pam_bak/* /etc/pam.d/
+mv `utils`/pam/* /etc/pam.d
+#cp -n ./pam_bak/* /etc/pam.d/
 #cp `pwd`/utils/pam/* /etc/pam.d/ #Update to contain only: gdm3, lightdm, login, passwd as they cannot be downloaded, and a secure common default
 #sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
@@ -120,6 +121,7 @@ cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
 cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
 cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
 cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/*
+cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/00-login-screen
 chmod 644 /etc/dconf/db/gdm.d/*
 mkdir /etc/dconf/db/gdm.d/locks/ 2>/dev/null
 cp `pwd`/utils/gdm-lockfile /etc/dconf/db/gdm.d/locks/00-security-settings-lock
