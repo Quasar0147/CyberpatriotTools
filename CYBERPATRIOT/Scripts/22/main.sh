@@ -36,7 +36,7 @@ sudo systemctl enable rsyslog
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
-bash ubuntu.sh &
+#bash ubuntu.sh &
 cd ..
 echo "
 wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.64/scap-security-guide-0.1.64-oval-5.10.zip >> /dev/null
