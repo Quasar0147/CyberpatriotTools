@@ -53,7 +53,7 @@ find `pwd`/utils -type f -exec chown root:root {} \;
 find `pwd`/utils -type f -exec chmod 644 {} \;
 password="Baher13@c0stc0"
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$password" | chpasswd; echo "$u:$password"; done
-rm -r /etc/ufw/*
+#rm -r /etc/ufw/*
 apt install --reinstall -o Dpkg::Options::="--force-confmiss" ufw
 ufw enable
 ufw logging on
