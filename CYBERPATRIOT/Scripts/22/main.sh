@@ -98,7 +98,9 @@ cp -n ./pam_bak/* /etc/pam.d/
 #sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 #awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
-#chage -M 30 -m 7 -W 15
+#chage -M 30 -m 7 -W 
+
+
 for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd); do chage --mindays 7 --maxdays 30 --warndays 15 --expiredate 0 --lastday 0 --inactive 31 $x; done
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
@@ -484,12 +486,12 @@ overlayroot_cfgdisk=\"disabled\"
 overlayroot=""
 " > /etc/overlayroot.conf
 echo "" > /etc/pam.conf
-systemctl stop clamav-freshclam
-wget https://database.clamav.net/daily.cvd
-mv daily.cvd /var/lib/clamav/daily.cvd
-systemctl start clamav-freshclam
-freshclam
-clamscan --infected --recursive --remove / &>./clamlog
+#systemctl stop clamav-freshclam
+#wget https://database.clamav.net/daily.cvd
+#mv daily.cvd /var/lib/clamav/daily.cvd
+#systemctl start clamav-freshclam
+#freshclam
+#clamscan --infected --recursive --remove / &>./clamlog
 #systemctl restart gdm
 rm /etc/dpkg/dpkg.cfg.d/*
 echo "no-debsig
@@ -514,8 +516,8 @@ echo "Doing updates, may take a bit"
 apt-get update -y >> /dev/null && apt-get upgrade -y & >> /dev/null
 rm -r /etc/apt/auth.conf.d/*
 echo "" > /etc/apt/auth.conf
-rm -r /etc/apt/keyring/* 
-rm -r /etc/apt/trusted.gpg.d/*
+#rm -r /etc/apt/keyring/* 
+#rm -r /etc/apt/trusted.gpg.d/*
 
 echo "daily
 rotate 28

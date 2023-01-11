@@ -2,7 +2,7 @@ Defaults	mail_badpass
 Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 Defaults    use_pty
 Defaults    require_tty
-Defaults    !root_sudo
+#Defaults    !root_sudo
 Defaults    logfile="/var/log/sudo.log"
 Defaults    timestamp_timeout=15
 Defaults    !pwfeedback
