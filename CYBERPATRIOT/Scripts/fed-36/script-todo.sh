@@ -20,9 +20,6 @@ gedit /etc/group &
 gedit /etc/passwd &
 gedit /etc/fstab &
 
-# Reconfig dnf (to ensure it works)
-#TODO
-
 # remove cups, bluetooth, and apport
 dnf remove cups bluetooth apport
 #chown and chmod utils
@@ -72,8 +69,15 @@ rm -r /usr/lib/firewalld/*
 dnf reinstall firewalld
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 firewall-cmd --set-log-denied=all
-
-#TODO
+firewall-cmd --set-default-zone=drop
+# Deny outbound traffic
+firewall-cmd --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
+firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
+firewall-cmd --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
+firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
+#Deny Routed Traffic via direct
+firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
+firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
 
 # copy pam from utils
 cp `pwd`/utils/pam/* /etc/pam.d/
@@ -283,7 +287,7 @@ find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -ty
 find /lib /lib64 /usr/lib -perm /022 -type f -exec chmod 755 '{}' +;
 find /lib /lib64 /usr/lib -perm /022 -type d -exec chmod 755 '{}' +;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -type f -exec chmod 755 '{}' +;
-chown root:syslog /var/log
+chown root:root /var/log
 find /var/log -perm /137 -type f -exec chmod 640 '{}' \;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type f -exec  -c chown root:root '{}' +;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -name "*.sh" -type f -delete
@@ -319,7 +323,6 @@ echo "* hard core
 * hard nproc 1024
 " > /etc/security/limits.conf
 chmod 744 /etc/security/limits.conf
-# TODO, make this a file and add other limits
 
 # Disabling some modules
 for x in "dccp sctp tipc rds"; do sudo modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/modules.conf; done
@@ -342,9 +345,6 @@ cp /etc/bash.bashrc /home/*/.bashrc
 cp /etc/bash.bashrc /root/.bashrc
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
-
-# /etc/hosts
-# TODO
 
 # Purge Games
 dnf remove aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel telnet telnetd >> /dev/null
@@ -386,7 +386,7 @@ done
 for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd)
 do
 usermod -U $x
-
+done
 # Make unowned files owned by root
 find / \( -nouser -o -nogroup \) -exec chown root:root {} \;
 
@@ -440,9 +440,6 @@ overlayroot_cfgdisk=\"disabled\"
 overlayroot=""
 " > /etc/overlayroot.conf
 
-# RPM config 
-#TODO
-
 # Set permission on yum repos
 chmod -R 644 /etc/yum.repos.d
 chown -R root:root /etc/yum.repos.d
@@ -484,10 +481,15 @@ echo "enabled=0" > /etc/default/irqbalance
 #automatic upgrades
 dnf install dnf-automatic
 systemctl enable --now dnf-automatic.timer
-#TODO /etc/dnf/automatic.conf
+echo "[commands]
+apply_updates=True
+" > /etc/dnf/automatic.conf
 
 # Upgrade
 dnf upgrade --refresh
+update-crypto-policies --set FIPS
 
 systemctl daemon-reload
+
 echo "Done"
+

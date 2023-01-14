@@ -514,6 +514,7 @@ cp ./utils/22sources.list /etc/apt/sources.list
 chmod 644 /etc/apt/sources.list
 chown root:root
 apt-mark unhold $(apt-mark showhold) # Unhold all packages
+#TODO automate apt pin rules
 echo "Doing updates, may take a bit"
 apt-get update -y >> /dev/null && apt-get upgrade -y & >> /dev/null
 rm -r /etc/apt/auth.conf.d/*
