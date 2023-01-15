@@ -18,14 +18,14 @@ chmod 644 utils/*
 chown root:root utils/*
 crontab -r
 for i in `atq | awk '{print $1}'`;do atrm $i;done
-for x in $(lsattr -aR / 2>/dev/null | grep -- -i- | awk '{ print $2 }')
+for x in $(lsattr -aR /etc 2>/dev/null | grep -- -i- | awk '{ print $2 }')
 do
-chattr -i $x
+chattr -ai $x
 done
-for x in $(lsattr -aR / 2>/dev/null | grep -- -a- | awk '{ print $2 }')
-do
-chattr -a $x
-done
+#for x in $(lsattr -aR /usr 2>/dev/null | grep -- -a- | awk '{ print $2 }')
+#do
+#chattr -ai $x
+#done
 cp `pwd`/utils/systemd/* /etc/systemd/
 umask 077
 rm /etc/profile.d/*

@@ -15,7 +15,7 @@ gpasswd -r $x
 done
 
 # open up group passwd and fstab via gedit
-dnf install gedit
+dnf install gedit -y
 gedit /etc/group &
 gedit /etc/passwd &
 gedit /etc/fstab &
@@ -50,11 +50,11 @@ cp `pwd`/utils/systemd/* /etc/systemd/
 umask 0077
 
 # remove alternatives to /etc/profile
-rm /etc/profile.d
+rm -r /etc/profile.d/*
 
 #reset rsyslog config
 rm /etc/rsyslog.conf
-dnf reinstall rsyslog
+dnf reinstall rsyslog -y
 sudo systemctl start rsyslog
 sudo systemctl enable rsyslog
 
@@ -66,8 +66,10 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 # configure firewalld
 rm -r /etc/firewalld/*
 rm -r /usr/lib/firewalld/*
-dnf reinstall firewalld
+dnf reinstall firewalld -y
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
+systemctl start firewalld
+systemctl enable firewalld
 firewall-cmd --set-log-denied=all
 firewall-cmd --set-default-zone=drop
 # Deny outbound traffic
@@ -80,7 +82,7 @@ firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
 firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
 
 # copy pam from utils
-cp `pwd`/utils/pam/* /etc/pam.d/
+cp `pwd`/utils/system-auth /etc/pam.d/
 cp /etc/pam.d/system-auth /etc/pam.d/password-auth
 
 # set dates for users
@@ -90,7 +92,7 @@ for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd); do chage
 cp `pwd`/utils/lightdm/* /etc/lightdm/
 
 # copy gdm3 config from utils
-p `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
+cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults
@@ -140,7 +142,7 @@ sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
 sysctl --system >/dev/null
 
 # config ipv6
-ead -p "IPV6? (y/n): " ipv6
+read -p "IPV6? (y/n): " ipv6
 if [ "$ipv6"="y" ]; then
 echo "
 net.ipv6.conf.all.accept_ra=0
@@ -333,16 +335,16 @@ chown root:root /var/log/audit/audit.log
 echo > /etc/rc.local
 
 #Config other rcs
-cp `pwd`/utils/bash.bashrc /etc/bash.bashrc
+cp `pwd`/utils/bashrc /etc/bashrc
 cp `pwd`/utils/profile /etc/profile
 chmod 644 /etc/profile
 cp /etc/profile /home/*/.profile
 cp /etc/profile /root/.profile
 chmod 644 /home/*/.profile
 chmod 644 /root/.profile
-chmod 644 /etc/bash.bashrc
-cp /etc/bash.bashrc /home/*/.bashrc
-cp /etc/bash.bashrc /root/.bashrc
+chmod 644 /etc/bashrc
+cp /etc/bashrc /home/*/.bashrc
+cp /etc/bashrc /root/.bashrc
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
 
@@ -479,7 +481,7 @@ echo "enabled=0" > /etc/default/irqbalance
 
 
 #automatic upgrades
-dnf install dnf-automatic
+dnf install dnf-automatic -y
 systemctl enable --now dnf-automatic.timer
 echo "[commands]
 apply_updates=True
@@ -487,7 +489,10 @@ apply_updates=True
 
 # Upgrade
 dnf upgrade --refresh
+
+# Set crypto policies
 update-crypto-policies --set FIPS
+fips-mode-setup --enable
 
 systemctl daemon-reload
 
