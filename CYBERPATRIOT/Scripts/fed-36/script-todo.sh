@@ -64,9 +64,9 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 
 
 # configure firewalld
-rm -r /etc/firewalld/*
-rm -r /usr/lib/firewalld/*
-dnf install firewalld -y
+#rm -r /etc/firewalld/*
+#rm -r /usr/lib/firewalld/*
+dnf reinstall firewalld -y
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 systemctl start firewalld
 systemctl enable firewalld
