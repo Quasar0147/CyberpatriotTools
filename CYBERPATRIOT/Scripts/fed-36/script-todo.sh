@@ -21,7 +21,9 @@ gedit /etc/passwd &
 gedit /etc/fstab &
 
 # remove cups, bluetooth, and apport
-dnf remove cups bluetooth apport
+dnf remove -y cups
+dnf remove -y bluetooth
+dnf remove -y apport
 #chown and chmod utils
 chmod 644 utils/*
 chown root:root utils/*
@@ -44,7 +46,7 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 
 # copy systemd configs in
-cp `pwd`/utils/systemd/* /etc/systemd/
+# cp `pwd`/utils/systemd/* /etc/systemd/
 
 # set umask
 umask 0077
@@ -67,7 +69,6 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 #rm -r /etc/firewalld/*
 #rm -r /usr/lib/firewalld/*
 dnf reinstall firewalld -y
-cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 systemctl start firewalld
 systemctl enable firewalld
 firewall-cmd --set-log-denied=all
@@ -80,6 +81,7 @@ firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1
 #Deny Routed Traffic via direct
 firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
 firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
+cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 
 # copy pam from utils
 cp `pwd`/utils/system-auth /etc/pam.d/
@@ -469,7 +471,11 @@ useradd -D -f 35
 sed -i "s/enabled=1/enabled=0/gI" /etc/default/apport
 sed -i "s/enabled=1/enabled=0/gI" /etc/default/whoopsie
 sed -i "s/report_crashes=.*/report_crashes=0/gI" /etc/default/whoopsie
-dnf remove popularity-contest tracker tracker-extract tracker-miner-fs; rm /etc/cron.daily/popularity-contest
+dnf remove tracker-miner-fs -y
+dnf remove popularity-contest -y
+dnf remove tracker -y
+dnf remove tracker-extract
+rm /etc/cron.daily/popularity-contest
 sed -i "s/ENABLED=.*/ENABLED=0/gI" /etc/default/irqbalance
 echo "enabled=0" > /etc/default/apport
 echo "enabled=0" > /etc/default/whoopsie
@@ -485,7 +491,7 @@ apply_updates=True
 " > /etc/dnf/automatic.conf
 
 # Upgrade
-dnf upgrade --refresh
+dnf upgrade --refresh -y
 
 # Configure DNF
 cp `pwd`/utils/dnf.conf /etc/dnf/dnf.conf
