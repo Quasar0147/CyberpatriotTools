@@ -1,21 +1,7 @@
 ##TODO:
-# 1.  Fix PAM - V
+# 1.  Fix rsyslog
 # 2.  Fix firewalld
-# 3.  Fix auditd
-# 4.  Fix internet
-
-
-
-
-# remove any immutable or unappendable files
-for x in $(lsattr -aR / 2>/dev/null | grep -- -i- | awk '{ print $2 }')
-do
-chattr -i $x
-done
-for x in $(lsattr -aR / 2>/dev/null | grep -- -a- | awk '{ print $2 }')
-do
-chattr -a $x
-done
+# 3.  Fix internet
 
 # remove gpasswds
 for x in $(cat /etc/group | cut -d: -f1)
@@ -42,7 +28,6 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1)
 do
 crontab -u $u -r
 done
-crontab -r 
 for i in `atq | awk '{print $1}'`;do atrm $i;done
 rm -f /etc/cron.deny /etc/at.deny
 echo root >/etc/cron.allow
@@ -55,7 +40,7 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 
 # copy systemd configs in
-cp `pwd`/utils/systemd/* /etc/systemd/
+# cp `pwd`/utils/systemd/* /etc/systemd/
 
 # set umask
 umask 0077
@@ -80,16 +65,16 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 dnf reinstall firewalld -y
 systemctl start firewalld
 systemctl enable firewalld
-#firewall-cmd --set-log-denied=all
-firewall-cmd --set-default-zone=drop --permanent
+firewall-cmd --set-log-denied=all
+firewall-cmd --set-default-zone=drop
 # Deny outbound traffic
-firewall-cmd --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject' --permanent
-firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT --permanent
-firewall-cmd --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT --permanent 
-firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject' --permanent 
+firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
+firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
+firewall-cmd --permanent --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
+firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
 #Deny Routed Traffic via direct
-firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT --permanent 
-firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT --permanent 
+firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
+firewall-cmd --permanent --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 
 # copy pam from utils
