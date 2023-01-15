@@ -133,7 +133,6 @@ password pbkdf2 root '"$data"'
 EOF" >> /etc/grub.d/00_header
 sed -i "s/set superusers=.*/set superusers='root'/g" /etc/grub.d/*
 chmod 744 /etc/grub.d/00_header
-grub2-mkconfig -o "$(readlink -e /etc/grub2.conf)"
 # copy in sysctl
 cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
@@ -167,15 +166,13 @@ net.ipv6.conf.all.use_tempaddr=2
 net.ipv6.conf.default.use_tempaddr=2
 " >> /etc/sysctl.conf
 echo "ipv6.disable=0" >> /etc/default/grub
-sed -i "s/IPV6=.*/IPV6=yes/gI" /etc/default/ufw
 else 
 echo "net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo "ipv6.disable=1" >> /etc/default/grub
-sed -i "s/IPV6=.*/IPV6=no/gI" /etc/default/ufw
+echo -e "\nipv6.disable=1" >> /etc/default/grub
 fi
-grub2-mkconfig -o "$(readlink -e /etc/grub2.conf)"
-
+grub2-mkconfig -o "$(readlink -e /etc/grub2.conf)" > ./temp.text
+mv ./temp.text /etc/grub2.conf
 
 # Misc Permissions
 chmod 744 /etc/default/grub
@@ -300,8 +297,9 @@ chmod 600 /etc/ssh/*key 2>/dev/null
 chmod 640 /etc/ssh/*key.pub 2>/dev/null
 chmod 640 /etc/ssh/*key-cert.pub 2>/dev/null
 chmod 0640 /var/log/syslog
-chown syslog /var/log/syslog
+chown root:root /var/log/syslog
 # copy auditd configs
+dnf install -y audit
 cp `pwd`/utils/auditd.conf /etc/audit/auditd.conf
 auditctl -e 1
 rm /etc/audit/rules.d/*
@@ -352,8 +350,6 @@ chmod 644 /root/.bashrc
 # Purge Games
 dnf remove aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel telnet telnetd >> /dev/null
 
-# Configure DNF
-cp `pwd`/utils/dnf.conf /etc/dnf/dnf.conf
 
 # Clear securetty
 echo "" > /etc/securetty
@@ -473,7 +469,7 @@ useradd -D -f 35
 sed -i "s/enabled=1/enabled=0/gI" /etc/default/apport
 sed -i "s/enabled=1/enabled=0/gI" /etc/default/whoopsie
 sed -i "s/report_crashes=.*/report_crashes=0/gI" /etc/default/whoopsie
-apt-get remove popularity-contest tracker tracker-extract tracker-miner-fs; rm /etc/cron.daily/popularity-contest
+dnf remove popularity-contest tracker tracker-extract tracker-miner-fs; rm /etc/cron.daily/popularity-contest
 sed -i "s/ENABLED=.*/ENABLED=0/gI" /etc/default/irqbalance
 echo "enabled=0" > /etc/default/apport
 echo "enabled=0" > /etc/default/whoopsie
@@ -490,6 +486,9 @@ apply_updates=True
 
 # Upgrade
 dnf upgrade --refresh
+
+# Configure DNF
+cp `pwd`/utils/dnf.conf /etc/dnf/dnf.conf
 
 # Set crypto policies
 update-crypto-policies --set FIPS

@@ -11,11 +11,17 @@ auth required pam_permit.so
 
 
 
-account     required                                     pam_unix.so
+account	[success=1 new_authtok_reqd=done default=ignore]	pam_unix.so 
 account     sufficient                                   pam_localuser.so
-#account     sufficient                                   pam_usertype.so issystem
-#account     [default=bad success=ok user_unknown=ignore] pam_sss.so
+account     sufficient                                   pam_usertype.so issystem
+account     [default=bad success=ok user_unknown=ignore] pam_sss.so
 account     required                                     pam_permit.so
+session     optional			pam_umask.so
+session	requisite			pam_deny.so
+session	required			pam_permit.so
+
+
+
 
 password    requisite                   pam_pwquality.so local_users_only difok=8 minlen=14 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1 minclass=4 maxrepeat=2 gecoscheck=1 dictcheck=1 m>
 password    [success=1 default=ignore]  pam_unix.so yescrypt try_first_pass obscure shadow rounds=65536
