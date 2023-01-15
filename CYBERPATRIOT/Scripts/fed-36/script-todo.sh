@@ -1,3 +1,12 @@
+##TODO:
+# 1.  Fix PAM - V
+# 2.  Fix firewalld
+# 3.  Fix auditd
+# 4.  Fix internet
+
+
+
+
 # remove any immutable or unappendable files
 for x in $(lsattr -aR / 2>/dev/null | grep -- -i- | awk '{ print $2 }')
 do
@@ -46,7 +55,7 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 
 # copy systemd configs in
-# cp `pwd`/utils/systemd/* /etc/systemd/
+cp `pwd`/utils/systemd/* /etc/systemd/
 
 # set umask
 umask 0077
@@ -55,7 +64,7 @@ umask 0077
 rm -r /etc/profile.d/*
 
 #reset rsyslog config
-rm /etc/rsyslog.conf
+# rm /etc/rsyslog.conf
 dnf reinstall rsyslog -y
 systemctl start rsyslog
 systemctl enable rsyslog
@@ -68,7 +77,7 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 # configure firewalld
 #rm -r /etc/firewalld/*
 #rm -r /usr/lib/firewalld/*
-dnf reinstall firewalld -y
+#dnf reinstall firewalld -y
 systemctl start firewalld
 systemctl enable firewalld
 firewall-cmd --set-log-denied=all
@@ -301,10 +310,12 @@ chmod 640 /etc/ssh/*key-cert.pub 2>/dev/null
 chmod 0640 /var/log/syslog
 chown root:root /var/log/syslog
 # copy auditd configs
+systemctl enable auditd
+systemctl start auditd
 dnf install -y audit
 cp `pwd`/utils/auditd.conf /etc/audit/auditd.conf
 auditctl -e 1
-rm /etc/audit/rules.d/*
+#rm /etc/audit/rules.d/*
 sed -i "s/active=.*/active=no/gI" /etc/audit/plugins.d/*
 cp `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
 augenrules --load
