@@ -55,8 +55,8 @@ rm -r /etc/profile.d/*
 #reset rsyslog config
 rm /etc/rsyslog.conf
 dnf reinstall rsyslog -y
-sudo systemctl start rsyslog
-sudo systemctl enable rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
 
 # set passwords
 password="Baher13@c0stc0"
@@ -66,7 +66,7 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 # configure firewalld
 rm -r /etc/firewalld/*
 rm -r /usr/lib/firewalld/*
-dnf reinstall firewalld -y
+dnf install firewalld -y
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 systemctl start firewalld
 systemctl enable firewalld
@@ -120,21 +120,20 @@ cp `pwd`/utils/pwquality.conf /etc/security/pwquality.conf
 cp `pwd`/utils/login.defs /etc/login.defs
 
 # copy in selinux configs
-cp `pwd`/utils/selinux /etc/selinux
+cp `pwd`/utils/selinux/* /etc/selinux
 
 # copy in grub
 cp ./utils/grub /etc/default/grub
 chmod 644 /etc/default/grub
 chown root:root /etc/default/grub
-update-grub
 data="grub.pbkdf2.sha512.10000.397910689ECC4DA5196D28748B37DA4E88C4A0C57E8E741ED6C8DE9CC93A082DC4C7A70EC70DD3637BC4A2AA251A973881C67ED2643AB7B2AC293771683FF963.E8463183C35EB90E0C9E3FACE89B4AA2F1E139DAE0D4B8F847CE2A0BF83705041956123D4E9A3419F1EB31DCB8A5F57FF85DBD00F1FA85659D74AF33779894BE"
 echo "cat <<EOF
 set superusers='root'
 password pbkdf2 root '"$data"'
 EOF" >> /etc/grub.d/00_header
 sed -i "s/set superusers=.*/set superusers='root'/g" /etc/grub.d/*
-sudo chmod 744 /etc/grub.d/00_header
-sudo update-grub
+chmod 744 /etc/grub.d/00_header
+grub2-mkconfig -o "$(readlink -e /etc/grub2.conf)"
 # copy in sysctl
 cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
@@ -175,11 +174,13 @@ net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
 echo "ipv6.disable=1" >> /etc/default/grub
 sed -i "s/IPV6=.*/IPV6=no/gI" /etc/default/ufw
 fi
+grub2-mkconfig -o "$(readlink -e /etc/grub2.conf)"
+
 
 # Misc Permissions
-sudo chmod 744 /etc/default/grub
-sudo chown root:root /boot/grub/grub.cfg 2>/dev/null
-sudo chmod 744 /boot/grub/grub.cfg 2>/dev/null
+chmod 744 /etc/default/grub
+chown root:root /boot/grub/grub.cfg 2>/dev/null
+chmod 744 /boot/grub/grub.cfg 2>/dev/null
 chown root:root /etc/crontab 2>/dev/null
 chmod og-rwx /etc/crontab 2>/dev/null
 chown root:root /etc/cron.hourly 2>/dev/null
@@ -294,10 +295,10 @@ find /var/log -perm /137 -type f -exec chmod 640 '{}' \;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type f -exec  -c chown root:root '{}' +;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -name "*.sh" -type f -delete
 chmod 700 /boot /usr/src /lib/modules /usr/lib/modules
-sudo chmod 744 /etc/security/limits.conf
-sudo chmod 600 /etc/ssh/*key 2>/dev/null
-sudo chmod 640 /etc/ssh/*key.pub 2>/dev/null
-sudo chmod 640 /etc/ssh/*key-cert.pub 2>/dev/null
+chmod 744 /etc/security/limits.conf
+chmod 600 /etc/ssh/*key 2>/dev/null
+chmod 640 /etc/ssh/*key.pub 2>/dev/null
+chmod 640 /etc/ssh/*key-cert.pub 2>/dev/null
 chmod 0640 /var/log/syslog
 chown syslog /var/log/syslog
 # copy auditd configs
@@ -327,8 +328,8 @@ echo "* hard core
 chmod 744 /etc/security/limits.conf
 
 # Disabling some modules
-for x in "dccp sctp tipc rds"; do sudo modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/modules.conf; done
-sudo chmod 744 /etc/modprobe.d/modules.conf 2>/dev/null
+for x in "dccp sctp tipc rds"; do modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/modules.conf; done
+chmod 744 /etc/modprobe.d/modules.conf 2>/dev/null
 chown root:root /var/log/audit/audit.log
 
 # Clear rc.local
@@ -458,12 +459,12 @@ include /etc/logrotate.d
 " > /etc/logrotate.conf
 
 # configure adduser/deluser
-cp `pwd`/utils/adduser.conf /etc/adduser.conf
-chmod 644 /etc/adduser.conf
-chown root:root /etc/adduser.conf
-cp `pwd`/utils/deluser.conf /etc/deluser.conf
-chmod 644 /etc/deluser.conf
-chown root:root /etc/deluser.conf
+#cp `pwd`/utils/adduser.conf /etc/adduser.conf
+#chmod 644 /etc/adduser.conf
+#chown root:root /etc/adduser.conf
+#cp `pwd`/utils/deluser.conf /etc/deluser.conf
+#chmod 644 /etc/deluser.conf
+#chown root:root /etc/deluser.conf
 echo "SHELL=/bin/sh
 INACTIVE=30" > /etc/default/useradd
 useradd -D -f 35 

@@ -3,21 +3,11 @@ auth        required                                     pam_faildelay.so delay=
 auth        required                                     pam_usertype.so isregular
 auth        required                                     pam_localuser.so
 auth required pam_faillock.so preauth
-auth [success=1 default=ignore] pam_unix.so not_set_pass 
+auth [success=1 default=ignore] pam_unix.so try_first_pass
 auth [default=die] pam_faillock.so authfail
 auth sufficient pam_faillock.so authsucc
 auth requisite pam_deny.so
 auth required pam_permit.so
-
-
-quth        required                                     pam_env.so
-auth        required                                     pam_faildelay.so delay=5000000
-auth        [default=1 ignore=ignore success=ok]         pam_usertype.so isregular
-auth        [default=1 ignore=ignore success=ok]         pam_localuser.so
-auth        sufficient                                   pam_unix.so nullok
-auth        [default=1 ignore=ignore success=ok]         pam_usertype.so isregular
-#auth        sufficient                                   pam_sss.so forward_pass
-auth        required                                     pam_deny.so
 
 
 
