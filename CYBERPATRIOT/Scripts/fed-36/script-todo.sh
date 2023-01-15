@@ -77,19 +77,19 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 # configure firewalld
 #rm -r /etc/firewalld/*
 #rm -r /usr/lib/firewalld/*
-#dnf reinstall firewalld -y
+dnf reinstall firewalld -y
 systemctl start firewalld
 systemctl enable firewalld
-firewall-cmd --set-log-denied=all
-firewall-cmd --set-default-zone=drop
+#firewall-cmd --set-log-denied=all
+firewall-cmd --set-default-zone=drop --permanent
 # Deny outbound traffic
-firewall-cmd --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
-firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
-firewall-cmd --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
-firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
+firewall-cmd --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject' --permanent
+firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT --permanent
+firewall-cmd --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT --permanent 
+firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject' --permanent 
 #Deny Routed Traffic via direct
-firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
-firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
+firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT --permanent 
+firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT --permanent 
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 
 # copy pam from utils
@@ -325,6 +325,7 @@ chown root:root /etc/audit/audit*.{rules,conf} /etc/audit/rules.d/*
 chmod 744 /etc/audit/auditd.conf
 systemctl kill auditd -s SIGHUP
 systemctl restart auditd
+chown root:root /var/log/audit/audit.log
 # lock all user accs
 #for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do passwd -l $u; done
 
@@ -339,9 +340,8 @@ echo "* hard core
 chmod 744 /etc/security/limits.conf
 
 # Disabling some modules
-for x in "dccp sctp tipc rds"; do modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/modules.conf; done
+for x in "sctp tipc rds"; do modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/modules.conf; done
 chmod 744 /etc/modprobe.d/modules.conf 2>/dev/null
-chown root:root /var/log/audit/audit.log
 
 # Clear rc.local
 echo > /etc/rc.local
