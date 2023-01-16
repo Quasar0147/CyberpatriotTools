@@ -2,15 +2,19 @@
 # 1.  Fix rsyslog
 # 2.  Fix firewalld
 # 3.  Fix internet
-
+# 4.  Fix chage
 # remove gpasswds
+dnf install -y audit
+dnf install dnf-automatic -y
+dnf install gedit -y
+dnf install firewalld -y
+dnf install rsyslog -y
 for x in $(cat /etc/group | cut -d: -f1)
 do
 gpasswd -r $x
 done
 
 # open up group passwd and fstab via gedit
-dnf install gedit -y
 gedit /etc/group &
 gedit /etc/passwd &
 gedit /etc/fstab &
@@ -50,7 +54,7 @@ rm -r /etc/profile.d/*
 
 #reset rsyslog config
 # rm /etc/rsyslog.conf
-dnf reinstall rsyslog -y
+#sdnf reinstall rsyslog -y
 systemctl start rsyslog
 systemctl enable rsyslog
 
@@ -62,19 +66,26 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do echo "$u:$
 # configure firewalld
 #rm -r /etc/firewalld/*
 #rm -r /usr/lib/firewalld/*
-dnf reinstall firewalld -y
+#dnf reinstall firewalld -y
 systemctl start firewalld
 systemctl enable firewalld
 firewall-cmd --set-log-denied=all
 firewall-cmd --set-default-zone=drop
 # Deny outbound traffic
 firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
+firewall-cmd --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
 firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
+firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
 firewall-cmd --permanent --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
+firewall-cmd --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
 firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
+firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
 #Deny Routed Traffic via direct
 firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
+firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
 firewall-cmd --permanent --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
+firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
+
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
 
 # copy pam from utils
@@ -297,7 +308,6 @@ chown root:root /var/log/syslog
 # copy auditd configs
 systemctl enable auditd
 systemctl start auditd
-dnf install -y audit
 cp `pwd`/utils/auditd.conf /etc/audit/auditd.conf
 auditctl -e 1
 #rm /etc/audit/rules.d/*
@@ -480,7 +490,6 @@ echo "enabled=0" > /etc/default/irqbalance
 
 
 #automatic upgrades
-dnf install dnf-automatic -y
 systemctl enable --now dnf-automatic.timer
 echo "[commands]
 apply_updates=True
