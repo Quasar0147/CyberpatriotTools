@@ -26,7 +26,7 @@ done
 #do
 #chattr -ai $x
 #done
-cp `pwd`/utils/systemd/* /etc/systemd/
+# cp `pwd`/utils/systemd/* /etc/systemd/
 umask 077
 rm /etc/profile.d/*
 rm /etc/rsyslog.conf

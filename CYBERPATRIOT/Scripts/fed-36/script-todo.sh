@@ -42,7 +42,7 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 
 # copy systemd configs in
-cp `pwd`/utils/systemd/* /etc/systemd/
+#cp `pwd`/utils/systemd/* /etc/systemd/
 
 # set umask
 umask 0077
