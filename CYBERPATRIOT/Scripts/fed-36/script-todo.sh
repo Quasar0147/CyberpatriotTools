@@ -179,8 +179,7 @@ echo "net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
 echo -e "\nipv6.disable=1" >> /etc/default/grub
 fi
-grub2-mkconfig -o "$(readlink -e /etc/grub2.conf)" > ./temp.text
-mv ./temp.text /etc/grub2.conf
+grub2-mkconfig -o "$(readlink -e /etc/grub2.cfg)"
 
 # Misc Permissions
 chmod 744 /etc/default/grub
