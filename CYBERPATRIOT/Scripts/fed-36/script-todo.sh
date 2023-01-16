@@ -44,7 +44,7 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 
 # copy systemd configs in
-# cp `pwd`/utils/systemd/* /etc/systemd/
+cp `pwd`/utils/systemd/* /etc/systemd/
 
 # set umask
 umask 0077
@@ -72,14 +72,14 @@ systemctl enable firewalld
 firewall-cmd --set-log-denied=all
 firewall-cmd --set-default-zone=drop
 # Deny outbound traffic
-firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
-firewall-cmd --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
-firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
-firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
-firewall-cmd --permanent --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
-firewall-cmd --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
-firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
-firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
+#firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
+#firewall-cmd --zone=drop --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" reject'
+#firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
+#firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -j REJECT
+#firewall-cmd --permanent --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
+#firewall-cmd --direct --add-rule ipv6 filter OUTPUT 0 -j REJECT
+#firewall-cmd --permanent --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
+#firewall-cmd --zone=drop --add-rich-rule='rule family="ipv6" source address="::1" reject'
 #Deny Routed Traffic via direct
 firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
 firewall-cmd --direct --add-rule ipv4 filter FORWARD 0 -j REJECT
