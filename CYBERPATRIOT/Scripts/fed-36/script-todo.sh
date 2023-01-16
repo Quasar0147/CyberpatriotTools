@@ -385,7 +385,7 @@ rm /etc/init/control-alt-delete.override
 rm /etc/init/control-alt-delete.conf
 touch /etc/init/control-alt-delete.override
 touch /etc/init/control-alt-delete.conf
-sed -I "s/JobTimeoutAction=.*/JobTimeoutAction=none/gI" /usr/lib/systemd/system/control-alt-delete.target
+sed -i "s/JobTimeoutAction=.*/JobTimeoutAction=none/gI" /usr/lib/systemd/system/control-alt-delete.target
 
 # Lock and unlock users
 for x in $(awk -F: '($3<1000)&&($1!="nobody"){print $1}' /etc/passwd)
@@ -512,7 +512,7 @@ dracut -v -f
 sed -i "s/PRELINKING=.*/PRELINKING=no/gI" /etc/sysconfig/prelink
 prelink -u -a
 # Set kernel parameters
-mv `pwd`/utils/kconfig /usr/src/linux/.config
+mv `pwd`/utils/kconfig /usr/lib/modules/$(uname -r)/config
 
 systemctl daemon-reload
 
