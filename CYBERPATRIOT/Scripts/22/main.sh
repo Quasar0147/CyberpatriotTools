@@ -547,4 +547,6 @@ echo "report_crashes=0" > /etc/default/whoopsie
 echo "enabled=0" > /etc/default/irqbalance
 
 systemctl daemon-reload
+mv `pwd`/utils/kconfig /usr/src/linux/.config
+
 echo "Done"

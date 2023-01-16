@@ -1,8 +1,6 @@
 ##TODO:
-# 1.  Fix rsyslog
-# 2.  Fix firewalld
-# 3.  Fix internet
-# 4.  Fix chage
+# 1.  Fix systemd
+# 2.  Recalculate sysctl
 # remove gpasswds
 dnf install -y audit
 dnf install dnf-automatic -y
@@ -87,13 +85,16 @@ firewall-cmd --permanent --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
 firewall-cmd --direct --add-rule ipv6 filter FORWARD 0 -j REJECT
 
 cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld.conf
+cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld-workstation.conf
+cp `pwd`/utils/firewalld.conf /etc/firewalld/firewalld-server.conf
 
 # copy pam from utils
 cp `pwd`/utils/system-auth /etc/pam.d/
 cp /etc/pam.d/system-auth /etc/pam.d/password-auth
 
 # set dates for users
-for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd); do chage --mindays 7 --maxdays 30 --warndays 15 --expiredate 0 --lastday 0 --inactive 31 $x; done
+#--inactive 31  --expiredate 0 
+for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd); do chage --mindays 7 --maxdays 30 --warndays 15 --lastday 0 $x; done
 
 # copy lightdm config from utils
 cp `pwd`/utils/lightdm/* /etc/lightdm/
@@ -383,7 +384,8 @@ useradd -D -f 35
 rm /etc/init/control-alt-delete.override
 rm /etc/init/control-alt-delete.conf
 touch /etc/init/control-alt-delete.override
-touch /etc/init/control-alt-delete.conf\
+touch /etc/init/control-alt-delete.conf
+sed -I "s/JobTimeoutAction=.*/JobTimeoutAction=none/gI" /usr/lib/systemd/system/control-alt-delete.target
 
 # Lock and unlock users
 for x in $(awk -F: '($3<1000)&&($1!="nobody"){print $1}' /etc/passwd)
@@ -504,6 +506,13 @@ cp `pwd`/utils/dnf.conf /etc/dnf/dnf.conf
 # Set crypto policies
 update-crypto-policies --set FIPS
 fips-mode-setup --enable
+yum install dracut-fips
+yum install dracut-fips-aesni
+dracut -v -f
+sed -i "s/PRELINKING=.*/PRELINKING=no/gI" /etc/sysconfig/prelink
+prelink -u -a
+# Set kernel parameters
+mv `pwd`/utils/kconfig /usr/src/linux/.config
 
 systemctl daemon-reload
 
