@@ -26,7 +26,7 @@ auth required pam_permit.so
 account	[success=1 new_authtok_reqd=done default=ignore]	pam_unix.so 
 account     sufficient                                   pam_localuser.so
 account     sufficient                                   pam_usertype.so issystem
-account     [default=bad success=ok user_unknown=ignore] pam_sss.so
+account     [default=bad success=ok user_unknown=ignore] pam_sss.so ## is this line needed, can be commented
 account     required                                     pam_permit.so
 
 

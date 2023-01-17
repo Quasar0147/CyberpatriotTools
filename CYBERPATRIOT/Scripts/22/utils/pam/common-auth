@@ -1,4 +1,4 @@
-auth        required                                     pam_faildelay.so delay=2000000
+auth        required                                     pam_faildelay.so delay=5000000
 auth required pam_faillock.so preauth
 auth [success=1 default=ignore] pam_unix.so not_set_pass 
 auth [default=die] pam_faillock.so authfail
