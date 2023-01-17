@@ -177,14 +177,13 @@ net.ipv6.conf.all.accept_ra_defrtr=0
 net.ipv6.conf.all.use_tempaddr=2
 net.ipv6.conf.default.use_tempaddr=2
 " >> /etc/sysctl.conf
-echo "ipv6.disable=0" >> /etc/default/grub
+#echo "ipv6.disable=0" >> /etc/default/grub
 sed -i "s/IPV6=.*/IPV6=yes/gI" /etc/default/ufw
 else 
 echo "net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo "ipv6.disable=1" >> /etc/default/grub
+sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"ipv6.disable=1\"/g" /etc/default/grub
 sed -i "s/IPV6=.*/IPV6=no/gI" /etc/default/ufw
-
 fi
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
