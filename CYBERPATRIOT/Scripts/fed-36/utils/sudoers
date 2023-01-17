@@ -15,10 +15,10 @@ Defaults    log_host
 Defaults    log_year
 Defaults    log_input
 Defaults    log_output
-Defaults    noexec
+#Defaults    noexec
 Defaults    !path_info
 Defaults    preserve_groups
-Defaults    stay_setuid
+#Defaults    stay_setuid
 Defaults    umask_override
 Defaults    umask=0077
 Defaults    passwd_timeout=1
