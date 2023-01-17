@@ -1,4 +1,5 @@
 ##TODO:
+# lightdm
 # 1.  Fix Ctrl alt del
 # 2.  Fix systemd
 # 3.  Recalculate sysctl
@@ -172,11 +173,11 @@ net.ipv6.conf.all.accept_ra_defrtr=0
 net.ipv6.conf.all.use_tempaddr=2
 net.ipv6.conf.default.use_tempaddr=2
 " >> /etc/sysctl.conf
-echo "ipv6.disable=0" >> /etc/default/grub
+#echo "ipv6.disable=0" >> /etc/default/grub
 else 
 echo "net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo -e "\nipv6.disable=1" >> /etc/default/grub
+sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"ipv6.disable=1\"/g" /etc/default/grub
 fi
 #grub2-mkconfig -o "$(readlink -e /etc/grub2.cfg)"
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
