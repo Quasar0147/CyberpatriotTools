@@ -1,6 +1,7 @@
 ##TODO:
-# 1.  Fix systemd
-# 2.  Recalculate sysctl
+# 1.  Fix Ctrl alt del
+# 2.  Fix systemd
+# 3.  Recalculate sysctl
 # remove gpasswds
 dnf install -y audit
 dnf install dnf-automatic -y
@@ -144,8 +145,6 @@ chmod 744 /etc/grub.d/00_header
 # copy in sysctl
 cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
-sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
-sysctl --system >/dev/null
 
 # config ipv6
 read -p "IPV6? (y/n): " ipv6
@@ -179,8 +178,9 @@ echo "net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
 echo -e "\nipv6.disable=1" >> /etc/default/grub
 fi
-grub2-mkconfig -o "$(readlink -e /etc/grub2.cfg)"
-
+#grub2-mkconfig -o "$(readlink -e /etc/grub2.cfg)"
+sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
+sysctl --system >/dev/null
 # Misc Permissions
 chmod 744 /etc/default/grub
 chown root:root /boot/grub/grub.cfg 2>/dev/null
@@ -504,15 +504,16 @@ cp `pwd`/utils/dnf.conf /etc/dnf/dnf.conf
 
 # Set crypto policies
 update-crypto-policies --set FIPS
-fips-mode-setup --enable
-yum install dracut-fips
-yum install dracut-fips-aesni
-dracut -v -f
-sed -i "s/PRELINKING=.*/PRELINKING=no/gI" /etc/sysconfig/prelink
-prelink -u -a
+#fips-mode-setup --enable
+#yum install dracut-fips
+#yum install dracut-fips-aesni
+#dracut -v -f
+#sed -i "s/PRELINKING=.*/PRELINKING=no/gI" /etc/sysconfig/prelink
+#prelink -u -a
+#sed -i "s/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=\"fips=0\"/gI" /etc/default/grub
 # Set kernel parameters
-mv `pwd`/utils/kconfig /usr/lib/modules/$(uname -r)/config
-
+#mv `pwd`/utils/kconfig /usr/lib/modules/$(uname -r)/config
+grub2-mkconfig -o /boot/grub2/grub.cfg
 systemctl daemon-reload
 
 echo "Done"
