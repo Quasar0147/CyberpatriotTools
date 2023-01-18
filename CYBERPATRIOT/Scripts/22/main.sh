@@ -32,8 +32,8 @@ umask 077
 rm /etc/profile.d/*
 rm /etc/rsyslog.conf
 apt install --reinstall -o Dpkg::Options::="--force-confmiss" rsyslog
-sudo systemctl start rsyslog
-sudo systemctl enable rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
 #cp `pwd`/utils/22sources.list /etc/apt/sources.list
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
@@ -195,12 +195,12 @@ data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | rev |
 echo "set superusers='root'
 password pbkdf2 root '"$data"'" >> /etc/grub.d/40_custom
 sed -i "s/set superusers=.*/set superusers='root'/g" /etc/grub.d/*
-sudo chmod 744 /etc/grub.d/*
-sudo update-grub
+chmod 744 /etc/grub.d/*
+update-grub
 
-sudo chmod 744 /etc/default/grub
-sudo chown root:root /boot/grub/grub.cfg 2>/dev/null
-sudo chmod 744 /boot/grub/grub.cfg 2>/dev/null
+chmod 744 /etc/default/grub
+chown root:root /boot/grub/grub.cfg 2>/dev/null
+chmod 744 /boot/grub/grub.cfg 2>/dev/null
 chown root:root /etc/crontab 2>/dev/null
 chmod og-rwx /etc/crontab 2>/dev/null
 chown root:root /etc/cron.hourly 2>/dev/null
@@ -324,14 +324,14 @@ cp `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
 augenrules --load
 echo "* hard core" > /etc/security/limits.conf
 echo "* hard maxlogins 10" >> /etc/security/limits.conf
-sudo chmod 744 /etc/security/limits.conf
-sudo chmod 600 /etc/ssh/*key 2>/dev/null
-sudo chmod 640 /etc/ssh/*key.pub 2>/dev/null
-sudo chmod 640 /etc/ssh/*key-cert.pub 2>/dev/null
+chmod 744 /etc/security/limits.conf
+chmod 600 /etc/ssh/*key 2>/dev/null
+chmod 640 /etc/ssh/*key.pub 2>/dev/null
+chmod 640 /etc/ssh/*key-cert.pub 2>/dev/null
 chmod 0640 /var/log/syslog
 chown syslog /var/log/syslog
-for x in "dccp sctp tipc rds"; do sudo modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/ubuntu.conf; done
-sudo chmod 744 /etc/modprobe.d/ubuntu.conf 2>/dev/null
+for x in "dccp sctp tipc rds"; do modprobe -n -v $x; echo "install $x /bin/true" >> /etc/modprobe.d/ubuntu.conf; done
+chmod 744 /etc/modprobe.d/ubuntu.conf 2>/dev/null
 echo "
 local_events = yes
 write_logs = yes
@@ -368,10 +368,10 @@ end_of_event_timeout = 2
 " > /etc/audit/auditd.conf
 chmod 600 /var/log/audit/audit.log
 chown root:root /var/log/audit/audit.log
-sudo chmod -R  g-w,o-rwx /var/log/audit
+chmod -R  g-w,o-rwx /var/log/audit
 chmod -R 0640 /etc/audit/audit*.{rules,conf} /etc/audit/rules.d/*
 chown root:root /etc/audit/audit*.{rules,conf} /etc/audit/rules.d/*
-sudo chmod 744 /etc/audit/auditd.conf
+chmod 744 /etc/audit/auditd.conf
 
 systemctl kill auditd -s SIGHUP
 systemctl restart auditd
@@ -386,8 +386,8 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 echo > /etc/rc.local
 #echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 ubuntu\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts
-apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel -y >> /dev/null && sudo apt-get autoremove >> /dev/null
-sudo dpkg-reconfigure -plow unattended-upgrades
+apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel -y >> /dev/null && apt-get autoremove >> /dev/null
+dpkg-reconfigure -plow unattended-upgrades
 cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 chown root:root /etc/apt/apt.conf.d/50unattended-upgrades
 chmod 644 /etc/apt/apt.conf.d/50unattended-upgrades
@@ -395,7 +395,7 @@ chmod 644 /etc/apt/apt.conf.d/50unattended-upgrades
 systemctl enable fail2ban
 systemctl start fail2ban
 
-sudo apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
+apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(cat /home/*/.mozilla/firefox/profiles.ini | grep "Path=" | cut -c6-1000 | xargs); do cp utils/user.js /home/$u/.mozilla/firefox/$x/user.js 2>/dev/null; chmod 644 /home/$u/.mozilla/firefox/$x/user.js ; done; done
 sed s'/user_pref(/pref(/g' utils/user.js > ./temp
 sed s'/);/,locked);/g' ./temp > /etc/firefox/syspref.js

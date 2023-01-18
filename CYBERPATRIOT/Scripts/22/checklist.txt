@@ -14,6 +14,7 @@ Groups - /etc/group + /etc/gshadow
         OS Updates
             Set settings in gui if applicable
             check /etc/ if they have a folder
+                /apt/ check sources.list(.d), keyrings, (everything in the dir)
             Unattended Upgrades
         Actual Updates
             REBOOT
