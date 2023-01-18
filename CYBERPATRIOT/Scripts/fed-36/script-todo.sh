@@ -1,5 +1,4 @@
 ##TODO:
-# PAM
 # 1.  Fix Ctrl alt del
 # 2.  Fix systemd
 # 3.  Recalculate sysctl

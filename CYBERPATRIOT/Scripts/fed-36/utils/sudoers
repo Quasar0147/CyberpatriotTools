@@ -28,7 +28,7 @@ Defaults    iolog_dir="/var/log/sudo-io"
 Defaults    lecture=always
 Defaults    listpw=always
 Defaults    verifypw=always
-Defaults    tty_tickets
+#Defaults    tty_tickets
 Defaults    env_reset
 
 #

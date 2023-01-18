@@ -1,4 +1,5 @@
-uapt-get dist-upgrade -y
+# Fix internet
+apt-get dist-upgrade -y
 apt-get install apparmor-utils clamav rsyslog clamav-daemon dbus-x11 git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
@@ -18,10 +19,10 @@ chmod 644 utils/*
 chown root:root utils/*
 crontab -r
 for i in `atq | awk '{print $1}'`;do atrm $i;done
-for x in $(lsattr -aR /etc 2>/dev/null | grep -- -i- | awk '{ print $2 }')
-do
-chattr -ai $x
-done
+#for x in $(lsattr -aR /etc 2>/dev/null | grep -- -i- | awk '{ print $2 }')
+#do
+#chattr -ai $x
+#done
 #for x in $(lsattr -aR /usr 2>/dev/null | grep -- -a- | awk '{ print $2 }')
 #do
 #chattr -ai $x
@@ -194,9 +195,9 @@ data="grub.pbkdf2.sha512.10000.397910689ECC4DA5196D28748B37DA4E88C4A0C57E8E741ED
 echo "cat <<EOF
 set superusers='root'
 password pbkdf2 root '"$data"'
-EOF" >> /etc/grub.d/00_header
+EOF" >> /etc/grub.d/40_custom
 sed -i "s/set superusers=.*/set superusers='root'/g" /etc/grub.d/*
-sudo chmod 744 /etc/grub.d/00_header
+sudo chmod 744 /etc/grub.d/*
 sudo update-grub
 
 sudo chmod 744 /etc/default/grub
@@ -387,7 +388,7 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 echo > /etc/rc.local
 #echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 ubuntu\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts
-apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
+apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel -y >> /dev/null && sudo apt-get autoremove >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
 cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 chown root:root /etc/apt/apt.conf.d/50unattended-upgrades
@@ -511,7 +512,7 @@ chmod -R 644 /etc/dpkg
 chown -R root:root /etc/dpkg
 cp ./utils/22sources.list /etc/apt/sources.list
 chmod 644 /etc/apt/sources.list
-chown root:root
+chown root:root /etc/apt/sources.list
 apt-mark unhold $(apt-mark showhold) # Unhold all packages
 #TODO automate apt pin rules
 echo "Doing updates, may take a bit"
@@ -538,7 +539,7 @@ ubuntu-report -f send no
 sed -i "s/enabled=1/enabled=0/gI" /etc/default/apport
 sed -i "s/enabled=1/enabled=0/gI" /etc/default/whoopsie
 sed -i "s/report_crashes=.*/report_crashes=0/gI" /etc/default/whoopsie
-apt-get remove popularity-contest tracker tracker-extract tracker-miner-fs; rm /etc/cron.daily/popularity-contest
+apt-get remove popularity-contest tracker tracker-extract tracker-miner-fs -y; rm /etc/cron.daily/popularity-contest
 sed -i "s/ENABLED=.*/ENABLED=0/gI" /etc/default/irqbalance
 echo "enabled=0" > /etc/default/apport
 echo "enabled=0" > /etc/default/whoopsie
