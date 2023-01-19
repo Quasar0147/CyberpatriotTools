@@ -115,7 +115,7 @@ chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
 #cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
-cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
+#cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults
@@ -125,17 +125,17 @@ chown root:root /etc/dconf/profile/gdm
 rm /etc/dconf/db/gdm.d/* 2>/dev/null
 rm /home/*/.config/dconf/user 2>/dev/null
 mkdir /etc/dconf/db/gdm.d/ 2>/dev/null
-cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
-cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
-cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
-cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/*
-cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/00-login-screen
-chmod 644 /etc/dconf/db/gdm.d/*
-mkdir /etc/dconf/db/gdm.d/locks/ 2>/dev/null
-cp `pwd`/utils/gdm-lockfile /etc/dconf/db/gdm.d/locks/00-security-settings-lock
-chmod 644 /etc/dconf/db/gdm.d/00-login-screen
-chown root:root /etc/dconf/db/gdm.d/00-login-screen
-dconf update
+#cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+#cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
+#cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
+#cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/*
+#cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/00-login-screen
+#chmod 644 /etc/dconf/db/gdm.d/*
+#mkdir /etc/dconf/db/gdm.d/locks/ 2>/dev/null
+#cp `pwd`/utils/gdm-lockfile /etc/dconf/db/gdm.d/locks/00-security-settings-lock
+#chmod 644 /etc/dconf/db/gdm.d/00-login-screen
+#chown root:root /etc/dconf/db/gdm.d/00-login-screen
+#dconf update
 rm /etc/security/pwquality.conf
 cp `pwd`/utils/pwquality.conf /etc/security/pwquality.conf
 chmod 644 /home/*/.bashrc

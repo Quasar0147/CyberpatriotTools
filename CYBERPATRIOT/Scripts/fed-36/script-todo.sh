@@ -44,6 +44,11 @@ chmod -R 644 /etc/*cron*
 
 # copy systemd configs in
 #cp `pwd`/utils/systemd/* /etc/systemd/
+cp `pwd`/utils/systemd/coredump.conf /etc/systemd/
+cp `pwd`/utils/systemd/journald.conf /etc/systemd/
+cp `pwd`/utils/systemd/logind.conf /etc/systemd/
+cp `pwd`/utils/systemd/pstore.conf /etc/systemd/
+cp `pwd`/utils/systemd/oomd.conf /etc/systemd/
 
 # set umask
 umask 0077
