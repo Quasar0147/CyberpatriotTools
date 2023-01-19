@@ -29,6 +29,12 @@ for i in `atq | awk '{print $1}'`;do atrm $i;done
 #chattr -ai $x
 #done
 # cp `pwd`/utils/systemd/* /etc/systemd/
+cp `pwd`/utils/systemd/coredump.conf /etc/systemd/
+cp `pwd`/utils/systemd/journald.conf /etc/systemd/
+cp `pwd`/utils/systemd/logind.conf /etc/systemd/
+cp `pwd`/utils/systemd/pstore.conf /etc/systemd/
+cp `pwd`/utils/systemd/oomd.conf /etc/systemd/
+cp `pwd`/utils/systemd/system.conf /etc/systemd/
 umask 077
 rm /etc/profile.d/*
 rm /etc/rsyslog.conf
@@ -545,6 +551,19 @@ echo "enabled=0" > /etc/default/apport
 echo "enabled=0" > /etc/default/whoopsie
 echo "report_crashes=0" > /etc/default/whoopsie
 echo "enabled=0" > /etc/default/irqbalance
+
+systemctl disable apport
+systemctl disable whoopsie
+systemctl disable irqbalance
+systemctl disable popularity-contest
+systemctl disable tracker*
+systemctl disable rsync
+systemctl disable kdump
+
+apt purge nis -y 
+apt purge rsh-client -y
+apt purge talk -y
+apt purge telnet -y
 
 systemctl daemon-reload
 #mv `pwd`/utils/kconfig /usr/src/linux/.config
