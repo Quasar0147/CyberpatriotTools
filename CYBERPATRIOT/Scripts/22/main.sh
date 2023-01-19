@@ -1,4 +1,5 @@
-# Fix internet
+# Fix grub
+# Fix apt
 apt-get dist-upgrade -y
 apt-get install apparmor-utils clamav rsyslog clamav-daemon dbus-x11 git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
@@ -148,7 +149,7 @@ systemctl start apparmor.service
 cp ./utils/grub /etc/default/grub
 chmod 644 /etc/default/grub
 chown root:root /etc/default/grub
-update-grub
+#update-grub
 
 aa-enforce /etc/apparmor.d/*
 
@@ -193,7 +194,7 @@ sed -i "s/password_pbkdf2 .*//g" /etc/grub.d/*
 data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | rev | cut -d" " -f1 | rev)
 #data="grub.pbkdf2.sha512.10000.397910689ECC4DA5196D28748B37DA4E88C4A0C57E8E741ED6C8DE9CC93A082DC4C7A70EC70DD3637BC4A2AA251A973881C67ED2643AB7B2AC293771683FF963.E8463183C35EB90E0C9E3FACE89B4AA2F1E139DAE0D4B8F847CE2A0BF83705041956123D4E9A3419F1EB31DCB8A5F57FF85DBD00F1FA85659D74AF33779894BE"
 echo "set superusers='root'
-password pbkdf2 root '"$data"'" >> /etc/grub.d/40_custom
+password_pbkdf2 root '$data'" >> /etc/grub.d/40_custom
 sed -i "s/set superusers=.*/set superusers='root'/g" /etc/grub.d/*
 chmod 744 /etc/grub.d/*
 update-grub
