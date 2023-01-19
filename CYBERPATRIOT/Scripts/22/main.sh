@@ -141,14 +141,6 @@ cp `pwd`/utils/pwquality.conf /etc/security/pwquality.conf
 chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
 cp `pwd`/utils/login.defs /etc/login.defs
-gzip -d /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example.gz 
-cp /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11.conf
-sed -i 's/.*pam_pkcs11.so.*/auth       optional      pam_pkcs11.so/' /etc/pam.d/common-auth
-if [ !`grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null`= *"pwent"* ]
-then
-sed -i 's/use_mappers = .*/use_mappers = pwent/' /etc/pam_pkcs11/pam_pkcs11.conf
-sed -i 's/cert_policy = .*/cert_policy = ca,signature,ocsp_on, crl_auto;/' /etc/pam_pkcs11/pam_pkcs11.conf
-fi
 
 systemctl enable apparmor.service 
 systemctl start apparmor.service 
