@@ -34,7 +34,7 @@ cp `pwd`/utils/systemd/journald.conf /etc/systemd/
 cp `pwd`/utils/systemd/logind.conf /etc/systemd/
 cp `pwd`/utils/systemd/pstore.conf /etc/systemd/
 cp `pwd`/utils/systemd/oomd.conf /etc/systemd/
-cp `pwd`/utils/systemd/system.conf /etc/systemd/
+#cp `pwd`/utils/systemd/system.conf /etc/systemd/
 umask 077
 rm /etc/profile.d/*
 rm /etc/rsyslog.conf
