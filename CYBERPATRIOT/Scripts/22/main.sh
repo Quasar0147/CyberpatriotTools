@@ -115,27 +115,27 @@ chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
 #cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
-##cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
-##echo "user-db:user
-##system-db:gdm
-##file-db:/usr/share/gdm/greeter-dconf-defaults
-##" >> /etc/dconf/profile/gdm
-##chmod 644 /etc/dconf/profile/gdm
-##chown root:root /etc/dconf/profile/gdm
-##rm /etc/dconf/db/gdm.d/* 2>/dev/null
-##rm /home/*/.config/dconf/user 2>/dev/null
-##mkdir /etc/dconf/db/gdm.d/ 2>/dev/null
-##cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
-##cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
-##cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
-##cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/*
-##cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/00-login-screen
-##chmod 644 /etc/dconf/db/gdm.d/*
-##mkdir /etc/dconf/db/gdm.d/locks/ 2>/dev/null
-##cp `pwd`/utils/gdm-lockfile /etc/dconf/db/gdm.d/locks/00-security-settings-lock
-##chmod 644 /etc/dconf/db/gdm.d/00-login-screen
-##chown root:root /etc/dconf/db/gdm.d/00-login-screen
-##dconf update
+cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
+echo "user-db:user
+system-db:gdm
+file-db:/usr/share/gdm/greeter-dconf-defaults
+" >> /etc/dconf/profile/gdm
+chmod 644 /etc/dconf/profile/gdm
+chown root:root /etc/dconf/profile/gdm
+rm /etc/dconf/db/gdm.d/* 2>/dev/null
+rm /home/*/.config/dconf/user 2>/dev/null
+mkdir /etc/dconf/db/gdm.d/ 2>/dev/null
+cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
+cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
+cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/*
+cp `pwd`/utils/greeter.dconf-defaults /etc/dconf/db/gdm.d/00-login-screen
+chmod 644 /etc/dconf/db/gdm.d/*
+mkdir /etc/dconf/db/gdm.d/locks/ 2>/dev/null
+cp `pwd`/utils/gdm-lockfile /etc/dconf/db/gdm.d/locks/00-security-settings-lock
+chmod 644 /etc/dconf/db/gdm.d/00-login-screen
+chown root:root /etc/dconf/db/gdm.d/00-login-screen
+dconf update
 rm /etc/security/pwquality.conf
 cp `pwd`/utils/pwquality.conf /etc/security/pwquality.conf
 chmod 644 /home/*/.bashrc
@@ -152,58 +152,58 @@ fi
 
 systemctl enable apparmor.service 
 systemctl start apparmor.service 
-##cp ./utils/grub /etc/default/grub
+cp ./utils/grub /etc/default/grub
 chmod 644 /etc/default/grub
 chown root:root /etc/default/grub
 #update-grub
 
 aa-enforce /etc/apparmor.d/*
 
-##cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
-##read -p "IPV6? (y/n): " ipv6
-##if [ "$ipv6"="y" ]; then
-##echo "
-##net.ipv6.conf.all.accept_ra=0
-##net.ipv6.conf.all.accept_redirects=0
-##net.ipv6.conf.all.accept_source_route=0
-##net.ipv6.conf.all.forwarding=0
-##net.ipv6.conf.all.use_tempaddr=2
-##net.ipv6.conf.default.accept_ra=0
-##net.ipv6.conf.default.accept_ra_defrtr=0
-##net.ipv6.conf.default.accept_ra_pinfo=0
-##net.ipv6.conf.default.accept_ra_rtr_pref=0
-##net.ipv6.conf.default.accept_redirects=0
-##net.ipv6.conf.default.accept_source_route=0
-##net.ipv6.conf.default.autoconf=0
-##net.ipv6.conf.default.dad_transmits=0
-##net.ipv6.conf.default.max_addresses=1
-##net.ipv6.conf.default.router_solicitations=0
-##net.ipv6.conf.default.use_tempaddr=2
-##net.ipv6.conf.all.accept_ra_rtr_pref=0
-##net.ipv6.conf.all.accept_ra_pinfo=0
-##net.ipv6.conf.all.accept_ra_defrtr=0
-##net.ipv6.conf.all.use_tempaddr=2
-##net.ipv6.conf.default.use_tempaddr=2
-##" >> /etc/sysctl.conf
+cp `pwd`/utils/sysctl.conf /etc/sysctl.conf
+read -p "IPV6? (y/n): " ipv6
+if [ "$ipv6"="y" ]; then
+echo "
+net.ipv6.conf.all.accept_ra=0
+net.ipv6.conf.all.accept_redirects=0
+net.ipv6.conf.all.accept_source_route=0
+net.ipv6.conf.all.forwarding=0
+net.ipv6.conf.all.use_tempaddr=2
+net.ipv6.conf.default.accept_ra=0
+net.ipv6.conf.default.accept_ra_defrtr=0
+net.ipv6.conf.default.accept_ra_pinfo=0
+net.ipv6.conf.default.accept_ra_rtr_pref=0
+net.ipv6.conf.default.accept_redirects=0
+net.ipv6.conf.default.accept_source_route=0
+net.ipv6.conf.default.autoconf=0
+net.ipv6.conf.default.dad_transmits=0
+net.ipv6.conf.default.max_addresses=1
+net.ipv6.conf.default.router_solicitations=0
+net.ipv6.conf.default.use_tempaddr=2
+net.ipv6.conf.all.accept_ra_rtr_pref=0
+net.ipv6.conf.all.accept_ra_pinfo=0
+net.ipv6.conf.all.accept_ra_defrtr=0
+net.ipv6.conf.all.use_tempaddr=2
+net.ipv6.conf.default.use_tempaddr=2
+" >> /etc/sysctl.conf
 #echo "ipv6.disable=0" >> /etc/default/grub
-##sed -i "s/IPV6=.*/IPV6=yes/gI" /etc/default/ufw
-##else 
-##echo "net.ipv6.conf.all.disable_ipv6 = 1
-##net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-##sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"ipv6.disable=1\"/g" /etc/default/grub
-##sed -i "s/IPV6=.*/IPV6=no/gI" /etc/default/ufw
-##fi
-##cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
-##sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
+sed -i "s/IPV6=.*/IPV6=yes/gI" /etc/default/ufw
+else 
+echo "net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"ipv6.disable=1\"/g" /etc/default/grub
+sed -i "s/IPV6=.*/IPV6=no/gI" /etc/default/ufw
+fi
+cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
+sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
 #sysctl --system >/dev/null
-##sed -i "s/password_pbkdf2 .*//g" /etc/grub.d/* 
-##data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | rev | cut -d" " -f1 | rev)
+sed -i "s/password_pbkdf2 .*//g" /etc/grub.d/* 
+data=$(echo -e "$password\n$password" | grub-mkpasswd-pbkdf2 | tail -n 1 | rev | cut -d" " -f1 | rev)
 #data="grub.pbkdf2.sha512.10000.397910689ECC4DA5196D28748B37DA4E88C4A0C57E8E741ED6C8DE9CC93A082DC4C7A70EC70DD3637BC4A2AA251A973881C67ED2643AB7B2AC293771683FF963.E8463183C35EB90E0C9E3FACE89B4AA2F1E139DAE0D4B8F847CE2A0BF83705041956123D4E9A3419F1EB31DCB8A5F57FF85DBD00F1FA85659D74AF33779894BE"
-##echo "set superusers='root'
-##password_pbkdf2 root '$data'" >> /etc/grub.d/40_custom
-##sed -i "s/set superusers=.*/set superusers='root'/g" /etc/grub.d/*
-##chmod 744 /etc/grub.d/*
-##update-grub
+echo "set superusers='root'
+password_pbkdf2 root '$data'" >> /etc/grub.d/40_custom
+sed -i "s/set superusers=.*/set superusers='root'/g" /etc/grub.d/*
+chmod 744 /etc/grub.d/*
+update-grub
 
 chmod 744 /etc/default/grub
 chown root:root /boot/grub/grub.cfg 2>/dev/null
@@ -329,8 +329,13 @@ rm /etc/audit/rules.d/*
 sed -i "s/active=.*/active=no/gI" /etc/audit/plugins.d/*
 cp `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
 augenrules --load
-echo "* hard core" > /etc/security/limits.conf
-echo "* hard maxlogins 10" >> /etc/security/limits.conf
+echo "* hard core
+* hard maxlogins 10
+* hard maxsyslogins 20
+* hard fsize 10000000
+* hard nofile 1024
+* hard nproc 1024
+" > /etc/security/limits.conf
 chmod 744 /etc/security/limits.conf
 chmod 600 /etc/ssh/*key 2>/dev/null
 chmod 640 /etc/ssh/*key.pub 2>/dev/null
