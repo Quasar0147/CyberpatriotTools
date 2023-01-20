@@ -103,7 +103,10 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//
 #pam-auth-update
 #mv `utils`/pam/* /etc/pam.d
 #cp -n ./pam_bak/* /etc/pam.d/
-#cp `pwd`/utils/pam/* /etc/pam.d/
+cp `pwd`/utils/pam/common-auth /etc/pam.d/
+cp `pwd`/utils/pam/common-password /etc/pam.d/
+cp `pwd`/utils/pam/common-account /etc/pam.d/
+
 #sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 #awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
