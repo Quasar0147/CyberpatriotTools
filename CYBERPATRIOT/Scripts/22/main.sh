@@ -103,10 +103,11 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//
 #pam-auth-update
 #mv `utils`/pam/* /etc/pam.d
 #cp -n ./pam_bak/* /etc/pam.d/
-#cp `pwd`/utils/pam/common-auth /etc/pam.d/
-#cp `pwd`/utils/pam/common-password /etc/pam.d/
+cp `pwd`/utils/pam/common-auth /etc/pam.d/
+cp `pwd`/utils/pam/common-password /etc/pam.d/
 #cp `pwd`/utils/pam/common-account /etc/pam.d/
-
+cp `pwd`/utils/pam/common-session /etc/pam.d/
+cp `pwd`/utils/pam/common-session-noninteractive /etc/pam.d/
 #sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 #awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
@@ -119,12 +120,13 @@ chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
 #cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
 cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
+rm /etc/dconf/profile/* 2>/dev/null
 echo "user-db:user
 system-db:gdm
-file-db:/etc/gdm3/greeter-dconf-defaults
-" >> /etc/dconf/profile/gdm
-chmod 644 /etc/dconf/profile/gdm
-chown root:root /etc/dconf/profile/gdm
+file-db:/usr/share/gdm/greeter-dconf-defaults
+" >> /etc/dconf/profile/user
+chmod 644 /etc/dconf/profile/user
+chown root:root /etc/dconf/profile/user
 rm /etc/dconf/db/gdm.d/* 2>/dev/null
 rm /home/*/.config/dconf/user 2>/dev/null
 mkdir /etc/dconf/db/gdm.d/ 2>/dev/null
@@ -139,6 +141,7 @@ cp `pwd`/utils/gdm-lockfile /etc/dconf/db/gdm.d/locks/00-security-settings-lock
 chmod 644 /etc/dconf/db/gdm.d/00-login-screen
 chown root:root /etc/dconf/db/gdm.d/00-login-screen
 dconf update
+
 rm /etc/security/pwquality.conf
 cp `pwd`/utils/pwquality.conf /etc/security/pwquality.conf
 chmod 644 /home/*/.bashrc
