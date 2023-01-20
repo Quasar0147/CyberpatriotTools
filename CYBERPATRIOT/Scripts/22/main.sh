@@ -103,7 +103,7 @@ for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//
 #pam-auth-update
 #mv `utils`/pam/* /etc/pam.d
 #cp -n ./pam_bak/* /etc/pam.d/
-cp `pwd`/utils/pam/* /etc/pam.d/
+#cp `pwd`/utils/pam/* /etc/pam.d/
 #sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 #awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
@@ -118,7 +118,7 @@ chown root:root /etc/pam.d/*
 cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
-file-db:/usr/share/gdm/greeter-dconf-defaults
+file-db:/etc/gdm3/greeter-dconf-defaults
 " >> /etc/dconf/profile/gdm
 chmod 644 /etc/dconf/profile/gdm
 chown root:root /etc/dconf/profile/gdm
