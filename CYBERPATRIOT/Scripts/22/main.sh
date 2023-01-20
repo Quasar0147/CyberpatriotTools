@@ -97,12 +97,12 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-mkdir pam_bak
-mv /etc/pam.d/* ./pam_bak 
-apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
+#mkdir pam_bak
+#mv /etc/pam.d/* ./pam_bak 
+#apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
 #pam-auth-update
 #mv `utils`/pam/* /etc/pam.d
-cp -n ./pam_bak/* /etc/pam.d/
+#cp -n ./pam_bak/* /etc/pam.d/
 cp `pwd`/utils/pam/* /etc/pam.d/
 #sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
