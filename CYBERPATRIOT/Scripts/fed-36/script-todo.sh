@@ -3,6 +3,7 @@
 # 2.  Fix systemd
 # 3.  Recalculate sysctl
 # remove gpasswds
+authselect opt-out
 dnf install -y audit
 dnf install dnf-automatic -y
 dnf install gedit -y
@@ -110,9 +111,9 @@ cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults
-" >> /etc/dconf/profile/gdm
-chmod 644 /etc/dconf/profile/gdm
-chown root:root /etc/dconf/profile/gdm
+" >> /etc/dconf/profile/user
+chmod 644 /etc/dconf/profile/user
+chown root:root /etc/dconf/profile/user
 rm /etc/dconf/db/gdm.d/* 2>/dev/null
 rm /home/*/.config/dconf/user 2>/dev/null
 mkdir /etc/dconf/db/gdm.d/ 2>/dev/null
