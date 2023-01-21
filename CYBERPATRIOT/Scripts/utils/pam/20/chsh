@@ -1,5 +1,0 @@
-auth        required    pam_shells.so
-auth		sufficient	pam_rootok.so
-@include common-auth
-@include common-account
-@include common-session

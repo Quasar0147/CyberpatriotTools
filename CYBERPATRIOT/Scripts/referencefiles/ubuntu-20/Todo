@@ -1,0 +1,3 @@
+Hashdeep of /etc
+Default Installed Packages (apt, snap, flatpak, dpkg https://itsfoss.com/list-installed-packages-ubuntu/)
+find /etc/systemd -name "*.service" -type f 

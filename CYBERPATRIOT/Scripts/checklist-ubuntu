@@ -1,10 +1,196 @@
-Check for unwanted software
+Forensics Questions 
+    When in doubt, remember what you think you know could be wrong
+    Cyberchef cyberchef does whatever a cyptographer can
+Application Updates & Operating System Updates
+    apt-get update && apt-get upgrade
+    REBOOT DUMBASS
+    Check /etc/apt
+    unattended-upgrades
+    USE THE GUI ITS NOT THE END OF THE WORLD
+        Enable security updates
+User Auditing
+    Hidden users && UID/GID checks
+        /etc/passwd
+            Is the UID 0? The GID? Are they something they shouldnt be?
+        /etc/gpasswd
+        /etc/groups
+    Administrators
+        /etc/sudoers && /etc/sudoers.d/*
+        What users shouldnt be adm, lpadmin, sudo, etc?
+    Passwords
+        What passwords are weak? Change all to Baher13@c0stc0
+    Users
+        What users on the system shouldnt be there?
+        Can an unauth user access the system remotely? Root shouldnt be able to
+Account Policies
+    Do you have a password policy?
+        /etc/security/pwquality.conf
+    What are password dates?
+        /etc/login.defs
+        chage 
+    Is your PAM secure?
+        /etc/pam.d/* && /etc/pam.conf
+        Lockout policy, password minlen and security options, password memory
+        Check service files
+Defensive Countermeasures
+    Is firewall up?
+        /etc/ufw
+    Is rsyslog up?
+    Is auditd up?
+Local Policies
+    /etc/sysctl.conf and /etc/sysctl.d/*
+    /etc/sudoers.d && /etc/sudoers && /etc/sudo.conf
+    Configure /etc/fstab
+        dir      -> fsck options
+        /tmp     -> 2    nodev, noexec, nosuid
+        /dev/shm -> 2    nodev, noexec, nosuid
+        /var/tmp -> 2    nodev, noexec, nosuid
+        /var     -> 2    nodev, noexec, nosuid
+        /        -> 1    nodev
+    ld.so
+    modprobe, modules-load, modules
+    profiles
+    ~/.config
+    grub 
+    ufw config
+    polkit 
+    environment
+    check rc and profile
+    
+Malware
+    ps -Meaf --forest
+    netstat -tulpn
+    Cron & at
+Service Auditing
     systemctl | grep running | awk '{ print $1 }'
     systemctl list-unit-files | grep enabled | awk '{ print $1 }'
-    apt-mark showmanual
-Check for suspicious/unwanted ports
+    systemctl list-unit-files | grep disabled | awk '{ print $1 }'
+    What should be running and enabled?
+    What is non default?
+    /etc/systemd conveniently has a list of all services, get default ones
+Unwanted Software
+    apt list --installed
+    dpkg-query -l
+    snap list
+    flatpak list    
+    (For all other software managers)
+    Check installed in software center
+        Note:
+            ## MAKE SURE TO RUN sed -i "s/$chipset/<arch>/g" $defaults. On my mac was arm64 and aarch64. Defaults convert both to <arch>.
+            diff $thissystem $defaults | grep ">" # Services not in default in system
+            diff $thissystem $defaults | grep "<" # Services in default not in system
+                dpkg-query -f '${binary:Package}\n' -W
+                apt list --installed | cut -d/ -f1
+                snap list | tail -n +2 | awk '{ print $1 }'
+                (dpkg-query -f '${binary:Package}\n' -W && apt list --installed | cut -d/ -f1 && (snap list | tail -n +2 | awk '{print $1}')) | sort | uniq | sed s"/Loading...//g"
+
+Uncategorized Operating System Settings
+    Screenlocking/gdm config
+    File permissions
+        What is world writeable and executable?
+        What should not be world readable?
+Prohibited Files
+    Password files and stuff like creditcardinfo.json
+    MP3s and MP4s
+    /etc/alternatives and other software archives
+    .sh files
+    Stuff referred to in Forensic Questions
+    Use fsearch    
+Application Security Settings
+    Read the readme
+    Google secure confs
+    open up manual pages and see what should be enabled and what should be disabled
+    Are all permissions in order on the critical service?
+Attack Surface Reduction
+    Disable everything you can
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Do users
+File checks
+    /etc/hosts.conf
+    /etc/sudo.conf /etc/sudoers /etc/sudoers.d/*
+    /etc/pam.conf /etc/pam.d/*
+    SUID and SGID
+    World writable or world executable
+    Cron
+    At
+    Hidden users /etc/passwd
+    /usr/share/polkit-1
+    /etc/polkit-1
+    /home/*/.config
+    /etc/ufw
+    Rcs and autoruns
+    Hashdeep
+    Check associated directories for critical services (ex: /etc/thunderbird)
+Other
+    getcap -r /
+    ps -Meaf --forest
+    apt-list showmanual 
+    apt-list showauto
+    systemctl | grep running | awk '{ print $1 }'
+    systemctl list-unit-files | grep enabled | awk '{ print $1 }'
     lsof -Pnli +M
     netstat -tulpn
+Updates 
+    apt-get update
+    apt-get upgrade
+    use gui to configure some stuff
+    check /apt
+    Unattended-Upgrades
+    reinstall all:
+        dpkg --get-selections > selections
+        sudo dpkg --clear-selections
+        #Edit selections
+        sudo dpkg --set-selections < selections
+        sudo apt-get --reinstall dselect-upgrade
+    REBOOT DUMBASS
+
+
+
+
+
+
+
+
+
+
+
+
+
+More in depth:
 File Checks
     Check Permissions on all service related files
     Look through world writable files and directories
@@ -22,27 +208,22 @@ File Checks
                 evil:x:1000:1000::/etc:/bin/bash
         Check All Scripts in /etc 
             find /etc -name "*.sh" -type f 2>/dev/null
-        Rc
-            Scripts that run when you change level or startup
-            /etc/rc.d
-            /etc/rc
-            /etc/rc?.d
-            /etc/rc0.d to /etc/rc6.d
-            /etc/rcS.d
-        Init
-            Run On Boot
-            /etc/init.d
-            /etc/init
-        Profile
-            Run On Shell Creation (EX: Env variables)
-            /etc/profile
-            /etc/profile.d/
-        Cron
-            Scheduled Tasks
-            /etc/crontab
-            /etc/cron.weekly
-            /etc/cron.monthly
-            /etc/cron.hourly
+        PAM
+            /etc/pam.d/
+            rm -r /etc/pam.d #yeet
+            pam-auth-update #remakes common stuff
+            sudo apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1) #Everything else
+        Check /etc permissions
+            Should be no world writeable files
+            Not much should not be owned by root | root
+                find /etc -type f -exec ls -l {} \; | grep -v "root root" 
+            Check all executables
+                World Executable
+                    find /etc -type f -perm -0001
+                SUID and SGID
+                    find /etc -type f -perm -4000
+                    find /etc -type f -perm -2000
+    
     Check /bin and /sbin
     Check /usr
         /usr/share
@@ -54,3 +235,125 @@ Enumerate
         cd lynis && ./lynis audit system --debug
     Run Linpeas
         curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
+Reinstall All The Packages You Can 
+    (Without bricking the system)
+    libpam 
+Search for malicious code
+    Autostart
+        XDG
+            Global autostart directory
+            /etc/xdg
+        GDM autostart
+            /usr/share/gdm/autostart
+        Other AutoStart Directories 
+            find / -name "*autostart*"
+    Check APT conf
+        /etc/apt
+    Init
+        Run On Boot
+        /etc/init.d
+        /etc/init
+    On shell creation
+        Profile
+            /etc/profile
+            /etc/profile.d/
+            /home/*/.profile
+        Shell RCS
+            /etc/bash.bashrc
+            /home/*/.bashrc
+        Other RCS
+            Scripts that run when you change level or startup
+            /etc/rc.d
+            /etc/rc
+            /etc/rc0.d to /etc/rc6.d
+                ID  Name                               Description
+                0   Halt                               Shuts down the system.
+                1   Single-user Mode                   Mode for administrative tasks.
+                2   Multi-user Mode                    Does not configure network interfaces, does not export networks services.
+                3   Multi-user Mode with Networking    Starts the system normally.
+                4   Not used/User-definable            For special purposes.
+                5   Start the system normally with 
+                    with GUI                           As runlevel 3 + display manager.
+                6   Reboot                             Reboots the system.
+
+            /etc/rcS.d
+            find /etc -name "*rc*" 
+                Quite a few false positives, consider ls -a /etc | grep rc
+    find /etc -type f -print0 | xargs -0 file --mime-type | grep -F '/x-shellscript' | cut -d ':' -f 1
+    #for x in $(find /etc -type f -print0 | xargs -0 file --mime-type | grep -F '/x-shellscript' | cut -d ':' -f 1); do echo $(sha256sum $x); done
+    #for x in $(find /etc -name "*.conf"); do echo $(sha256sum $x); done
+    #for x in $(find /etc -name "*.rules"); do echo $(sha256sum $x); done
+
+    Cron
+        Scheduled Tasks
+        /etc/crontab
+        /etc/cron.weekly
+        /etc/cron.monthly
+        /etc/cron.hourly
+    Systemd
+        /etc/systemd
+        /usr/lib/systemd/system
+        /lib/systemd/system
+        Startup services
+            /etc/systemd/system
+        Timers
+            /etc/systemd/system/
+            ~/.config/systemd/user/
+    
+    Dconf
+        /usr/share/dconf
+        Startup services
+            /usr/share/dconf/system-services
+            /usr/share/dconf/services
+    Grub
+        /etc/grub.d
+        /boot/grub
+    Defaults
+        /etc/default
+    
+    Polkit
+        Authentication Policies
+            /usr/share/polkit-1/rules.d
+            /etc/polkit-1
+            find /etc/polkit-1 -type f
+            /etc/polkit-1/localauthority.conf.d/51-ubuntu-admin.conf
+            /etc/polkit-1/localauthority.conf.d/50-localauthority.conf 
+
+    Network
+        actions
+            /etc/network/if-up.d
+            /etc/network/if-down.d
+            /etc/network/if-post-down.d
+            /etc/network/if-pre-up.d
+    Loaded Libs
+        /etc/ld.so.preload
+        
+
+
+Backdoor Hunting
+    netstat -putna
+        netstat -putna | grep LISTEN
+            p = list proccess
+            u = udp
+            t = tcp
+            n = numeric (dont resolve names)
+            a = all
+    netstat -tulpn
+        netstat -tulpn | grep LISTEN
+            l = listening
+    ps -Meaf --forest
+
+Capabilities
+    getcap -r / 2>/dev/null
+ 
+File Modification Date
+    for x in $(find dir -type f); do echo $(stat -c %y $x) $x; done | sort 
+    for x in $(find dir -type f); do echo $(stat -c %z $x) $x; done | sort 
+    dir = /etc, /usr/share, /bin etc
+
+Check Kernel Modules
+    find /lib/modules/$(uname -r) -type f -name '*.ko*'
+    lsmod
+    /usr/lib/modules-load.d
+    Todo: Make this efficient
+    

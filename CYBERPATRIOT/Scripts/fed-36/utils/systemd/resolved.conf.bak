@@ -1,0 +1,3 @@
+[Resolve]
+DNSSEC=1
+DNSOverTLS=1

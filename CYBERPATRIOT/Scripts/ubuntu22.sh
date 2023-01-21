@@ -1,10 +1,50 @@
-apt-get install apparmor-utils clamav rsyslog clamav-daemon lightdm git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
+apt-get install apparmor-utils clamav rsyslog clamav-daemon dbus-x11 git unattended-upgrades opensc-pkcs11 libpam-pkcs11 fail2ban net-tools procps auditd ufw vlock gzip libpam-pwquality apparmor apparmor-profiles -y
 ##### STOP IT GET SOME HELP #####
-# This script is for Ubuntu 20.04 LTS
 version=$(lsb_release -a | grep Rel | sed s'/Release:	//g' | sed s'/.04//g')
 #Hardening from other people done first so i can override some of their dumb settings :>
+chkconfig autofs off
 dpkg-reconfigure apt
-cp `pwd`/utils/22sources.list /etc/apt/sources.list
+dpkg-reconfigure gdm3
+apt-get autoremove cups bluetooth apport -y
+for x in $(lsattr -R /etc 2>/dev/null | grep -- -i- | awk '{ print $2 }')
+do
+chattr -i $x
+done
+cp `pwd`/utils/systemd/* /etc/systemd/
+if [ -f /etc/init.d/rc ]; then
+sed -i 's/umask 022/umask 077/g' /etc/init.d/rc
+fi
+
+if ! grep -q -i "umask" "/etc/profile" 2> /dev/null; then
+echo "umask 077" >> /etc/profile
+fi
+
+if ! grep -q -i "umask" "/etc/bash.bashrc" 2> /dev/null; then
+echo "umask 077" >> /etc/bash.bashrc
+fi
+
+if ! grep -q -i "TMOUT" "/etc/profile.d/*" 2> /dev/null; then
+echo -e 'TMOUT=600\nreadonly TMOUT\nexport TMOUT' > '/etc/profile.d/autologout.sh'
+chmod +x /etc/profile.d/autologout.sh
+fi
+#wip
+# Inner for works, unless being used in which case usermod will error. Must do by force?
+for g in root sys sudo adm lpadmin sambashare wheel
+do
+gid=$(cat /etc/passwd | grep "^$g:" | awk -F":" '{ print $4 }')
+echo "$gid"
+for x in $(awk -F: "(\$3==$gid||\$4==$gid){print \$1}" /etc/passwd | sed s"/$g//g")
+do
+ud=$(grep "^$x:" /etc/passwd | awk -F':' '{ print $3":"$4 }')
+newuid=$(cat /etc/group /etc/passwd | cut -d ":" -f 3 | awk '($1>=1000&&$1<=2000){print $1+1}' | sort -n | tail -n 1)
+usermod -u $newuid $x
+groupmod -g $newuid $x
+echo "Hidden User $x with old id $ud is now $x:$(getent group $g | cut -d ":" -f3)"
+echo "Hidden User $x with old id $ud is now $x:$(getent group $g | cut -d ":" -f3)" >> ./hiddenusers.txt
+done
+done
+
+#cp `pwd`/utils/22sources.list /etc/apt/sources.list
 git clone https://github.com/konstruktoid/hardening.git
 cp `pwd`/utils/ubuntu.cfg hardening/ubuntu.cfg
 cd hardening
@@ -35,6 +75,7 @@ ufw allow in on lo
 ufw allow out on lo
 ufw deny in from 127.0.0.0/8
 ufw deny in from ::1
+sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
 
 #ufw limit in on eth0 2>/dev/null
 #ufw limit in out eth0 2>/dev/null
@@ -59,28 +100,22 @@ if [ -f /etc/ssh/sshd_config ]; then
     systemctl enable ssh
 fi
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed s'/root//g' | xargs); do sed -i "/^AllowUser/ s/$/ $u /" /etc/ssh/sshd_config; done
-#cp `pwd`/utils/pam/22/* /etc/pam.d/
-pam-auth-update #reset to defaults
-## Some sed cmds here to secure the default configuration
-echo "
-auth required pam_faillock.so preauth
-auth [success=1 default=ignore] pam_unix.so nullok
-auth [default=die] pam_faillock.so authfail
-auth sufficient pam_faillock.so authsucc
-auth requisite pam_deny.so
-auth required pam_permit.so
-auth optional pam_cap.so
-" > /etc/pam.d/common-auth
-sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5/g" /etc/pam.d/common-password
-{
+mkdir pam_bak
+mv /etc/pam.d/* ./pam_bak 
+apt install --reinstall -o Dpkg::Options::="--force-confmiss" $(dpkg -S /etc/pam.d/\* | cut -d ':' -f 1)
+#pam-auth-update
+cp -n ./pam_bak/* /etc/pam.d/
+#cp `pwd`/utils/pam/$version/* /etc/pam.d/ #Update to contain only: gdm3, lightdm, login, passwd as they cannot be downloaded, and a secure common default
+#sed -i "s/password .* pam_unix.so .*/password [success=1 default=ignore] pam_unix.so obscure use_authtok try_first_pass remember=5/g" /etc/pam.d/common-password
 UID_MIN=$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)
 awk -F: -v UID_MIN="${UID_MIN}" '( $3 >= UID_MIN && $1 != "nfsnobody" ) { print $1 }' /etc/passwd | xargs -n 1 chage -d 0
-}
 chown root:root /etc/pam.d/*
 chmod 644 /etc/pam.d/*
 chown root:root /etc/pam.d/*
-cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
-#cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+#cp `pwd`/utils/lightdm.conf /etc/lightdm/lightdm.conf
+cp `pwd`/utils/greeter.dconf-defaults /etc/gdm3/greeter.dconf-defaults
+cp `pwd`/utils/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
+cp /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults
 #cp `pwd`/utils/gdm3.conf /etc/gdm3/custom.conf
 echo "user-db:user
 system-db:gdm
@@ -99,6 +134,9 @@ enable-fingerprint-authentication=false
 allowed-failures=3
 [org/gnome/desktop/screensaver]
 lock-enabled=true
+lock-delay=uint32 5
+[org/gnome/desktop/session]
+idle-delay=uint32 900
 [org/gnome/desktop/lockdown]
 disable-command-line=true
 disable-log-out=true
@@ -114,16 +152,42 @@ automount=false
 automount-open=false
 autorun-never=true
 " >> /etc/dconf/db/gdm.d/00-login-screen
+echo "
+/org/gnome/login-screen/disable-user-list
+/org/gnome/login-screen/disable-restart-buttons
+/org/gnome/login-screen/enable-password-authentication
+/org/gnome/login-screen/enable-smartcard-authentication
+/org/gnome/login-screen/enable-fingerprint-authentication
+/org/gnome/login-screen/allowed-failures
+/org/gnome/desktop/screensaver/lock-enabled=true
+/org/gnome/desktop/lockdown/disable-command-line
+/org/gnome/desktop/lockdown/disable-log-out
+/org/gnome/desktop/lockdown/disable-lock-screen
+/org/gnome/desktop/lockdown/disable-printing
+/org/gnome/desktop/lockdown/disable-print-setup
+/org/gnome/desktop/lockdown/disable-user-switching
+/org/gnome/desktop/lockdown/disable-application-handlers
+/org/gnome/desktop/lockdown/disable-save-to-disk
+/org/gnome/desktop/lockdown/user-administration-disabled
+/org/gnome/desktop/media-handling/automount
+/org/gnome/desktop/media-handling/automount-open
+/org/gnome/desktop/media-handling/autorun-never
+/org/gnome/desktop/screensaver
+/org/gnome/desktop/session
+" > /etc/dconf/db/gdm.d/locks/00-security-settings-lock
 chmod 644 /etc/dconf/db/gdm.d/00-login-screen
 chown root:root /etc/dconf/db/gdm.d/00-login-screen
 dconf update
 read -p "Autologin User (some username/none): " auto
-sed -i "s/autologin-user=/autologin-user=$auto/g" /etc/lightdm/lightdm.conf
-sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
+sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
+exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
+sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
+#sed -i "s/autologin-user=/autologin-user=$auto/g" /etc/lightdm/lightdm.conf
+#sed -i "s/autologin-timeout=.*/autologin-timeout=1/g" /etc/lightdm/lightdm.conf
 group=$(getent group $(id -u $auto) | cut -d: -f1)
-sed -i "s/auth    sufficient      pam_succeed_if.so user ingroup .*/auth    sufficient      pam_succeed_if.so user ingroup $group/g" /etc/pam.d/lightdm
-cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
-chmod 644 /etc/lightdm/lightdm.conf
+#sed -i "s/auth    sufficient      pam_succeed_if.so user ingroup .*/auth    sufficient      pam_succeed_if.so user ingroup $group/g" /etc/pam.d/lightdm
+#cp /etc/lightdm/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-myconfig.conf
+#chmod 644 /etc/lightdm/lightdm.conf
 rm /etc/security/pwquality.conf
 echo "difok=8
 minlen=14
@@ -153,7 +217,7 @@ cp `pwd`/utils/login.defs /etc/login.defs
 gzip -d /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example.gz 
 cp /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11.conf
 sed -i 's/.*pam_pkcs11.so.*/auth       optional      pam_pkcs11.so/' /etc/pam.d/common-auth
-if [ `grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null` != *"pwent"* ]
+if [ !`grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf 2>/dev/null`= *"pwent"* ]
 then
 sed -i 's/use_mappers = .*/use_mappers = pwent/' /etc/pam_pkcs11/pam_pkcs11.conf
 sed -i 's/cert_policy = .*/cert_policy = ca,signature,ocsp_on, crl_auto;/' /etc/pam_pkcs11/pam_pkcs11.conf
@@ -191,11 +255,17 @@ net.ipv6.conf.default.use_tempaddr=2
 net.ipv6.conf.all.accept_ra_rtr_pref=0
 net.ipv6.conf.all.accept_ra_pinfo=0
 net.ipv6.conf.all.accept_ra_defrtr=0
+net.ipv6.conf.all.use_tempaddr=2
+net.ipv6.conf.default.use_tempaddr=2
 " >> /etc/sysctl.conf
 echo "ipv6.disable=0" >> /etc/default/grub
+sed -i "s/IPV6=.*/IPV6=yes" /etc/default/ufw
 else 
-echo "net.ipv6.conf.all.disable_ipv6=1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
 echo "ipv6.disable=1" >> /etc/default/grub
+sed -i "s/IPV6=.*/IPV6=no" /etc/default/ufw
+
 fi
 cp /etc/sysctl.conf /etc/sysctl.d/* 2> /dev/null
 sysctl -p /etc/sysctl.conf 0>1 1>/dev/null
@@ -309,8 +379,8 @@ chmod 744 /etc/ssh/ssh_host_ed25519_key.pub 2>/dev/null
 chown root:root /lib 
 chown root:root /usr/lib 
 chown root:root /lib64
-chown root:root /etc/pam.d/common-password /etc/pam.d/common-auth /etc/pam.d/login /etc/login.defs /etc/security/pwquality.conf
-chmod 0644 /etc/pam.d/common-password /etc/pam.d/common-auth /etc/pam.d/login /etc/login.defs /etc/security/pwquality.conf
+chown root:root /etc/pam.d/* /etc/pam.conf /etc/login.defs /etc/security/*
+chmod 0644 /etc/pam.d/* /etc/pam.conf /etc/login.defs /etc/security/*
 chgrp adm /var/log/syslog
 chmod 0750 /var/log
 chown root:root /etc/securetty
@@ -325,7 +395,9 @@ find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -ty
 chown root:syslog /var/log
 find /var/log -perm /137 -type f -exec chmod 640 '{}' \;
 find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type f -exec  -c chown root:root '{}' +;
- 
+find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -name "*.sh" -type f -delete
+chmod 700 /boot /usr/src /lib/modules /usr/lib/modules
+
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1); do passwd -l $u; done
 auditctl -e 1
 cp `pwd`/utils/audit.rules /etc/audit/rules.d/audit.rules
@@ -372,13 +444,6 @@ chown -R root:root /etc/*cron*
 chmod -R 644 /etc/*cron*
 echo > /etc/rc.local
 echo -e "127.0.0.1 ubuntu\n127.0.0.1 localhost\n127.0.1.1 $USER\n::1 ip6-localhost ip6-loopback\nfe00::0 ip6-localnet\nff00::0 ip6-mcastprefix\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts
-find /bin/ -name "*.sh" -type f -delete &
-find /usr/bin/ -name "*.sh" -type f -delete &
-find /usr/local/bin/ -name "*.sh" -type f -delete &
-find /sbin/ -name "*.sh" -type f -delete &
-find /usr/sbin/ -name "*.sh" -type f -delete &
-find /usr/local/sbin/ -name "*.sh" -type f -delete &
-find "/home" -regex "(mov|mp.|png|jpg|.peg)" -type f -delete;
 apt-get purge aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel >> /dev/null && sudo apt-get autoremove >> /dev/null
 sudo dpkg-reconfigure -plow unattended-upgrades
 cp `pwd`/utils/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
@@ -389,7 +454,8 @@ systemctl start fail2ban
 
 sudo apt-get purge john nmap nc ncat netcat netcat-openbsd netcat-traditional netcat-ubuntu-openbsd wireshark nessus hydra nikto aircrack-ng burp hashcat logkeys socat -y >> /dev/null
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do for x in $(cat /home/*/.mozilla/firefox/profiles.ini | grep "Path=" | cut -c6-1000 | xargs); do cp utils/user.js /home/$u/.mozilla/firefox/$x/user.js 2>/dev/null; chmod 644 /home/$u/.mozilla/firefox/$x/user.js ; done; done
-sed s'/user_pref(/pref(/g' utils/user.js > /etc/firefox/syspref.js
+sed s'/user_pref(/pref(/g' utils/user.js > ./temp
+sed s'/);/,locked);/g' ./temp > /etc/firefox/syspref.js
 
 cp `pwd`/utils/bash.bashrc /etc/bash.bashrc
 cp `pwd`/utils/profile /etc/profile
@@ -437,20 +503,10 @@ for x in $(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd)
 do
 usermod -U $x
 done
-for x in $(cut -d: -f1,3 /etc/passwd | egrep ':[0]{1}$' | cut -d: -f1 | sed s'/root//g')
-do
-echo "Deleting hidden user [$x]"
-userdel $x
-done
 find / \( -nouser -o -nogroup \) -exec chown root:root {} \;
-echo "
-Defaults	env_reset
-Defaults	secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"
-root	    ALL=(ALL:ALL) ALL
-%admin      ALL=(ALL) ALL
-%sudo	    ALL=(ALL:ALL) ALL
-" > /etc/sudoers
+cp `pwd`/utils/sudoers /etc/sudoers
 rm /etc/sudoers.d/*
+rm /etc/sudo.conf
 systemctl daemon-reload
 for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d: -f1); do 
     crontab -u $u -r >> /dev/null
@@ -461,7 +517,6 @@ echo "
 /bin/bash
 /usr/bin/bash
 " > /etc/shells
-gsettings set org.gnome.desktop.screensaver lock-enabled true
 rm /etc/nologin 2>/dev/null
 echo "PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'" > /etc/environment
 cp /etc/environment /etc/environment.d/*
@@ -490,22 +545,11 @@ echo "" > /etc/pam.conf
 systemctl stop clamav-freshclam
 wget https://database.clamav.net/daily.cvd
 mv daily.cvd /var/lib/clamav/daily.cvd
-freshclam
 systemctl start clamav-freshclam
+freshclam
 clamscan --infected --recursive --remove / &>./clamlog
-find /bin/ -name "*.sh" -type f -delete
-sed -i 's/IPT_SYSCTL=.*/IPT_SYSCTL=""/g' /etc/default/ufw
-echo "CtrlAltDelBurstAction=none" > /etc/systemd/system.conf
-dpkg-reconfigure lightdm
-sed -i s"/hell/$auto/g" /etc/gdm3/custom.conf
-exclude=$(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | xargs)
-sed -i s"/idksmthng/$exclude/g" /etc/gdm3/custom.conf
-usermod -g 0 root
-chkconfig autofs off
-echo "SELINUX=enforcing
-SELINUXTYPE=targeted
-" >> /etc/selinux/config 
-apt purge apport -y
-for u in $(cat /etc/passwd | grep -E "/bin/.*sh" | cut -d":" -f1 | sed -i "s/$auto//g"); do chage -M 30 -m 7 -W 15 $u; done
+systemctl daemon-reload
 #systemctl restart gdm
 echo "Done"
+
+# Todo, get lockout policy to actually work

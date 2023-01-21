@@ -1,4 +1,0 @@
-auth	required	pam_nologin.so
-@include common-auth
-@include common-account
-@include common-session

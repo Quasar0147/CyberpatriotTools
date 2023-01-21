@@ -1,5 +1,4 @@
 slab_nomerge
-selinux = 1 security = selinux enforcing = 1 audit = 1
 init_on_alloc = 1 init_on_free = 1
 page_alloc.shuffle = 1
 randomize_kstack_offset = on
@@ -19,4 +18,31 @@ pti = on
 debugfs = off
 mce = 0
 apparmor = 1 security = apparmor
+intel_iommu=on amd_iommu=on
+disable_early_pci_dma
+no usb
+mitigations=auton
+slub_debug=FZ 
+page_poison=1
+GRUB_SAVEDEFAULT="true"
 
+GRUB_DISABLE_LINUX_RECOVERY="true"
+GRUB_ENABLE_CRYPTODISK=y
+GRUB_DISABLE_RECOVERY="true"
+GRUB_TERMINAL_INPUT="console"
+GRUB_DEFAULT="0"
+GRUB_TIMEOUT="3"
+
+noexec
+vdso
+noapic
+nolapic
+noirqbalance
+noirqdebug
+nmi_watchdog=3
+no387
+nofxsr
+no-hlt
+nosep
+notsc
+disable_local_igmp

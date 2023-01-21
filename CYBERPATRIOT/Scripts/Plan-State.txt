@@ -1,0 +1,46 @@
+1. Forensics
+2. Updates
+    For all package managers (even like pip!)
+        OS Updates
+            Set settings in gui if applicable
+            check /etc/ if they have a folder
+            Unattended Upgrades
+        Actual Updates
+            REBOOT
+3. User Auditing
+    Unauth Users
+    Unauth Admins/Groups
+    Hidden User
+    Passwords
+4. User Policy
+    (expect 4)
+    Important password dates
+    Password Policy
+        Minlen
+        Lockout
+    PAM
+        Crit service pam
+            Harden
+        Non default pam where?
+5. Defensive Countermeasures
+    Enable Firewall
+    Enable Auditing
+    Enable Rsyslog
+6. Prohibited Files
+    Fsearch
+    If file share, check the shared directory
+7. Services
+    Use baselines
+8. Unwanted software 
+    Use baselines
+    Check other managers like pip
+9. Local Policy
+    Sysctl && sudoers
+10. Malware
+    Check running procs and prots
+    Check baselines for modified files
+        Rcs and such which get executed
+11. Appsec
+    Read Me
+    Get those docs out
+    

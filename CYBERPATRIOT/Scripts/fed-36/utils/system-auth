@@ -1,0 +1,61 @@
+#auth        required                                     pam_env.so
+#auth        required                                     pam_faildelay.so delay=2000000
+#auth        sufficient                                   pam_fprintd.so
+#auth        [default=1 ignore=ignore success=ok]         pam_usertype.so isregular
+#auth        [default=1 ignore=ignore success=ok]         pam_localuser.so
+#auth        sufficient                                   pam_unix.so nullok
+#auth        [default=1 ignore=ignore success=ok]         pam_usertype.so isregular
+#auth        sufficient                                   pam_sss.so forward_pass
+#auth        required                                     pam_deny.so
+auth        required                                     pam_env.so
+auth        required                                     pam_faildelay.so delay=5000000
+auth        required                                     pam_usertype.so isregular
+auth        required                                     pam_localuser.so
+auth required pam_faillock.so preauth
+auth [success=1 default=ignore] pam_unix.so try_first_pass
+auth [default=die] pam_faillock.so authfail
+auth sufficient pam_faillock.so authsucc
+auth requisite pam_deny.so
+auth required pam_permit.so
+
+#account     required                                     pam_unix.so
+#account     sufficient                                   pam_localuser.so
+#account     sufficient                                   pam_usertype.so issystem
+#account     [default=bad success=ok user_unknown=ignore] pam_sss.so
+#account     required                                     pam_permit.so
+account	[success=1 new_authtok_reqd=done default=ignore]	pam_unix.so 
+account     sufficient                                   pam_localuser.so
+account     sufficient                                   pam_usertype.so issystem
+account     [default=bad success=ok user_unknown=ignore] pam_sss.so ## is this line needed, can be commented
+account     required                                     pam_permit.so
+
+
+#password    requisite                                    pam_pwquality.so local_users_only
+#password    sufficient                                   pam_unix.so yescrypt shadow nullok use_authtok
+#password    sufficient                                   pam_sss.so use_authtok
+#password    required                                     pam_deny.so
+password    requisite                   pam_pwquality.so difok=8 minlen=14 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1 minclass=4 maxrepeat=2 gecoscheck=1 dictcheck=1 maxsequence=4 maxclassrepeat=4 usercheck=1 enforcing=1 enforce_for_root=1 usercheck=1 usersubstr=4 retry=2
+password    requisite                   pam_pwhistory.so remember=5 use_authtok
+password    [success=1 default=ignore]  pam_unix.so yescrypt try_first_pass obscure shadow rounds=65536 use_authok
+password        requisite                               pam_deny.so
+password        required                                pam_permit.so
+
+
+
+session     optional                                     pam_keyinit.so revoke
+session     required                                     pam_limits.so
+-session    optional                                     pam_systemd.so
+#session     [success=1 default=ignore]                   pam_succeed_if.so service in crond quiet use_uid
+session     required                                     pam_unix.so
+session     optional                                     pam_sss.so
+session	     required					  pam_umask.so
+
+#session	requisite			pam_deny.so
+#session	required			pam_permit.so
+#session     optional                                     pam_keyinit.so revoke
+#session     required                                     pam_limits.so
+#session     optional                                     pam_umask.so
+#session     optional                                     pam_systemd.so
+#session     [success=1 default=ignore]                   pam_succeed_if.so service in crond quiet use_uid
+#session     required                                     pam_unix.so
+#session     optional  

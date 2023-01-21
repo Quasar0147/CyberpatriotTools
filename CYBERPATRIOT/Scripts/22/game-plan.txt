@@ -1,0 +1,8 @@
+Forensics
+Update
+UA
+dpkg -V -> manual check
+meld -> visual diff
+baselines BEFORE SCRIPT
+Script
+Hope youve aced cuz i got no fucking clue what to do next

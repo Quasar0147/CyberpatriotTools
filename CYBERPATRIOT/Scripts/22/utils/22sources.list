@@ -1,0 +1,7 @@
+deb http://ports.ubuntu.com/ubuntu-ports/ jammy main
+deb http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main
+deb http://ports.ubuntu.com/ubuntu-ports/ jammy universe
+deb http://ports.ubuntu.com/ubuntu-ports/ jammy-updates universe
+deb http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main universe
+deb http://ports.ubuntu.com/ubuntu-ports/ jammy-security main
+deb http://ports.ubuntu.com/ubuntu-ports/ jammy-security universe
