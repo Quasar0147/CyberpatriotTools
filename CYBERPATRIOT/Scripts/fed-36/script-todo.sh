@@ -362,7 +362,7 @@ chmod 644 /home/*/.bashrc
 chmod 644 /root/.bashrc
 
 # Purge Games
-dnf remove aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel telnet telnetd >> /dev/null
+#dnf remove aisleriot gnome-sudoku mahjongg ace-of-penguins gnomine gbrainy gnome-sushi gnome-taquin gnome-tetravex gnome-robots gnome-chess lightsoff swell-foop quadrapassel telnet telnetd >> /dev/null
 
 
 # Clear securetty
@@ -503,7 +503,7 @@ apply_updates=True
 " > /etc/dnf/automatic.conf
 
 # Upgrade
-dnf upgrade --refresh -y
+#dnf upgrade --refresh -y
 
 # Configure DNF
 cp `pwd`/utils/dnf.conf /etc/dnf/dnf.conf
