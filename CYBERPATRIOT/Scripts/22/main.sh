@@ -18,7 +18,7 @@ dpkg-reconfigure gdm3
 apt-get autoremove cups bluetooth apport -y
 chmod 644 utils/*
 chown root:root utils/*
-crontab -r
+#crontab -r
 for i in `atq | awk '{print $1}'`;do atrm $i;done
 #for x in $(lsattr -aR /etc 2>/dev/null | grep -- -i- | awk '{ print $2 }')
 #do
